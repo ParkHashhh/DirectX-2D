@@ -1,4 +1,4 @@
-#include "Collision.h"
+﻿#include "Collision.h"
 
 bool CCollision::CollisionBox2DToBox2D(FVector3& HitPoint, 
     CColliderBox2D* Src, CColliderBox2D* Dest)
@@ -147,7 +147,7 @@ bool CCollision::CollisionBox2DToSphere2D(FVector3& HitPoint,
     if (!CollisionBox2DToSphere2D(HitPoint, Src->GetInfo(),
         Dest->GetInfo()))
         return false;
-
+    
     return true;
 }
 

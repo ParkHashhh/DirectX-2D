@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Object/GameObject.h"
 #include "../Interface/StateInterface.h"
@@ -29,10 +29,12 @@ private:
 	std::weak_ptr<class CColliderBox2D>	mBody;
 	std::weak_ptr<class CColliderSphere2D>	mSphere2D;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
-	int		mHP = 10;
+	int		mHP = 3;
 	bool	mAutoIdle = false;
-
-	std::weak_ptr<class CBullet>	mSkill1Bullet;
+	FVector3 mDir = FVector3(0.f,1.f,0.f);
+	float mInvincibleTime = 1.0f;
+	bool mIsInvincible = false;
+	std::weak_ptr<class CBullet>	mBullet;
 
 public:
 	void Damage(int Dmg)
@@ -45,6 +47,10 @@ public:
 	}
 
 public:
+	void SetDir(FVector3 Dir)
+	{
+		mDir = Dir;
+	}
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
@@ -59,9 +65,11 @@ private:
 	void MoveDown();
 	void MoveLeft();
 	void MoveRight();
-	void AttackKey();
-	void Skill1Press();
-	void Skill1Hold();
-	void Skill1Release();
+	void AttackPress();
+	void AttackHold();
+	void AttackRelease();
+	void OnHit(const FVector3& HitPoint,
+		class CCollider* Dest);
+
 };
 
