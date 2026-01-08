@@ -1,0 +1,53 @@
+﻿  Player.cpp
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Object\GameObject.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Object.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\EngineInfo.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Matrix.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Vector2.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Asset\Shader\CBufferContainer.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\World\World.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\World\CameraManager.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Asset\Mesh\Mesh.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Asset\Material\Material.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Asset\Texture\Texture.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Asset\Animation2D\Animation2D.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\World\Input.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Device.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Component\Animation2DSequence.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Timer.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\assort_75\Desktop\Cpp\DirectX\Engine\Include\Component\Collider.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+  (소스 파일 'Player/Player.cpp'을(를) 컴파일하는 중)
+  
+  Client.vcxproj -> C:\Users\assort_75\Desktop\Cpp\DirectX\Binary\Client_Debug.exe
