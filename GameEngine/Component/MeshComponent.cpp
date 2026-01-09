@@ -1,4 +1,4 @@
-#include "MeshComponent.h"
+﻿#include "MeshComponent.h"
 #include "../Asset/AssetManager.h"
 #include "../Asset/Mesh/MeshManager.h"
 #include "../Asset/Mesh/Mesh.h"
@@ -233,7 +233,7 @@ bool CMeshComponent::SetTextureIndex(int SlotIndex, int TextureIndex)
 	if ((int)mMaterialSlot.size() <= SlotIndex)
 		return false;
 
-	//mMaterialSlot[SlotIndex]->
+	//mMaterialSlot[SlotIndex]->SetTextureIndex(0);
 
 	return false;
 }

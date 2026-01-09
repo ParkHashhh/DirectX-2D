@@ -30,10 +30,17 @@ private:
 	std::weak_ptr<class CColliderSphere2D>	mSphere2D;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
 	int		mHP = 3;
-	bool	mAutoIdle = false;
-	FVector3 mDir = FVector3(0.f,1.f,0.f);
+	bool	mAutoIdle = true;
+	FVector3 mDir = FVector3(0.f, 1.f, 0.f);
 	float mInvincibleTime = 1.0f;
 	bool mIsInvincible = false;
+	bool mIsSlide = false;
+	bool mUpKey = false;
+	bool mDownKey = false;
+	bool mLeftKey = false;
+	bool mRightKey = false;
+	bool mIsShoot = false;
+
 	std::weak_ptr<class CBullet>	mBullet;
 
 public:
@@ -47,10 +54,7 @@ public:
 	}
 
 public:
-	void SetDir(FVector3 Dir)
-	{
-		mDir = Dir;
-	}
+	
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
@@ -61,13 +65,27 @@ private:
 	void AttackFinish();
 
 private:
+
+	void SetDir(FVector3 Dir)
+	{
+		mDir = Dir;
+	}
 	void MoveUp();
 	void MoveDown();
 	void MoveLeft();
 	void MoveRight();
+	void MoveUpRelease();
+	void MoveDownRelease();
+	void MoveLeftRelease();
+	void MoveRightRelease();
+
+
 	void AttackPress();
 	void AttackHold();
 	void AttackRelease();
+	void SlidePress();
+	void SlideEndNotify();
+	void AttackEndNotify();
 	void OnHit(const FVector3& HitPoint,
 		class CCollider* Dest);
 

@@ -8,6 +8,9 @@
 #include "BulletEffect.h"
 #include "Component/ProjectileMovementComponent.h"
 #include "Component/ColliderBox2D.h"
+#include "Component/Animation2DComponent.h"
+#include "Asset/Texture/Texture.h"
+
 
 CBullet::CBullet()
 {
@@ -73,6 +76,11 @@ void CBullet::SetMoveDir(const FVector3& MoveDir)
 	auto	Movement = mMovement.lock();
 
 	Movement->SetMoveDir(mMoveDir);
+	float Radian = atan2f(mMoveDir.y, mMoveDir.x);
+
+	float Degree = Radian * (180.f / 3.141592f);
+
+	SetWorldRotation(0.f, 0.f, Degree);
 }
 
 void CBullet::SetNearTarget(const std::string& Name)
@@ -118,8 +126,10 @@ bool CBullet::Init()
 
 	mMeshComponent = CreateComponent<CMeshComponent>("Mesh");
 	mMovement = CreateComponent<CProjectileMovementComponent>("Movement");
-
+	mAnimation2DComponent = CreateComponent<CAnimation2DComponent>("Anim");
 	auto	Movement = mMovement.lock();
+	auto World = mWorld.lock();
+	auto AssetMng = World->GetWorldAssetManager().lock();
 
 	if (Movement)
 	{
@@ -132,14 +142,18 @@ bool CBullet::Init()
 	}
 
 	auto	Mesh = mMeshComponent.lock();
-
 	if (Mesh)
 	{
-		Mesh->SetShader("MaterialColor2D");
-		Mesh->SetMesh("CenterRectColor");
+		Mesh->SetShader("DefaultTexture2D");
+		Mesh->SetMesh("CenterRectTex");
+		Movement->SetMoveDir(GetAxis(EAxis::X));
 		Mesh->SetRelativeScale(50.f, 50.f);
+		auto Tex = AssetMng->FindTexture("Arrow");
+		Mesh->SetTexture(0, 0, Tex);
+				Mesh->SetMaterialBaseColor(0, 255, 255, 255, 0);
+		Mesh->SetBlendState(0, "AlphaBlend");
+		Mesh->SetInheritRot(true);
 	}
-
 	mBody = CreateComponent<CColliderBox2D>("Body");
 	auto	Body = mBody.lock();
 
@@ -150,10 +164,10 @@ bool CBullet::Init()
 		Body->SetCollisionEndFunction<CBullet>(this,&CBullet::CollisionEnd);
 
 		Body->SetCollisionProfile("PlayerAttack");
-		Body->SetBoxSize(50.f, 50.f);
+		Body->SetBoxSize(50.f, 10.f);
 		Body->SetDebugDraw(true);
 		Body->SetInheritScale(false);
-		//Body->SetInheritRot(false);
+		Body->SetInheritRot(true);
 	}
 
 	return true;

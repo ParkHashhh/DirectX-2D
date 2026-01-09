@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Object/GameObject.h"
 #include "../Interface/StateInterface.h"
@@ -22,6 +22,8 @@ private:
 	std::weak_ptr<class CMeshComponent>	mMeshComponent;
 	std::weak_ptr<class CStateComponent>	mStateComponent;
 	std::weak_ptr<class CAnimation2DComponent>	mAnimation2DComponent;
+	std::weak_ptr<class CObjectMovementComponent>	mMovement;
+
 	std::weak_ptr<class CColliderSphere2D>	mBody;
 	//std::weak_ptr<class CColliderBox2D>	mBody;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
@@ -39,7 +41,10 @@ public:
 		sprintf_s(Test, "HP : %d\n", mHP);
 		OutputDebugStringA(Test);
 	}
-
+	std::weak_ptr<CGameObject>	GetTargetObject()
+	{
+		return mTargetObject;
+	}
 public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
@@ -48,6 +53,8 @@ protected:
 	virtual CMonster* Clone();
 
 private:
+	void CollisionMonster(const FVector3& HitPoint,
+		class CCollider* Dest);
 	void AttackNotify();
 	void AttackFinish();
 };

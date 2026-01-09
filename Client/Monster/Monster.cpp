@@ -7,6 +7,8 @@
 #include "Component/ColliderBox2D.h"
 #include "Component/ColliderSphere2D.h"
 #include "Component/ColliderLine2D.h"
+#include "Component/ObjectMovementComponent.h"
+
 
 CMonster::CMonster()
 {
@@ -36,9 +38,10 @@ bool CMonster::Init()
 	mStateComponent = CreateComponent<CStateComponent>("State");
 	mAnimation2DComponent = CreateComponent<CAnimation2DComponent>("Animation2D");
 
+	mMovement = CreateComponent<CObjectMovementComponent>("Movement");
 	// 애니메이션 지정
 	auto	Anim = mAnimation2DComponent.lock();
-
+	
 	if (Anim)
 	{
 		Anim->SetUpdateComponent(mMeshComponent);
@@ -64,7 +67,12 @@ bool CMonster::Init()
 		Mesh->SetRelativeScale(100.f, 100.f);
 		Mesh->SetBlendState(0, "AlphaBlend");
 	}
-
+	auto Movement = mMovement.lock();
+	if (Movement)
+	{
+		Movement->SetUpdateComponent(Mesh);
+		Movement->SetSpeed(20);
+	}
 	//mBody = CreateComponent<CColliderBox2D>("Body");
 	mBody = CreateComponent<CColliderSphere2D>("Body");
 	auto	Body = mBody.lock();
@@ -72,8 +80,9 @@ bool CMonster::Init()
 	if (Body)
 	{
 		Body->SetCollisionProfile("Monster");
-		//Body->SetBoxSize(100.f, 100.f);
-		Body->SetRadius(sqrtf(100.f * 100.f + 100.f * 100.f) * 0.5f);
+		//Body->SetBoxSize(80.f, 80.f);
+		Body->SetCollisionBeginFunction<CMonster>(this, &CMonster::CollisionMonster);
+		Body->SetRadius(sqrtf(75.f * 75.f + 75.f * 75.f) * 0.5f);
 		Body->SetDebugDraw(true);
 		Body->SetInheritScale(false);
 	}
@@ -108,6 +117,7 @@ void CMonster::Update(float DeltaTime)
 	CGameObject::Update(DeltaTime);
 
 	auto Target = mTargetObject.lock();
+	auto Movement = mMovement.lock();
 
 	// 감지 반경 안에 들어오는지 계산한다.
 	FVector3	TargetPos = Target->GetWorldPos();
@@ -115,25 +125,23 @@ void CMonster::Update(float DeltaTime)
 
 	// 타겟과의 거리를 구해준다.
 	float TargetDistance = TargetDir.Length();
+	float Angle = GetWorldPos().GetViewTargetAngle2D(Target->GetWorldPos(), EAxis::Y);
 
+	SetWorldRotationZ(Angle);
+	Movement->AddMove(GetAxis(EAxis::Y));
 	// 탐지반경 안에 들어왔을 경우
 	if (TargetDistance <= mDetectRange)
 	{
-		// 플레이어 방향을 바라보게 회전시킨다.
-		float Angle = GetWorldPos().GetViewTargetAngle2D(Target->GetWorldPos(), EAxis::Y);
-
-		SetWorldRotationZ(100);
-
-		/*char	Test[256] = {};
-		sprintf_s(Test, "Target Angle : %.4f\n", Angle);
-		OutputDebugStringA(Test);*/
-
 		auto	Anim = mAnimation2DComponent.lock();
 
 		if (Anim)
 		{
 			Anim->ChangeAnimation("MonsterAttack");
 		}
+		// 플레이어 방향을 바라보게 회전시킨다.
+		
+
+		
 
 		//mFireTime -= DeltaTime;
 
@@ -189,42 +197,28 @@ CMonster* CMonster::Clone()
 	return new CMonster(*this);
 }
 
+void CMonster::CollisionMonster(const FVector3& HitPoint, CCollider* Dest)
+{
+	
+}
+
 void CMonster::AttackNotify()
 {
 	std::shared_ptr<CWorld>	World = mWorld.lock();
 
 	if (World)
 	{
-		std::weak_ptr<CBullet>	Bullet = World->CreateGameObject<CBullet>("Bullet");
+		GetWorldPos() + GetAxis(EAxis::Y) * 75.f;
 
-		std::shared_ptr<CBullet>	BulletObj = Bullet.lock();
 
-		if (BulletObj)
-		{
-			FVector3	BulletPos = GetWorldPos() + GetAxis(EAxis::Y) * 75.f;
+		auto Target = mTargetObject.lock();
 
-			BulletObj->SetCollisionName("MonsterAttack");
-			BulletObj->SetWorldPos(BulletPos);
-			BulletObj->SetWorldRotation(GetWorldRot());
-			BulletObj->SetCollisionTargetName("Player");
-			BulletObj->ComputeCollisionRange();
-
-			auto Target = mTargetObject.lock();
-
-			// 감지 반경 안에 들어오는지 계산한다.
-			FVector3	TargetPos = Target->GetWorldPos();
-
-			// 플레이어를 향하는 방향을 구해준다.
-			if (Target)
-			{
-				// Bullet -> TargetPos 방향 구하기
-				FVector3	Dir = TargetPos - BulletPos;
-				Dir.Normalize();
-
-				BulletObj->SetMoveDir(Dir);
-			}
-		}
+		// 감지 반경 안에 들어오는지 계산한다.
+		FVector3	TargetPos = Target->GetWorldPos();
+		
 	}
+
+	// 플레이어를 향하는 방향을 구해준다.
 }
 
 void CMonster::AttackFinish()

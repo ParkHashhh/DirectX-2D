@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../EngineInfo.h"
 #include "../Asset/AssetManager.h"
@@ -102,6 +102,10 @@ public:
 	bool AddFrame(const std::string& AnimationName,
 		int Count, float StartX, float StartY, float SizeX,
 		float SizeY);
+
+	bool CreateFrameAnimation(const std::string& AnimName, const std::string& TexName,
+		int StartFrame, int EndFrame, const std::string& PathName, const std::string& FileName, const std::string& Extention,
+		float FrameWidth, float FrameHeight, bool fill = true);
 
 #pragma endregion Animation2D
 };

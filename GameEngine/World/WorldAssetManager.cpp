@@ -1,4 +1,4 @@
-#include "WorldAssetManager.h"
+﻿#include "WorldAssetManager.h"
 
 CWorldAssetManager::CWorldAssetManager()
 {
@@ -555,5 +555,42 @@ bool CWorldAssetManager::AddFrame(
 	return true;
 }
 
+bool CWorldAssetManager::CreateFrameAnimation(const std::string& AnimName, const std::string& TexName,
+	int StartFrame,int EndFrame, const std::string& PathName, const std::string& FileName, const std::string& Extention,
+	float FrameWidth, float FrameHeight,bool fill)
+{
+	CreateAnimation(AnimName);
+	SetAnimation2DTextureType(
+		AnimName, EAnimation2DTextureType::Frame);
+	std::vector<const TCHAR*>	TextureFileName;
+	for (int i = StartFrame; i <= EndFrame; ++i)
+	{
+		TCHAR* szName = new TCHAR[MAX_PATH];
+		memset(szName, 0, sizeof(TCHAR) * MAX_PATH);
+		if (fill)
+		{
+			swprintf_s(szName, MAX_PATH, TEXT("%hs%hs%03d.%hs"),
+				PathName.c_str(), FileName.c_str(), i, Extention.c_str());
+			TextureFileName.push_back(szName);
+		}
+		else
+		{
+			swprintf_s(szName, MAX_PATH, TEXT("%hs%hs%d.%hs"),
+				PathName.c_str(), FileName.c_str(), i, Extention.c_str());
+			TextureFileName.push_back(szName);
+		}
+		
+	}
+	SetTexture(AnimName, TexName, TextureFileName);
+
+	for (size_t i = 0; i < TextureFileName.size(); ++i)
+	{
+		delete[] TextureFileName[i];
+	}
+	TextureFileName.clear();
+		
+	AddFrame(AnimName, EndFrame - StartFrame + 1, 0.f, 0.f, FrameWidth, FrameHeight);
+	return true;
+}
 
 #pragma endregion Animation2D

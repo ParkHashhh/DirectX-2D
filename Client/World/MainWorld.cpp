@@ -1,4 +1,4 @@
-#include "MainWorld.h"
+﻿#include "MainWorld.h"
 #include "../Player/Player.h"
 #include "../Monster/Monster.h"
 #include "../Monster/MonsterSpawnPoint.h"
@@ -28,9 +28,16 @@ bool CMainWorld::Init()
 	if (Monster)
 	{
 		Monster->SetWorldPos(-400.f, 300.f);
-		Monster->SetWorldRotationZ(180.f);
+		Monster->SetWorldRotationZ(180);
 	}
+	std::weak_ptr<CMonsterSpawnPoint>	SpawnPoint1 = CreateGameObject<CMonsterSpawnPoint>("SpawnPoint");
 
+	std::shared_ptr<CMonsterSpawnPoint>	Point = SpawnPoint1.lock();
+	if (Point)
+	{
+		Point->SetSpawnClass<CMonster>();
+		Point->SetSpawnTime(2.f);
+	}
 	/*Monster1 = CreateGameObject<CMonster>("Monster");
 
 	Monster = Monster1.lock();
@@ -58,58 +65,31 @@ bool CMainWorld::Init()
 
 void CMainWorld::LoadAnimation2D()
 {
-	mWorldAssetManager->CreateAnimation("PlayerIdle");
-	mWorldAssetManager->SetAnimation2DTextureType(
-		"PlayerIdle", EAnimation2DTextureType::Frame);
+	// LoadArrowTex
+	mWorldAssetManager->LoadTextureFullPath("Arrow", L"../Binary/Asset/Texture/Player/Item/Arrow.png");
+	
+	// CreateIdleAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"PlayerIdle", "PlayerIdle",0, 17, "Player/Idle/",
+		"0_Forest_Ranger_Idle_", "png", 900, 900);
 
-	std::vector<const TCHAR*>	TextureFileName;
+	// CreateRunAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"PlayerRun", "PlayerRun", 0,11, "Player/Running/",
+		"0_Forest_Ranger_Running_", "png", 900, 900);
 
-	for (int i = 0; i < 7; ++i)
-	{
-		//TCHAR	FileName[MAX_PATH] = {};
-		TCHAR* FileName = new TCHAR[MAX_PATH];
-		memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
-		wsprintf(FileName, 
-			TEXT("Player/PlayerFrame/adventurer-get-up-0%d.png"), i);
-		TextureFileName.push_back(FileName);
-	}
+	// CreateAttackAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"PlayerShoot", "PlayerShoot", 0,8, "Player/Shooting/",
+		"0_Forest_Ranger_Shooting_", "png", 900, 900);
 
-	mWorldAssetManager->SetTexture("PlayerIdle", "PlayerIdle",
-		TextureFileName);
+	mWorldAssetManager->CreateFrameAnimation(
+		"PlayerRunShoot", "PlayerRunShoot", 0,11, "Player/Run_Shooting/",
+		"0_Forest_Ranger_Run_Shooting_", "png", 900, 900);
 
-	for (int i = 0; i < 7; ++i)
-	{
-		delete[] TextureFileName[i];
-	}
-	TextureFileName.clear();
-
-	mWorldAssetManager->AddFrame("PlayerIdle", 7, 0.f, 0.f, 50.f, 37.f);
-
-	mWorldAssetManager->CreateAnimation("PlayerWalk");
-	mWorldAssetManager->SetAnimation2DTextureType("PlayerWalk",
-		EAnimation2DTextureType::SpriteSheet);
-
-	mWorldAssetManager->SetTexture("PlayerWalk", "PlayerSheet",
-		TEXT("Player/Player.png"));
-
-	mWorldAssetManager->AddFrame("PlayerWalk", 200.f, 222.f, 50.f, 37.f);
-	mWorldAssetManager->AddFrame("PlayerWalk", 250.f, 222.f, 50.f, 37.f);
-	mWorldAssetManager->AddFrame("PlayerWalk", 300.f, 222.f, 50.f, 37.f);
-	mWorldAssetManager->AddFrame("PlayerWalk", 0.f, 259.f, 50.f, 37.f);
-	mWorldAssetManager->AddFrame("PlayerWalk", 50.f, 259.f, 50.f, 37.f);
-	mWorldAssetManager->AddFrame("PlayerWalk", 100.f, 259.f, 50.f, 37.f);
-
-	mWorldAssetManager->CreateAnimation("PlayerAttack");
-	mWorldAssetManager->SetAnimation2DTextureType("PlayerAttack",
-		EAnimation2DTextureType::SpriteSheet);
-
-	mWorldAssetManager->SetTexture("PlayerAttack", "PlayerSheet",
-		TEXT("Player/Player.png"));
-
-	mWorldAssetManager->AddFrame("PlayerAttack", 0.f, 0.f, 50.f, 37.f);
-	mWorldAssetManager->AddFrame("PlayerAttack", 50.f, 0.f, 50.f, 37.f);
-	mWorldAssetManager->AddFrame("PlayerAttack", 100.f, 0.f, 50.f, 37.f);
-	mWorldAssetManager->AddFrame("PlayerAttack", 150.f, 0.f, 50.f, 37.f);
+	mWorldAssetManager->CreateFrameAnimation(
+		"PlayerSlide", "PlayerSlide", 0, 5, "Player/Sliding/",
+		"0_Forest_Ranger_Sliding_", "png", 900, 900);
 
 	mWorldAssetManager->CreateAnimation("MonsterIdle");
 	mWorldAssetManager->SetAnimation2DTextureType("MonsterIdle",
@@ -124,6 +104,7 @@ void CMainWorld::LoadAnimation2D()
 			45.f, 60.f);
 	}
 
+
 	mWorldAssetManager->CreateAnimation("MonsterAttack");
 	mWorldAssetManager->SetAnimation2DTextureType("MonsterAttack",
 		EAnimation2DTextureType::SpriteSheet);
@@ -137,29 +118,33 @@ void CMainWorld::LoadAnimation2D()
 			180.f, 45.f, 60.f);
 	}
 
+	mWorldAssetManager->CreateFrameAnimation(
+		"Explosion", "Explosion",1,89, "Explosion/",
+		"Explosion", "png", 320.f, 240.f,false);
 
-	mWorldAssetManager->CreateAnimation("Explosion");
-	mWorldAssetManager->SetAnimation2DTextureType("Explosion",
-		EAnimation2DTextureType::Frame);
 
-	for (int i = 1; i <= 89; ++i)
-	{
-		//TCHAR	FileName[MAX_PATH] = {};
-		TCHAR* FileName = new TCHAR[MAX_PATH];
-		memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
-		wsprintf(FileName,
-			TEXT("Explosion/Explosion%d.png"), i);
-		TextureFileName.push_back(FileName);
-	}
+	//mWorldAssetManager->CreateAnimation("Explosion");
+	//mWorldAssetManager->SetAnimation2DTextureType("Explosion",
+	//	EAnimation2DTextureType::Frame);
 
-	mWorldAssetManager->SetTexture("Explosion", "Explosion",
-		TextureFileName);
+	//for (int i = 1; i <= 89; ++i)
+	//{
+	//	//TCHAR	FileName[MAX_PATH] = {};
+	//	TCHAR* FileName = new TCHAR[MAX_PATH];
+	//	memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
+	//	wsprintf(FileName,
+	//		TEXT("Explosion/Explosion%d.png"), i);
+	//	TextureFileName.push_back(FileName);
+	//}
 
-	for (int i = 0; i < 89; ++i)
-	{
-		delete[] TextureFileName[i];
-	}
-	TextureFileName.clear();
+	//mWorldAssetManager->SetTexture("Explosion", "Explosion",
+	//	TextureFileName);
 
-	mWorldAssetManager->AddFrame("Explosion", 89, 0.f, 0.f, 320.f, 240.f);
+	//for (int i = 0; i < 89; ++i)
+	//{
+	//	delete[] TextureFileName[i];
+	//}
+	//TextureFileName.clear();
+
+	//mWorldAssetManager->AddFrame("Explosion", 89, 0.f, 0.f, 320.f, 240.f);
 }

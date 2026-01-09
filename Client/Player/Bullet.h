@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Object/GameObject.h"
 
@@ -19,6 +19,7 @@ public:
 private:
 	std::weak_ptr<class CMeshComponent>	mMeshComponent;
 	std::weak_ptr<class CProjectileMovementComponent>	mMovement;
+	std::weak_ptr<class CAnimation2DComponent>	mAnimation2DComponent;
 	std::weak_ptr<class CColliderBox2D>	mBody;
 	float		mDistance = 600.f;
 	float		mSpeed = 300.f;

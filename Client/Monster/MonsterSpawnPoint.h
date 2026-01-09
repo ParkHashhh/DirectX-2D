@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Object/GameObject.h"
 
@@ -21,6 +21,7 @@ private:
 	float	mTime = 0.f;
 	float	mSpawnTime = 1.f;
 	std::weak_ptr<class CMonster>	mSpawnMonster;
+	std::vector<std::weak_ptr<class CMonster>> mSpawnMonsterList;
 
 
 public:

@@ -60,26 +60,30 @@ bool CPlayer::Init()
 		Anim->SetUpdateComponent(mMeshComponent);
 
 		Anim->AddAnimation("PlayerIdle");
-		Anim->AddAnimation("PlayerWalk");
-		Anim->AddAnimation("PlayerAttack");
-		//Anim->ChangeAnimation("PlayerWalk");
-		Anim->SetPlayRate("PlayerAttack", 2.f);
+		Anim->AddAnimation("PlayerRun");
+		Anim->AddAnimation("PlayerShoot");
+		Anim->AddAnimation("PlayerRunShoot");
+		Anim->AddAnimation("PlayerSlide");
+		Anim->ChangeAnimation("PlayerRun");
+		Anim->SetPlayRate("PlayerShoot", 1.f);
 
-		//Anim->AddNotify<CPlayer>("PlayerIdle", "TestNotify",
-		//	4, this, &CPlayer::TestNotify);
-		Anim->AddNotify<CPlayer>("PlayerAttack",
-			"AttackNotify", 2, this, &CPlayer::AttackNotify);
-		Anim->SetFinishNotify<CPlayer>("PlayerAttack",
+		Anim->AddNotify<CPlayer>("PlayerShoot",
+			"AttackNotify", 1, this, &CPlayer::AttackNotify);
+		Anim->SetFinishNotify<CPlayer>("PlayerShoot",
 			this, &CPlayer::AttackFinish);
+		Anim->AddNotify<CPlayer>("PlayerShoot",
+			"AttackEndNotify", 8, this, &CPlayer::AttackEndNotify);
 
-		//Anim->SetFinishNotify<CPlayer>("PlayerIdle", this,
-		//	&CPlayer::TestNotify);
+		Anim->AddNotify<CPlayer>("PlayerRunShoot",
+			"AttackEndNotify", 11, this, &CPlayer::AttackEndNotify);
 
-		//Anim->SetSymmetry("PlayerIdle", true);
-		//Anim->SetSymmetry("PlayerWalk", true);
+		Anim->AddNotify<CPlayer>("PlayerSlide",
+			"SlideEndNotify", 5, this, &CPlayer::SlideEndNotify);
+
+
 
 		Anim->SetLoop("PlayerIdle", true);
-		Anim->SetLoop("PlayerWalk", true);
+		Anim->SetLoop("PlayerRun", true);
 	}
 
 	auto	Mesh = mMeshComponent.lock();
@@ -91,7 +95,7 @@ bool CPlayer::Init()
 		Mesh->SetWorldScale(100.f, 100.f);
 		Mesh->SetMaterialBaseColor(0, 255, 255, 255, 0);
 		Mesh->SetBlendState(0, "AlphaBlend");
-		Mesh->SetPivot(0.5f, 0.f);
+		Mesh->SetPivot(0.5f, 0.5f);
 	}	
 
 	mBody = CreateComponent<CColliderBox2D>("Body");
@@ -100,7 +104,7 @@ bool CPlayer::Init()
 	if (Body)
 	{
 		Body->SetCollisionProfile("Player");
-		Body->SetBoxSize(100.f, 100.f);
+		Body->SetBoxSize(75.f, 80.f);
 		Body->SetDebugDraw(true);
 		Body->SetInheritScale(false);
 		Body->SetCollisionBeginFunction<CPlayer>(this, &CPlayer::OnHit);
@@ -134,21 +138,32 @@ bool CPlayer::Init()
 	Input->AddBindKey("MoveUp", VK_UP);
 	Input->SetBindFunction<CPlayer>("MoveUp",
 		EInputType::Hold, this, &CPlayer::MoveUp);
+	Input->SetBindFunction<CPlayer>("MoveUp", EInputType::Release, this, &CPlayer::MoveUpRelease);
 
 	Input->AddBindKey("MoveDown", VK_DOWN);
 	Input->SetBindFunction<CPlayer>("MoveDown",
 		EInputType::Hold, this, &CPlayer::MoveDown);
+	Input->SetBindFunction<CPlayer>("MoveDown", EInputType::Release, this, &CPlayer::MoveDownRelease);
+
 
 	Input->AddBindKey("MoveLeft", VK_LEFT);
 	Input->SetBindFunction<CPlayer>("MoveLeft",
 		EInputType::Hold, this, &CPlayer::MoveLeft);
+	Input->SetBindFunction<CPlayer>("MoveLeft", EInputType::Release, this, &CPlayer::MoveLeftRelease);
+
 
 	Input->AddBindKey("MoveRight", VK_RIGHT);
 	Input->SetBindFunction<CPlayer>("MoveRight",
 		EInputType::Hold, this, &CPlayer::MoveRight);
+	Input->SetBindFunction<CPlayer>("MoveRight", EInputType::Release, this, &CPlayer::MoveRightRelease);
+
 
 	Input->AddBindKey("Attack", 'A');
 	Input->SetBindFunction<CPlayer>("Attack", EInputType::Press, this, &CPlayer::AttackPress);
+
+	Input->AddBindKey("Slide", 'S');
+	Input->SetBindFunction<CPlayer>("Slide", EInputType::Press, this, &CPlayer::SlidePress);
+	
 
 	return true;
 }
@@ -157,15 +172,55 @@ void CPlayer::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
+
 	auto	Mesh = mMeshComponent.lock();
 	auto	Anim = mAnimation2DComponent.lock();
-
-
-	if (Mesh->GetSpeed() == 0.f && mAutoIdle)
+	auto	Movement = mMovement.lock();
+	if (mIsSlide)
 	{
-		mAutoIdle = false;
-		Anim->ChangeAnimation("PlayerIdle");
+		Movement->SetSpeed(300);
+		Movement->AddMove(mDir);
+		return;
 	}
+	FVector3 Current;
+	if (mUpKey) Current.y += 1.f;
+	if (mDownKey) Current.y -= 1.f;
+	if (mLeftKey) Current.x -= 1.f;
+	if (mRightKey) Current.x += 1.f;
+	if (!Current.IsZero())
+	{
+		Current.Normalize();
+		mDir = Current;
+	}
+	if (Current.x < 0.f)
+	{
+		Anim->SetSymmetry("PlayerRun", true);
+		Anim->SetSymmetry("PlayerIdle", true);
+		Anim->SetSymmetry("PlayerShoot", true);
+		Anim->SetSymmetry("PlayerRunShoot", true);
+	}
+	else if (Current.x > 0.f)
+	{
+		Anim->SetSymmetry("PlayerRun", false);
+		Anim->SetSymmetry("PlayerIdle", false);
+		Anim->SetSymmetry("PlayerShoot", false);
+		Anim->SetSymmetry("PlayerRunShoot", false);
+	}
+	
+	if (!mIsShoot)
+	{
+		if (!Current.IsZero())
+		{
+			Anim->ChangeAnimation("PlayerRun");
+			mAutoIdle = true;
+		}
+		else if (mAutoIdle && Mesh->GetSpeed() <= 0.1f)
+		{
+			Anim->ChangeAnimation("PlayerIdle");
+			mAutoIdle = false;
+		}
+	}
+
 	if (mIsInvincible)
 	{
 		mInvincibleTime -= CTimer::GetDeltaTime();
@@ -191,23 +246,7 @@ void CPlayer::Destroy()
 
 void CPlayer::AttackNotify()
 {
-	std::shared_ptr<CWorld>	World = mWorld.lock();
-
-	if (World)
-	{
-		std::weak_ptr<CBullet>	Bullet = World->CreateGameObject<CBullet>("Bullet");
-
-		std::shared_ptr<CBullet>	BulletObj = Bullet.lock();
-
-		if (BulletObj)
-		{
-			BulletObj->SetCollisionName("PlayerAttack");
-			BulletObj->SetWorldPos(GetWorldPos() + GetAxis(EAxis::Y) * 75.f);
-			BulletObj->SetWorldRotation(GetWorldRot());
-			BulletObj->SetCollisionTargetName("Monster");
-			BulletObj->ComputeCollisionRange();
-		}
-	}
+	// 몇프레임에 무슨 반응할지.
 }
 
 void CPlayer::AttackFinish()
@@ -217,67 +256,124 @@ void CPlayer::AttackFinish()
 
 void CPlayer::MoveUp()
 {
-	mAutoIdle = true;
-
+	if (mIsSlide)
+		return;
+	mUpKey = true;
 	auto	Movement = mMovement.lock();
-	auto	Mesh = mMeshComponent.lock();
-	auto	Anim = mAnimation2DComponent.lock();
-
-	Mesh->SetWorldRotation(0.f, 0.f,0.f);
+	auto	Anim = mAnimation2DComponent.lock();	
 	Movement->AddMove(FVector3(0.f, 1.f, 0.f));
-	SetDir(FVector3(0.f, 1.f, 0.f));
-	Anim->ChangeAnimation("PlayerWalk");
+	if (mIsShoot)
+		return;
+
 }
 
 void CPlayer::MoveDown()
 {
-	mAutoIdle = true;
+	if (mIsSlide)
+		return;
+	mDownKey = true;
 
 	auto	Movement = mMovement.lock();
-	auto	Mesh = mMeshComponent.lock();
 	auto	Anim = mAnimation2DComponent.lock();
-
-	Anim->ChangeAnimation("PlayerWalk");
-	Mesh->SetWorldRotation(0.f, 0.f,180.f);
 	Movement->AddMove(FVector3(0.f, -1.f, 0.f));
-	SetDir(FVector3(0.f, -1.f, 0.f));
-
+	if (mIsShoot)
+		return;
 
 }
 
 void CPlayer::MoveLeft()
 {
-	mAutoIdle = true;
-
+	if (mIsSlide)
+		return;
+	mLeftKey = true;
 	auto	Movement = mMovement.lock();
-	auto	Mesh = mMeshComponent.lock();
 	auto	Anim = mAnimation2DComponent.lock();
-
-	Anim->ChangeAnimation("PlayerWalk");
-	Mesh->SetWorldRotation(0.f, 0.f, 90.f);
-
 	Movement->AddMove(FVector3(-1.f, 0.f, 0.f));
-	SetDir(FVector3(-1.f, 0.f, 0.f));
+	if (mIsShoot)
+		return;
 }
 
 void CPlayer::MoveRight()
 {
-	mAutoIdle = true;
+	if (mIsSlide)
+		return;
+	mRightKey = true;
 	auto	Movement = mMovement.lock();
-	auto	Mesh = mMeshComponent.lock();
 	auto	Anim = mAnimation2DComponent.lock();
-	Mesh->SetWorldRotation(0.f, 0.f, -90.f);
-
-	Anim->ChangeAnimation("PlayerWalk");
-	Movement->AddMove(FVector3(1.f,0.f,0.f));
-	SetDir(FVector3(1.f, 0.f, 0.f));
+	Movement->AddMove(FVector3(1.f, 0.f, 0.f));
+	if (mIsShoot)
+		return;
 }
+
+void CPlayer::MoveUpRelease()
+{
+	mAutoIdle = true;
+	mUpKey = false;
+
+}
+
+void CPlayer::MoveDownRelease()
+{
+	mAutoIdle = true;
+	mDownKey = false;
+
+}
+
+void CPlayer::MoveLeftRelease()
+{
+	mAutoIdle = true;
+	mLeftKey = false;
+
+
+}
+
+void CPlayer::MoveRightRelease()
+{
+	mAutoIdle = true;
+	mRightKey = false;
+}
+
+
 
 void CPlayer::AttackPress()
 {
-	auto World = mWorld.lock();
+	if (mIsSlide)
+		return;
+
+	auto	Anim = mAnimation2DComponent.lock();
+	auto	Movement = mMovement.lock();
+	auto	 World = mWorld.lock();
 	if (World)
 	{
+		mIsShoot = true;
+		FVector3 ResultDir = FVector3::Zero;
+		if (mUpKey)
+			ResultDir.y += 1;
+		if (mDownKey)
+			ResultDir.y -= 1;
+		if (mLeftKey)
+			ResultDir.x -= 1;
+		if (mRightKey)
+			ResultDir.x += 1;
+		if (ResultDir.IsZero())
+			ResultDir = mDir;
+		else
+			ResultDir.Normalize();
+		if (Anim)
+		{
+			std::string AnimName = "PlayerShoot";
+			if (mUpKey || mDownKey || mLeftKey || mRightKey)
+				AnimName = "PlayerRunShoot";
+
+			if (mDir.x < 0)
+				Anim->SetSymmetry(AnimName, true);
+			else if (mDir.x > 0.f)
+				Anim->SetSymmetry(AnimName, false);
+
+			Anim->ChangeAnimation(AnimName);
+
+		}
+
 		std::weak_ptr<CBullet> mBullet = World->CreateGameObject<CBullet>("Bullet");
 		std::shared_ptr<CBullet>	Bullet = mBullet.lock();
 		auto	Mesh = mMeshComponent.lock();
@@ -285,10 +381,10 @@ void CPlayer::AttackPress()
 		{
 			Bullet->SetCollisionName("PlayerAttack");
 			Bullet->SetWorldRotation(GetWorldRot());
-			Bullet->SetWorldPos(GetWorldPos() + mDir * 75.f);
+			Bullet->SetWorldPos(GetWorldPos() + ResultDir * 75.f);
 			Bullet->SetCollisionTargetName("Monster");
 			Bullet->ComputeCollisionRange();
-			Bullet->SetMoveDir(mDir);
+			Bullet->SetMoveDir(ResultDir);
 			Bullet->SetSpeed(500);
 		}
 	}
@@ -301,6 +397,49 @@ void CPlayer::AttackHold()
 void CPlayer::AttackRelease()
 {
 
+}
+
+void CPlayer::SlidePress()
+{
+	if (mIsSlide)
+		return;
+	mIsSlide = true;
+	auto	Movement = mMovement.lock();
+	auto	Anim = mAnimation2DComponent.lock();
+	if (Anim)
+	{
+		if (mDir.x == -1 || mDir.y == -1)
+			Anim->SetSymmetry("PlayerSlide", true);
+		else
+			Anim->SetSymmetry("PlayerSlide", false);
+
+		Anim->ChangeAnimation("PlayerSlide");
+
+	}
+}
+
+void CPlayer::SlideEndNotify()
+{
+	mAutoIdle = true;
+	mIsSlide = false;
+
+	auto	Anim = mAnimation2DComponent.lock();
+	auto	Movement = mMovement.lock();
+	if (Anim)
+	{
+		if (mDir.x == -1 || mDir.y == -1)
+			Anim->SetSymmetry("PlayerIdle", true);
+		else
+			Anim->SetSymmetry("PlayerIdle", false);
+
+		Anim->ChangeAnimation("PlayerIdle");
+	}
+}
+
+void CPlayer::AttackEndNotify()
+{
+	mIsShoot = false;
+	mAutoIdle = true;
 }
 
 void CPlayer::OnHit(const FVector3& HitPoint, CCollider* Dest)

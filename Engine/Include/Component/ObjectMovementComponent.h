@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "MovementComponent.h"
 
@@ -21,6 +21,10 @@ protected:
 	FVector3		mVelocity;
 
 public:
+	void SetVelocity(FVector3 Velocity)
+	{
+		mVelocity = Velocity;
+	}
 	const FVector3& GetVelocity()	const
 	{
 		return mVelocity;
