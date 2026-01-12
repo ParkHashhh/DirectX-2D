@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../EngineInfo.h"
 #include "../Object/GameObject.h"
@@ -23,6 +23,7 @@ protected:
 	std::shared_ptr<CWorldAssetManager>	mWorldAssetManager;
 	std::shared_ptr<CInput>	mInput;
 	std::shared_ptr<CWorldCollision>	mCollision;
+	bool mIsPlayerDead = false;
 
 public:
 	std::weak_ptr<CCameraManager> GetCameraManager()	const
@@ -61,6 +62,15 @@ private:
 	void Begin();
 
 public:
+	void SetPlayerIsDead(bool IsDead)
+	{
+		mIsPlayerDead = IsDead;
+	}
+	bool GetPlayerIsDead()
+	{
+		return mIsPlayerDead;
+	}
+
 	template <typename T>
 	std::weak_ptr<T> CreateGameObject(
 		const std::string& Name)

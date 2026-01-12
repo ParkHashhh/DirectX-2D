@@ -41,17 +41,14 @@ private:
 	bool mRightKey = false;
 	bool mIsShoot = false;
 
+
+	bool mEnd = false;
+
 	std::weak_ptr<class CBullet>	mBullet;
 
 public:
-	void Damage(int Dmg)
-	{
-		mHP -= Dmg;
-
-		char	Test[256] = {};
-		sprintf_s(Test, "HP : %d\n", mHP);
-		OutputDebugStringA(Test);
-	}
+	void Damage(int Dmg);
+	
 
 public:
 	
@@ -63,8 +60,16 @@ private:
 	void TestNotify();
 	void AttackNotify();
 	void AttackFinish();
+	void DeadNotify();
+	void DeadFinish();
 
 private:
+	void SetKey();
+	void SetCamera();
+	void SetCollision();
+	void SetMesh();
+	void SetAnimation();
+	void SetMovement();
 
 	void SetDir(FVector3 Dir)
 	{

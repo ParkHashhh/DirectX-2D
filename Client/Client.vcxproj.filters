@@ -34,6 +34,15 @@
     <Filter Include="06. Setting">
       <UniqueIdentifier>{031f271d-7fbc-418d-980e-12209691b400}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Monster\01. Goblin">
+      <UniqueIdentifier>{e96673f7-76ae-456e-83d4-f12516e9580d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster\02. Ogre">
+      <UniqueIdentifier>{007a84c5-f428-4349-bfb7-90cd617e08f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster\03. Orc">
+      <UniqueIdentifier>{7055cce8-4fe6-4b58-bd76-6f552952f451}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,6 +78,15 @@
     <ClCompile Include="GlobalSetting.cpp">
       <Filter>06. Setting</Filter>
     </ClCompile>
+    <ClCompile Include="Monster\Goblin.cpp">
+      <Filter>03. Monster\01. Goblin</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Ogre.cpp">
+      <Filter>03. Monster\02. Ogre</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Orc.cpp">
+      <Filter>03. Monster\03. Orc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -103,6 +121,15 @@
     </ClInclude>
     <ClInclude Include="GlobalSetting.h">
       <Filter>06. Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Goblin.h">
+      <Filter>03. Monster\01. Goblin</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Ogre.h">
+      <Filter>03. Monster\02. Ogre</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Orc.h">
+      <Filter>03. Monster\03. Orc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

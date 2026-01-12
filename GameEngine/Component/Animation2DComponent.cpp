@@ -1,4 +1,4 @@
-#include "Animation2DComponent.h"
+﻿#include "Animation2DComponent.h"
 #include "../Asset/Animation2D/Animation2D.h"
 #include "../Asset/Animation2D/Animation2DManager.h"
 #include "../Asset/AssetManager.h"
@@ -14,12 +14,12 @@ CAnimation2DComponent::CAnimation2DComponent()
 }
 
 CAnimation2DComponent::CAnimation2DComponent(
-	const CAnimation2DComponent& ref)	:
+	const CAnimation2DComponent& ref) :
 	CObjectComponent(ref)
 {
 	mUpdateComponent = ref.mUpdateComponent;
-}
 
+}
 CAnimation2DComponent::CAnimation2DComponent(
 	CAnimation2DComponent&& ref) noexcept :
 	CObjectComponent(std::move(ref))
@@ -37,6 +37,7 @@ void CAnimation2DComponent::SetUpdateComponent(
 
 	auto	MeshComponent = mUpdateComponent.lock();
 
+	mUpdateEnable = false;
 	if (MeshComponent && mCurrentAnimation)
 	{
 		MeshComponent->SetAnimComponent(
@@ -323,6 +324,7 @@ void CAnimation2DComponent::Update(float DeltaTime)
 
 		if (!mUpdateEnable)
 		{
+
 			if (MeshComponent)
 			{
 				MeshComponent->SetAnimComponent(
@@ -344,6 +346,7 @@ void CAnimation2DComponent::Update(float DeltaTime)
 
 		mCurrentAnimation->Update(DeltaTime);
 	}
+
 }
 
 void CAnimation2DComponent::PostUpdate(float DeltaTime)

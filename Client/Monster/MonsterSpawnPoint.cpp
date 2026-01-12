@@ -2,6 +2,9 @@
 #include "Component/SceneComponent.h"
 #include "Monster.h"
 #include "World/World.h"
+#include "Goblin.h"
+#include "Ogre.h"
+#include "Orc.h"
 
 namespace SpawnPos
 {
@@ -11,6 +14,15 @@ namespace SpawnPos
 		Bottom,
 		Left,
 		Right
+	};
+}
+namespace Monster
+{
+	enum Type : unsigned char
+	{
+		Goblin,
+		Ogre,
+		Orc
 	};
 }
 
@@ -37,7 +49,6 @@ CMonsterSpawnPoint::~CMonsterSpawnPoint()
 bool CMonsterSpawnPoint::Init()
 {
 	CGameObject::Init();
-
 	CreateComponent<CSceneComponent>("Root");
 
 	return true;
@@ -46,18 +57,42 @@ bool CMonsterSpawnPoint::Init()
 void CMonsterSpawnPoint::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
-
-	// 만약 생성한 몬스터가 제가 되었거나 처음 시작한다면
-	// 몬스터를 생성한다.
-	auto begin = mSpawnMonsterList.begin();
-	auto end = mSpawnMonsterList.end();
-	for (; begin != end;)
+	mLevelTime += DeltaTime;
+	if (mLevelTime >= 30.f)
 	{
-		if (begin->expired())
-			begin = mSpawnMonsterList.erase(begin);
-		else
-			begin++;
+		if (mLevel < MAX_LEVEL)
+		{
+			mLevelTime -= 30.f;
+			mLevel++;
+			mSpawnTime -= 0.2f;
+		}
 	}
+
+	// 플레이어 죽으면 끝
+	auto World = mWorld.lock();
+	if (World)
+	{
+		if (World->GetPlayerIsDead())
+			return;
+	}
+
+
+	// 죽은몬스터 제거
+	auto iter = mSpawnMonsterList.begin();
+
+	while (iter != mSpawnMonsterList.end())
+	{
+		if (iter->expired())
+		{
+			iter = mSpawnMonsterList.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+
+
 	if ((int)mSpawnMonsterList.size() < 20)
 	{	
 		mTime += DeltaTime;
@@ -66,54 +101,70 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 		{
 			mTime = 0.f;
 
-			std::weak_ptr<CObject> Origin = CObject::FindCDO(mSpawnClass);
 
-			auto OriginMonster = std::dynamic_pointer_cast<CMonster>(Origin.lock());
+			int MonsterType = rand() % mLevel;
 
 			auto	World = mWorld.lock();
-
-			std::weak_ptr<CMonster> SpawnMonster = World->CreateCloneGameObject<CMonster>("Monster", OriginMonster);
-
-			auto	Monster = std::dynamic_pointer_cast<CMonster>(SpawnMonster.lock());
-			int Sidepos = rand() % 4;
-			int RandWidth = rand() % 1200 - 600;
-			int RandHeight = rand() % 640 - 320;
-
-
-			FVector3 SpawnPos = FVector3::Zero;
-
-			switch (Sidepos)
+			// 몬스터 해쉬코드 받아오기
+			switch (MonsterType)
 			{
-			case SpawnPos::Top:
-				SpawnPos.x = RandWidth;
-				SpawnPos.y = 320;
+			case Monster::Goblin:
+				mSpawnClass = typeid(CGoblin).hash_code();
 				break;
-			case SpawnPos::Bottom:
-				SpawnPos.x = RandWidth;
-				SpawnPos.y = -320;
+			case Monster::Ogre:
+				mSpawnClass = typeid(COgre).hash_code();
 				break;
-			case SpawnPos::Left:
-				SpawnPos.y = RandHeight;
-				SpawnPos.x = -600;
-				break;
-			case SpawnPos::Right:
-				SpawnPos.x = 600;
-				SpawnPos.y = RandHeight;
+			case Monster::Orc:
+				mSpawnClass = typeid(COrc).hash_code();
 				break;
 			}
 
-			auto Target = Monster->GetTargetObject().lock();
-			FVector3	TargetPos = Target->GetWorldPos();
-			FVector3 DirToTarget = TargetPos - SpawnPos;
-			DirToTarget.Normalize();
-			float Angle = SpawnPos.GetViewTargetAngle2D(TargetPos, EAxis::Y);
-			Monster->SetWorldRotationZ(Angle);
+			std::weak_ptr<CObject> Origin = CObject::FindCDO(mSpawnClass);
+			auto OriginMonster = std::dynamic_pointer_cast<CMonster>(Origin.lock());
+			if (OriginMonster)
+			{
+				std::string MonsterName = "Monster_" + std::to_string(rand() % 10000);
+				std::weak_ptr<CMonster> SpawnMonster = World->CreateCloneGameObject<CMonster>(MonsterName, OriginMonster);
+				auto Monster = SpawnMonster.lock();
+				Monster->SetMonsterData();
+				int Sidepos = rand() % 4;
+				int RandWidth = rand() % 1200 - 600;
+				int RandHeight = rand() % 640 - 320;
 
-			Monster->SetWorldPos(SpawnPos);
-			Monster->SetWorldRotationZ(Angle);
-			mSpawnMonsterList.push_back(SpawnMonster);
 
+				FVector3 SpawnPos = FVector3::Zero;
+				// 생성위치
+				switch (Sidepos)
+				{
+				case SpawnPos::Top:
+					SpawnPos.x = RandWidth;
+					SpawnPos.y = 320;
+					break;
+				case SpawnPos::Bottom:
+					SpawnPos.x = RandWidth;
+					SpawnPos.y = -320;
+					break;
+				case SpawnPos::Left:
+					SpawnPos.y = RandHeight;
+					SpawnPos.x = -600;
+					break;
+				case SpawnPos::Right:
+					SpawnPos.x = 600;
+					SpawnPos.y = RandHeight;
+					break;
+				}
+				// 캐릭터쪽 따라가기
+				auto Target = Monster->GetTargetObject().lock();
+				FVector3	TargetPos = Target->GetWorldPos();
+				FVector3 DirToTarget = TargetPos - SpawnPos;
+				DirToTarget.Normalize();
+				float Angle = SpawnPos.GetViewTargetAngle2D(TargetPos, EAxis::Y);
+				Monster->SetWorldRotationZ(Angle);
 
+				Monster->SetWorldPos(SpawnPos);
+				Monster->SetWorldRotationZ(Angle);
+				mSpawnMonsterList.push_back(SpawnMonster);
+			}
 		}
 	}
 }

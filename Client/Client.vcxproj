@@ -153,8 +153,11 @@
     <ClCompile Include="GlobalSetting.cpp" />
     <ClCompile Include="Interface\StateInterface.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monster\Goblin.cpp" />
     <ClCompile Include="Monster\Monster.cpp" />
     <ClCompile Include="Monster\MonsterSpawnPoint.cpp" />
+    <ClCompile Include="Monster\Ogre.cpp" />
+    <ClCompile Include="Monster\Orc.cpp" />
     <ClCompile Include="Player\Bullet.cpp" />
     <ClCompile Include="Player\BulletEffect.cpp" />
     <ClCompile Include="Player\Missile.cpp" />
@@ -165,8 +168,11 @@
     <ClInclude Include="Component\StateComponent.h" />
     <ClInclude Include="GlobalSetting.h" />
     <ClInclude Include="Interface\StateInterface.h" />
+    <ClInclude Include="Monster\Goblin.h" />
     <ClInclude Include="Monster\Monster.h" />
     <ClInclude Include="Monster\MonsterSpawnPoint.h" />
+    <ClInclude Include="Monster\Ogre.h" />
+    <ClInclude Include="Monster\Orc.h" />
     <ClInclude Include="Player\Bullet.h" />
     <ClInclude Include="Player\BulletEffect.h" />
     <ClInclude Include="Player\Missile.h" />

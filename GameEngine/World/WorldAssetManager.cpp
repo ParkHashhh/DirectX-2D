@@ -589,7 +589,8 @@ bool CWorldAssetManager::CreateFrameAnimation(const std::string& AnimName, const
 	}
 	TextureFileName.clear();
 		
-	AddFrame(AnimName, EndFrame - StartFrame + 1, 0.f, 0.f, FrameWidth, FrameHeight);
+	if (!AddFrame(AnimName, EndFrame - StartFrame + 1, 0.f, 0.f, FrameWidth, FrameHeight))
+		return false;
 	return true;
 }
 

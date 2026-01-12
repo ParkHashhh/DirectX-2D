@@ -30,7 +30,7 @@ public:
 	void Update(float DeltaTime);
 
 #pragma region Mesh
-
+	                                        
 public:
 	bool CreateMesh(const std::string& Name, 
 		void* VertexData, 

@@ -37,21 +37,32 @@ bool CPlayer::Init()
 {
 	CGameObject::Init();
 
-	mMeshComponent = CreateComponent<CMeshComponent>("Mesh");
-	mRot = CreateComponent<CSceneComponent>("Rot1");
+	mMeshComponent = CreateComponent<CMeshComponent>("PlayerMesh");
 	mCameraComponent = CreateComponent<CCameraComponent>("PlayerCamera");
 
-	mStateComponent = CreateComponent<CStateComponent>("State");
-	mAnimation2DComponent = CreateComponent<CAnimation2DComponent>("Animation2D");
-	mMovement = CreateComponent<CObjectMovementComponent>("Movement");
-
+	mStateComponent = CreateComponent<CStateComponent>("PlayerState");
+	mAnimation2DComponent = CreateComponent<CAnimation2DComponent>("PlayerAnimation2D");
+	mMovement = CreateComponent<CObjectMovementComponent>("PlayerMovement");
+	SetMovement();
+	SetAnimation();
+	SetMesh();
+	SetCollision();
+	SetCamera();
+	SetKey();
+	return true;
+}
+void CPlayer::SetMovement()
+{
 	auto	Movement = mMovement.lock();
 
 	if (Movement)
 	{
 		Movement->SetUpdateComponent(mMeshComponent);
 	}
+}
 
+void CPlayer::SetAnimation()
+{
 	// 애니메이션 지정
 	auto	Anim = mAnimation2DComponent.lock();
 
@@ -64,13 +75,19 @@ bool CPlayer::Init()
 		Anim->AddAnimation("PlayerShoot");
 		Anim->AddAnimation("PlayerRunShoot");
 		Anim->AddAnimation("PlayerSlide");
-		Anim->ChangeAnimation("PlayerRun");
+		Anim->AddAnimation("PlayerDead");
 		Anim->SetPlayRate("PlayerShoot", 1.f);
 
 		Anim->AddNotify<CPlayer>("PlayerShoot",
 			"AttackNotify", 1, this, &CPlayer::AttackNotify);
 		Anim->SetFinishNotify<CPlayer>("PlayerShoot",
 			this, &CPlayer::AttackFinish);
+
+		Anim->AddNotify<CPlayer>("PlayerDead",
+			"AttackNotify", 1, this, &CPlayer::DeadNotify);
+		Anim->SetFinishNotify<CPlayer>("PlayerDead",
+			this, &CPlayer::DeadFinish);
+
 		Anim->AddNotify<CPlayer>("PlayerShoot",
 			"AttackEndNotify", 8, this, &CPlayer::AttackEndNotify);
 
@@ -85,19 +102,26 @@ bool CPlayer::Init()
 		Anim->SetLoop("PlayerIdle", true);
 		Anim->SetLoop("PlayerRun", true);
 	}
+}
 
+void CPlayer::SetMesh()
+{
 	auto	Mesh = mMeshComponent.lock();
 
 	if (Mesh)
 	{
+		Mesh->SetWorldPos(0, 0, 0);
 		Mesh->SetShader("DefaultTexture2D");
 		Mesh->SetMesh("RectTex");
 		Mesh->SetWorldScale(100.f, 100.f);
 		Mesh->SetMaterialBaseColor(0, 255, 255, 255, 0);
 		Mesh->SetBlendState(0, "AlphaBlend");
 		Mesh->SetPivot(0.5f, 0.5f);
-	}	
+	}
+}
 
+void CPlayer::SetCollision()
+{
 	mBody = CreateComponent<CColliderBox2D>("Body");
 	auto	Body = mBody.lock();
 
@@ -109,15 +133,10 @@ bool CPlayer::Init()
 		Body->SetInheritScale(false);
 		Body->SetCollisionBeginFunction<CPlayer>(this, &CPlayer::OnHit);
 	}
+}
 
-	auto	RotCom = mRot.lock();
-
-	if (RotCom)
-	{
-		RotCom->SetInheritRot(false);
-		RotCom->SetInheritScale(false);
-	}
-
+void CPlayer::SetCamera()
+{
 	auto	Camera = mCameraComponent.lock();
 
 	if (Camera)
@@ -128,8 +147,12 @@ bool CPlayer::Init()
 
 		Camera->SetInheritRot(false);
 	}
+}
 
 
+void CPlayer::SetKey()
+{
+	
 	// 플레이어에서 사용할 키를 등록한다.
 	auto	World = mWorld.lock();
 
@@ -163,25 +186,30 @@ bool CPlayer::Init()
 
 	Input->AddBindKey("Slide", 'S');
 	Input->SetBindFunction<CPlayer>("Slide", EInputType::Press, this, &CPlayer::SlidePress);
-	
-
-	return true;
 }
-
 void CPlayer::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
-
 	auto	Mesh = mMeshComponent.lock();
 	auto	Anim = mAnimation2DComponent.lock();
 	auto	Movement = mMovement.lock();
+	if (mEnd)
+	{
+		return;
+	}
+	if(mHP <= 0)
+	{
+		OutputDebugStringA("Player Dead!\n");
+		Anim->ChangeAnimation("PlayerDead");
+	}
 	if (mIsSlide)
 	{
 		Movement->SetSpeed(300);
 		Movement->AddMove(mDir);
 		return;
 	}
+
 	FVector3 Current;
 	if (mUpKey) Current.y += 1.f;
 	if (mDownKey) Current.y -= 1.f;
@@ -252,6 +280,18 @@ void CPlayer::AttackNotify()
 void CPlayer::AttackFinish()
 {
 	mAutoIdle = true;
+}
+
+void CPlayer::DeadNotify()
+{
+	auto World = mWorld.lock();
+	World->SetPlayerIsDead(true);
+
+}
+
+void CPlayer::DeadFinish()
+{
+	mEnd = true;
 }
 
 void CPlayer::MoveUp()
@@ -444,12 +484,26 @@ void CPlayer::AttackEndNotify()
 
 void CPlayer::OnHit(const FVector3& HitPoint, CCollider* Dest)
 {
+	// 무적이 아닐때 맞고 여기서 데미지가 0일때를 체크해야함.
+
 	if (!mIsInvincible)
 	{
-		mHP--;
-		if (!mHP)
+		Damage(1);
+		if (mHP <= 0)
 			return;
 		mInvincibleTime = 1.0f;
 		mIsInvincible = true;
+	}
+}
+
+void CPlayer::Damage(int Dmg)
+{
+	{
+		mHP -= Dmg;
+		char buf[256];
+		sprintf_s(buf, "Player HP: %d\n", mHP);
+		OutputDebugStringA(buf);
+
+
 	}
 }

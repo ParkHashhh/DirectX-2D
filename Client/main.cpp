@@ -1,4 +1,4 @@
-
+﻿
 #include "Engine.h"
 #include "resource.h"
 #include "World/WorldManager.h"
@@ -8,6 +8,10 @@
 #include "Player/Missile.h"
 #include "Monster/Monster.h"
 #include "Monster/MonsterSpawnPoint.h"
+#include "Monster/Goblin.h"
+#include "Monster/Ogre.h"
+#include "Monster/Orc.h"
+
 #include "Component/StateComponent.h"
 #include "GlobalSetting.h"
 
@@ -42,6 +46,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     CEngine::CreateCDO<CMissile>();
     CEngine::CreateCDO<CMonster>();
     CEngine::CreateCDO<CMonsterSpawnPoint>();
+    CEngine::CreateCDO<CGoblin>();
+    CEngine::CreateCDO<COgre>();
+    CEngine::CreateCDO<COrc>();
+
     CEngine::CreateCDO<CStateComponent>();
 
     // 시작 월드를 지정한다.
