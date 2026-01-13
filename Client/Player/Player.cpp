@@ -145,7 +145,6 @@ void CPlayer::SetCollision()
 		Shield->SetDebugDraw(false);
 		Shield->SetInheritScale(false);
 		Shield->SetCollisionBeginFunction<CPlayer>(this, &CPlayer::OnHitShield);
-		Shield->SetEnable(true);
 	}
 }
 
