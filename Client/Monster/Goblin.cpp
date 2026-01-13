@@ -46,12 +46,14 @@ void CGoblin::SetMonsterData()
 	mMovement = FindComponent<CObjectMovementComponent>("MonsterMovement");
 	mStateComponent = FindComponent<CStateComponent>("MonsterState");
 	mLine2D = FindComponent<CColliderLine2D>("MonsterLine2D");
-	mBody = FindComponent<CColliderSphere2D>("MonsterBody");
+	mBody = FindComponent<CColliderBox2D>("MonsterBody");
 	auto Anim = mAnimation2DComponent.lock();
 	auto Mesh = mMeshComponent.lock();
 	Anim->SetUpdateComponent(Mesh);
 	auto Movement = mMovement.lock();
 	mHP = 2;
+	mType = MonsterType::Goblin;
+
 	mIdleAnimName = "GoblinRun";
 	mAttackAnimName = "GoblinAttack";
 	if (Anim)
@@ -61,11 +63,10 @@ void CGoblin::SetMonsterData()
 		
 		Anim->ChangeAnimation(mIdleAnimName);
 		Anim->AddNotify<CGoblin>(mAttackAnimName,
-			mAttackAnimName, 7, this, &CGoblin::AttackNotify);
+			mAttackAnimName, 1, this, &CGoblin::AttackNotify);
 		Anim->SetFinishNotify<CGoblin>(mAttackAnimName,
 			this, &CGoblin::AttackFinish);
 		Anim->SetLoop(mIdleAnimName, true);
-		Anim->SetLoop(mAttackAnimName, true);
 	}
 	if (Movement)
 	{
@@ -77,8 +78,9 @@ void CGoblin::AttackNotify()
 	auto	Line2D = mLine2D.lock();
 	if (Line2D)
 	{
+		Line2D->SetLineDistance(0);
+		Line2D->SetCollisionProfile("MonsterAttack");
 		Line2D->SetWorldRotation(GetWorldRot());
-		Line2D->SetWorldPos(GetWorldPos() + GetAxis(EAxis::Y) * 50.f);
 		Line2D->SetEnable(true);
 		Line2D->SetDebugDraw(true);
 	}
@@ -86,6 +88,14 @@ void CGoblin::AttackNotify()
 
 void CGoblin::AttackFinish()
 {
+	auto	Line2D = mLine2D.lock();
+	if (Line2D)
+	{
+		Line2D->SetEnable(false);
+		Line2D->SetDebugDraw(false);
+		Line2D->ClearCollisionList();
+
+	}
 	auto	Anim = mAnimation2DComponent.lock();
 
 	if (Anim)

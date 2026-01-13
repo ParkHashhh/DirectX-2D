@@ -224,4 +224,24 @@ void CCollider::CallCollisionHit(const FVector3& HitPoint,
 
 void CCollider::CollisionHitEnd()
 {
+
 }
+
+void CCollider::ClearCollisionList()
+{
+	auto iter = mCollisionObjectMap.begin();
+	auto iterEnd = mCollisionObjectMap.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (iter->second.expired())
+			continue;
+
+		auto Dest = iter->second.lock();
+		Dest->EraseCollisionObject(this);
+	}
+
+	mCollisionObjectMap.clear();
+	mCollision = false;
+}
+

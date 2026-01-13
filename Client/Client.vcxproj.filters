@@ -60,9 +60,6 @@
     <ClCompile Include="Monster\Monster.cpp">
       <Filter>03. Monster</Filter>
     </ClCompile>
-    <ClCompile Include="Player\Missile.cpp">
-      <Filter>01. Player</Filter>
-    </ClCompile>
     <ClCompile Include="Component\StateComponent.cpp">
       <Filter>04. Component\01. State</Filter>
     </ClCompile>
@@ -87,6 +84,9 @@
     <ClCompile Include="Monster\Orc.cpp">
       <Filter>03. Monster\03. Orc</Filter>
     </ClCompile>
+    <ClCompile Include="Monster\FireBall.cpp">
+      <Filter>03. Monster\03. Orc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -100,9 +100,6 @@
     </ClInclude>
     <ClInclude Include="Monster\Monster.h">
       <Filter>03. Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="Player\Missile.h">
-      <Filter>01. Player</Filter>
     </ClInclude>
     <ClInclude Include="Component\StateComponent.h">
       <Filter>04. Component\01. State</Filter>
@@ -129,6 +126,9 @@
       <Filter>03. Monster\02. Ogre</Filter>
     </ClInclude>
     <ClInclude Include="Monster\Orc.h">
+      <Filter>03. Monster\03. Orc</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\FireBall.h">
       <Filter>03. Monster\03. Orc</Filter>
     </ClInclude>
   </ItemGroup>

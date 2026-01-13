@@ -37,6 +37,7 @@ bool COgre::Init()
 }
 
 
+
 void COgre::SetMonsterData()
 {
 	mMeshComponent = FindComponent<CMeshComponent>("MonsterMesh");
@@ -44,7 +45,7 @@ void COgre::SetMonsterData()
 	mMovement = FindComponent<CObjectMovementComponent>("MonsterMovement");
 	mStateComponent = FindComponent<CStateComponent>("MonsterState");
 	mLine2D = FindComponent<CColliderLine2D>("MonsterLine2D");
-	mBody = FindComponent<CColliderSphere2D>("MonsterBody");
+	mBody = FindComponent<CColliderBox2D>("MonsterBody");
 	auto Anim = mAnimation2DComponent.lock();
 	auto Mesh = mMeshComponent.lock();
 	Anim->SetUpdateComponent(Mesh);
@@ -52,6 +53,7 @@ void COgre::SetMonsterData()
 	mAttackAnimName = "OgreAttack";
 	mIdleAnimName = "OgreRun";
 	mHP = 4;
+	mType = MonsterType::Ogre;
 
 
 	if (Anim)
@@ -61,7 +63,7 @@ void COgre::SetMonsterData()
 		Anim->ChangeAnimation(mIdleAnimName);
 
 		Anim->AddNotify<COgre>(mAttackAnimName,
-			mAttackAnimName, 7, this, &COgre::AttackNotify);
+			mAttackAnimName, 1, this, &COgre::AttackNotify);
 		Anim->SetFinishNotify<COgre>(mAttackAnimName,
 			this, &COgre::AttackFinish);
 		Anim->SetLoop(mIdleAnimName, true);
@@ -77,15 +79,23 @@ void COgre::AttackNotify()
 	auto	Line2D = mLine2D.lock();
 	if (Line2D)
 	{
+		Line2D->SetLineDistance(0);
+		Line2D->SetCollisionProfile("MonsterAttack");
 		Line2D->SetWorldRotation(GetWorldRot());
-		Line2D->SetWorldPos(GetWorldPos() + GetAxis(EAxis::Y) * 30.f);
 		Line2D->SetEnable(true);
 		Line2D->SetDebugDraw(true);
 	}
 }
-
 void COgre::AttackFinish()
 {
+	auto	Line2D = mLine2D.lock();
+	if (Line2D)
+	{
+		Line2D->SetEnable(false);
+		Line2D->SetDebugDraw(false);
+		Line2D->ClearCollisionList();
+
+	}
 	auto	Anim = mAnimation2DComponent.lock();
 
 	if (Anim)

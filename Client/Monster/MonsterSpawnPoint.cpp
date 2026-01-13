@@ -58,7 +58,7 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 	mLevelTime += DeltaTime;
-	if (mLevelTime >= 30.f)
+	if (mLevelTime >= 3.f)
 	{
 		if (mLevel < MAX_LEVEL)
 		{
@@ -128,8 +128,10 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 				auto Monster = SpawnMonster.lock();
 				Monster->SetMonsterData();
 				int Sidepos = rand() % 4;
-				int RandWidth = rand() % 1200 - 600;
-				int RandHeight = rand() % 640 - 320;
+				int RandWidth = rand() % 1400 - 700;
+				int RandHeight = rand() % 800 - 400;
+
+				Monster->SetSpeed(rand() % (mLevel * 20) + mLevel * 10);
 
 
 				FVector3 SpawnPos = FVector3::Zero;
@@ -138,18 +140,18 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 				{
 				case SpawnPos::Top:
 					SpawnPos.x = RandWidth;
-					SpawnPos.y = 320;
+					SpawnPos.y = 400;
 					break;
 				case SpawnPos::Bottom:
 					SpawnPos.x = RandWidth;
-					SpawnPos.y = -320;
+					SpawnPos.y = -400;
 					break;
 				case SpawnPos::Left:
 					SpawnPos.y = RandHeight;
-					SpawnPos.x = -600;
+					SpawnPos.x = -700;
 					break;
 				case SpawnPos::Right:
-					SpawnPos.x = 600;
+					SpawnPos.x = 700;
 					SpawnPos.y = RandHeight;
 					break;
 				}

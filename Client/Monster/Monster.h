@@ -23,12 +23,13 @@ protected:
 	std::weak_ptr<class CStateComponent>	mStateComponent;
 	std::weak_ptr<class CAnimation2DComponent>	mAnimation2DComponent;
 	std::weak_ptr<class CObjectMovementComponent>	mMovement;
-	std::weak_ptr<class CColliderSphere2D>	mBody;
-	//std::weak_ptr<class CColliderBox2D>	mBody;
+	std::weak_ptr<class CColliderBox2D>	mBody;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
+	MonsterType::Type mType = MonsterType::Goblin;
+
 	float	mFireTime = 0.f;
 	std::weak_ptr<CGameObject>	mTargetObject;
-	float	mDetectRange = 150.f;
+	float	mDetectRange = 100.f;
 	int		mHP = 5;
 	bool mIsAttack = false;
 	float mDefaultSpeed = 0;
@@ -44,6 +45,10 @@ public:
 		char	Test[256] = {};
 		sprintf_s(Test, "HP : %d\n", mHP);
 		OutputDebugStringA(Test);
+	}
+	void SetSpeed(int Speed)
+	{
+		mDefaultSpeed = Speed;
 	}
 
 	std::weak_ptr<CGameObject>	GetTargetObject()

@@ -193,3 +193,13 @@ struct FLine2DInfo
 	FVector3	Start;
 	FVector3	End;
 };
+
+namespace MonsterType
+{
+	enum Type : unsigned char
+	{
+		Goblin,
+		Ogre,
+		Orc
+	};
+}

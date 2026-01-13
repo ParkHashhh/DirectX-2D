@@ -4,7 +4,6 @@
 #include "Bullet.h"
 #include "World/World.h"
 #include "Device.h"
-#include "Missile.h"
 #include "../Component/StateComponent.h"
 #include "Component/Animation2DComponent.h"
 #include "World/Input.h"
@@ -76,6 +75,7 @@ void CPlayer::SetAnimation()
 		Anim->AddAnimation("PlayerRunShoot");
 		Anim->AddAnimation("PlayerSlide");
 		Anim->AddAnimation("PlayerDead");
+		Anim->AddAnimation("PlayerShield");
 		Anim->SetPlayRate("PlayerShoot", 1.f);
 
 		Anim->AddNotify<CPlayer>("PlayerShoot",
@@ -98,9 +98,12 @@ void CPlayer::SetAnimation()
 			"SlideEndNotify", 5, this, &CPlayer::SlideEndNotify);
 
 
-
 		Anim->SetLoop("PlayerIdle", true);
+
 		Anim->SetLoop("PlayerRun", true);
+
+		
+
 	}
 }
 
@@ -132,6 +135,17 @@ void CPlayer::SetCollision()
 		Body->SetDebugDraw(true);
 		Body->SetInheritScale(false);
 		Body->SetCollisionBeginFunction<CPlayer>(this, &CPlayer::OnHit);
+	}
+	mShield = CreateComponent<CColliderSphere2D>("Shield");
+	auto Shield = mShield.lock();
+	if (Shield)
+	{
+		Shield->SetCollisionProfile("PlayerShield");
+		Shield->SetRadius(100);
+		Shield->SetDebugDraw(false);
+		Shield->SetInheritScale(false);
+		Shield->SetCollisionBeginFunction<CPlayer>(this, &CPlayer::OnHitShield);
+		Shield->SetEnable(true);
 	}
 }
 
@@ -186,6 +200,20 @@ void CPlayer::SetKey()
 
 	Input->AddBindKey("Slide", 'S');
 	Input->SetBindFunction<CPlayer>("Slide", EInputType::Press, this, &CPlayer::SlidePress);
+
+
+	Input->AddBindKey("MultiShot", 'D');
+	Input->SetBindFunction<CPlayer>("MultiShot", EInputType::Press, this, &CPlayer::MultiShotPress);
+
+	Input->AddBindKey("Shield", 'F');
+	Input->SetBindFunction<CPlayer>("Shield", EInputType::Press, this, &CPlayer::ShieldPress);
+
+	Input->AddBindKey("Shield", 'F');
+	Input->SetBindFunction<CPlayer>("Shield", EInputType::Hold, this, &CPlayer::ShieldHold);
+
+	Input->AddBindKey("Shield", 'F');
+	Input->SetBindFunction<CPlayer>("Shield", EInputType::Release, this, &CPlayer::ShieldRelease);
+
 }
 void CPlayer::Update(float DeltaTime)
 {
@@ -194,6 +222,10 @@ void CPlayer::Update(float DeltaTime)
 	auto	Mesh = mMeshComponent.lock();
 	auto	Anim = mAnimation2DComponent.lock();
 	auto	Movement = mMovement.lock();
+	auto Body = mBody.lock();
+	auto Shield = mShield.lock();
+	
+
 	if (mEnd)
 	{
 		return;
@@ -203,51 +235,9 @@ void CPlayer::Update(float DeltaTime)
 		OutputDebugStringA("Player Dead!\n");
 		Anim->ChangeAnimation("PlayerDead");
 	}
-	if (mIsSlide)
-	{
-		Movement->SetSpeed(300);
-		Movement->AddMove(mDir);
-		return;
-	}
-
-	FVector3 Current;
-	if (mUpKey) Current.y += 1.f;
-	if (mDownKey) Current.y -= 1.f;
-	if (mLeftKey) Current.x -= 1.f;
-	if (mRightKey) Current.x += 1.f;
-	if (!Current.IsZero())
-	{
-		Current.Normalize();
-		mDir = Current;
-	}
-	if (Current.x < 0.f)
-	{
-		Anim->SetSymmetry("PlayerRun", true);
-		Anim->SetSymmetry("PlayerIdle", true);
-		Anim->SetSymmetry("PlayerShoot", true);
-		Anim->SetSymmetry("PlayerRunShoot", true);
-	}
-	else if (Current.x > 0.f)
-	{
-		Anim->SetSymmetry("PlayerRun", false);
-		Anim->SetSymmetry("PlayerIdle", false);
-		Anim->SetSymmetry("PlayerShoot", false);
-		Anim->SetSymmetry("PlayerRunShoot", false);
-	}
 	
-	if (!mIsShoot)
-	{
-		if (!Current.IsZero())
-		{
-			Anim->ChangeAnimation("PlayerRun");
-			mAutoIdle = true;
-		}
-		else if (mAutoIdle && Mesh->GetSpeed() <= 0.1f)
-		{
-			Anim->ChangeAnimation("PlayerIdle");
-			mAutoIdle = false;
-		}
-	}
+	
+	
 
 	if (mIsInvincible)
 	{
@@ -261,6 +251,61 @@ void CPlayer::Update(float DeltaTime)
 		{
 			Mesh->SetMaterialOpacity(0, 1);
 			mIsInvincible = false;
+
+		}
+	}
+
+	if (mKnockbackSpeed > 0.f)
+	{
+		AddWorldPos(mKnockbackDir * mKnockbackSpeed * DeltaTime);
+		mKnockbackSpeed -= 1500.f * DeltaTime;
+	}
+	if (Shield->GetEnable())
+		return;
+	if (mIsSlide)
+	{
+		Movement->SetSpeed(300);
+		Movement->AddMove(mDir);
+		return;
+	}
+	FVector3 Current;
+	if (mUpKey) Current.y += 1.f;
+	if (mDownKey) Current.y -= 1.f;
+	if (mLeftKey) Current.x -= 1.f;
+	if (mRightKey) Current.x += 1.f;
+	if (!Current.IsZero())
+	{
+		Current.Normalize();
+		mDir = Current;
+	}
+	if (Current.x < 0.f)
+	{
+		mLastHorizonKey = -1;
+		Anim->SetSymmetry("PlayerRun", true);
+		Anim->SetSymmetry("PlayerIdle", true);
+		Anim->SetSymmetry("PlayerShoot", true);
+		Anim->SetSymmetry("PlayerRunShoot", true);
+	}
+	else if (Current.x > 0.f)
+	{
+		mLastHorizonKey = 1;
+		Anim->SetSymmetry("PlayerRun", false);
+		Anim->SetSymmetry("PlayerIdle", false);
+		Anim->SetSymmetry("PlayerShoot", false);
+		Anim->SetSymmetry("PlayerRunShoot", false);
+	}
+
+	if (!mIsShoot)
+	{
+		if (!Current.IsZero())
+		{
+			Anim->ChangeAnimation("PlayerRun");
+			mAutoIdle = true;
+		}
+		else if (mAutoIdle && Mesh->GetSpeed() <= 0.1f)
+		{
+			Anim->ChangeAnimation("PlayerIdle");
+			mAutoIdle = false;
 		}
 	}
 	
@@ -416,7 +461,6 @@ void CPlayer::AttackPress()
 
 		std::weak_ptr<CBullet> mBullet = World->CreateGameObject<CBullet>("Bullet");
 		std::shared_ptr<CBullet>	Bullet = mBullet.lock();
-		auto	Mesh = mMeshComponent.lock();
 		if (Bullet)
 		{
 			Bullet->SetCollisionName("PlayerAttack");
@@ -446,15 +490,16 @@ void CPlayer::SlidePress()
 	mIsSlide = true;
 	auto	Movement = mMovement.lock();
 	auto	Anim = mAnimation2DComponent.lock();
+	char buf[256];
+	sprintf_s(buf, " mDirx: %.2f,mDiry %.2f\n",mDir.x, mDir.y);
+	OutputDebugStringA(buf);
 	if (Anim)
 	{
-		if (mDir.x == -1 || mDir.y == -1)
+		if(mLastHorizonKey < 0)
 			Anim->SetSymmetry("PlayerSlide", true);
 		else
 			Anim->SetSymmetry("PlayerSlide", false);
-
 		Anim->ChangeAnimation("PlayerSlide");
-
 	}
 }
 
@@ -476,34 +521,138 @@ void CPlayer::SlideEndNotify()
 	}
 }
 
+
+void CPlayer::ShieldPress()
+{
+	auto Shield = mShield.lock();
+	auto Anim = mAnimation2DComponent.lock();
+	Shield->SetEnable(true);
+	Shield->SetDebugDraw(true);
+	Anim->ChangeAnimation("PlayerShield");
+	mAutoIdle = false;
+}
+void CPlayer::ShieldHold()
+{
+
+}
+
+void CPlayer::ShieldRelease()
+{
+	auto Shield = mShield.lock();
+	mAutoIdle = true;
+	Shield->SetEnable(false);
+}
+
+
 void CPlayer::AttackEndNotify()
 {
 	mIsShoot = false;
 	mAutoIdle = true;
 }
 
+void CPlayer::MultiShotPress()
+{
+	if (mIsSlide)
+		return;
+
+	auto	Anim = mAnimation2DComponent.lock();
+	auto	Movement = mMovement.lock();
+	auto	 World = mWorld.lock();
+	if (World)
+	{
+		mIsShoot = true;
+		FVector3 ResultDir = FVector3::Zero;
+		if (mUpKey)
+			ResultDir.y += 1;
+		if (mDownKey)
+			ResultDir.y -= 1;
+		if (mLeftKey)
+			ResultDir.x -= 1;
+		if (mRightKey)
+			ResultDir.x += 1;
+		if (ResultDir.IsZero())
+			ResultDir = mDir;
+		else
+			ResultDir.Normalize();
+		if (Anim)
+		{
+			std::string AnimName = "PlayerShoot";
+			if (mUpKey || mDownKey || mLeftKey || mRightKey)
+				AnimName = "PlayerRunShoot";
+
+			if (mDir.x < 0)
+				Anim->SetSymmetry(AnimName, true);
+			else if (mDir.x > 0.f)
+				Anim->SetSymmetry(AnimName, false);
+
+			Anim->ChangeAnimation(AnimName);
+
+		}
+		for (int i = 0; i < 3; i++)
+		{
+			std::weak_ptr<CBullet> mBullet = World->CreateGameObject<CBullet>("Bullet");
+			std::shared_ptr<CBullet>	Bullet = mBullet.lock();
+			auto	Mesh = mMeshComponent.lock();
+			if (Bullet)
+			{
+
+				float FinalRotation = 20.f * (float)(i - 1);
+				FMatrix RotMatrix;
+				RotMatrix.RotationZ(FinalRotation);
+				FVector3 ShootDir = ResultDir.TransformNormal(RotMatrix);
+				ShootDir.Normalize();
+				Bullet->SetCollisionName("PlayerAttack");
+				float BaseAngle = atan2f(ResultDir.y, ResultDir.x) * (180.f / 3.141592f);
+				Bullet->SetWorldRotationZ(BaseAngle + FinalRotation);
+				Bullet->SetWorldPos(GetWorldPos() + ShootDir * 35.f);
+				Bullet->SetCollisionTargetName("Monster");
+				Bullet->ComputeCollisionRange();
+				Bullet->SetMoveDir(ShootDir);
+				Bullet->SetSpeed(500);
+			}
+		}
+		
+	}
+}
+
 void CPlayer::OnHit(const FVector3& HitPoint, CCollider* Dest)
 {
 	// 무적이 아닐때 맞고 여기서 데미지가 0일때를 체크해야함.
 
+	auto Body = mBody.lock();
 	if (!mIsInvincible)
 	{
-		Damage(1);
-		if (mHP <= 0)
+		if (!Damage(1))
 			return;
 		mInvincibleTime = 1.0f;
 		mIsInvincible = true;
+		Body->ClearCollisionList();
 	}
+
+
+	auto DestOwner = Dest->GetOwner().lock();
+	FVector3	TargetPos = DestOwner->GetWorldPos();
+	FVector3	TargetDir = TargetPos - GetWorldPos();
+	FVector3 NormDir = TargetDir;
+	NormDir.Normalize();
+	mKnockbackDir = -NormDir;
+	mKnockbackSpeed = 500.f;
+
 }
 
-void CPlayer::Damage(int Dmg)
+void CPlayer::OnHitShield(const FVector3& HitPoint, CCollider* Dest)
+{
+}
+
+bool CPlayer::Damage(int Dmg)
 {
 	{
 		mHP -= Dmg;
+		if (mHP <= 0)
+			return false;
 		char buf[256];
 		sprintf_s(buf, "Player HP: %d\n", mHP);
 		OutputDebugStringA(buf);
-
-
+		return true;
 	}
 }

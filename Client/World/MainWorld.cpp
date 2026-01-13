@@ -123,8 +123,12 @@ void CMainWorld::LoadAnimation2D()
 		"PlayerDead", "PlayerDead", 0, 14, "Player/Dead/",
 		"0_Forest_Ranger_Dying_", "png", 900, 900);
 
-	// CreateGoblinRunAnim
+	// CreateDeadAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"PlayerShield", "PlayerShield", 0, 17, "Player/Shield/",
+		"0_Forest_Ranger_Shield_", "png", 900, 900);
 
+	// CreateGoblinRunAnim
 	if (!mWorldAssetManager->CreateFrameAnimation(
 		"GoblinRun", "GoblinRun", 0, 11, "Monster/Goblin/Running/",
 		"0_Goblin_Running_", "png", 900, 900))
@@ -147,10 +151,15 @@ void CMainWorld::LoadAnimation2D()
 	mWorldAssetManager->CreateFrameAnimation(
 		"OrcRun", "OrcRun", 0, 11, "Monster/Orc/Running/",
 		"0_Orc_Running_", "png", 900, 900);
-	// CreateOgreAttackAnim
+	// CreateOrcAttackAnim
 	mWorldAssetManager->CreateFrameAnimation(
 		"OrcAttack", "OrcAttack", 0, 11, "Monster/Orc/Attack/",
 		"0_Orc_Slashing_", "png", 900, 900);
+
+	// CreateOrcFireBallAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"OrcFireBall", "OrcFireBall", 0, 7, "Monster/Orc/Attack/",
+		"FireBall_Frame_", "png", 640, 360);
 
 
 	mWorldAssetManager->CreateFrameAnimation(

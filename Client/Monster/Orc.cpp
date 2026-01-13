@@ -7,7 +7,7 @@
 #include "Component/ColliderBox2D.h"
 #include "Component/ColliderSphere2D.h"
 #include "Component/ColliderLine2D.h"
-
+#include "FireBall.h"
 
 COrc::COrc()
 {
@@ -41,7 +41,7 @@ void COrc::SetMonsterData()
 	mMovement = FindComponent<CObjectMovementComponent>("MonsterMovement");
 	mStateComponent = FindComponent<CStateComponent>("MonsterState");
 	mLine2D = FindComponent<CColliderLine2D>("MonsterLine2D");
-	mBody = FindComponent<CColliderSphere2D>("MonsterBody");
+	mBody = FindComponent<CColliderBox2D>("MonsterBody");
 	auto Anim = mAnimation2DComponent.lock();
 	auto Mesh = mMeshComponent.lock();
 	Anim->SetUpdateComponent(Mesh);
@@ -49,6 +49,8 @@ void COrc::SetMonsterData()
 	mAttackAnimName = "OrcAttack";
 	mIdleAnimName = "OrcRun";
 	mHP = 6;
+	mDetectRange = 400.f;
+	mType = MonsterType::Orc;
 
 	if (Anim)
 	{
@@ -70,18 +72,37 @@ void COrc::SetMonsterData()
 
 void COrc::AttackNotify()
 {
-	auto	Line2D = mLine2D.lock();
-	if (Line2D)
+	auto World = mWorld.lock();
+	std::weak_ptr<CFireBall> mFireBall = World->CreateGameObject<CFireBall>("FireBall");
+	std::shared_ptr<CFireBall>	FireBall = mFireBall.lock();
+	auto Target = mTargetObject.lock();
+	FVector3	TargetPos = Target->GetWorldPos();
+	FVector3	TargetDir = TargetPos - GetWorldPos();
+	TargetDir.Normalize();
+	float Angle = GetWorldPos().GetViewTargetAngle2D(Target->GetWorldPos(), EAxis::Y);
+	SetWorldRotationZ(Angle);
+	if (FireBall)
 	{
-		Line2D->SetWorldRotation(GetWorldRot());
-		Line2D->SetWorldPos(GetWorldPos() + GetAxis(EAxis::Y) * 30.f);
-		Line2D->SetEnable(true);
-		Line2D->SetDebugDraw(true);
+		FireBall->SetWorldPos(GetWorldPos() + TargetDir * 50.f);
+
+		FireBall->SetNearTarget("Player");
+		FireBall->SetCollisionName("MonsterAttack");
+		FireBall->SetMoveDir(TargetDir);
+		FireBall->ComputeCollisionRange();
+
 	}
 }
 
 void COrc::AttackFinish()
 {
+	auto	Line2D = mLine2D.lock();
+	if (Line2D)
+	{
+		Line2D->SetEnable(false);
+		Line2D->SetDebugDraw(false);
+		Line2D->ClearCollisionList();
+
+	}
 	auto	Anim = mAnimation2DComponent.lock();
 
 	if (Anim)

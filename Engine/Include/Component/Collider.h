@@ -113,5 +113,6 @@ public:
 		mCollisionHitFunc = std::bind(Func, Obj,
 			std::placeholders::_1, std::placeholders::_2);
 	}
+	void ClearCollisionList();
 };
 

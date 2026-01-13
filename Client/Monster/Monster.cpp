@@ -41,9 +41,16 @@ bool CMonster::Init()
 	mAnimation2DComponent = CreateComponent<CAnimation2DComponent>("MonsterAnimation2D");
 	mMovement = CreateComponent<CObjectMovementComponent>("MonsterMovement");
 	mLine2D = CreateComponent<CColliderLine2D>("MonsterLine2D");
-	mBody = CreateComponent<CColliderSphere2D>("MonsterBody");
+	mBody = CreateComponent<CColliderBox2D>("MonsterBody");
+
 	auto	Line2D = mLine2D.lock();
-	
+	auto	Mesh = mMeshComponent.lock();
+	auto    Anim = mAnimation2DComponent.lock();
+	auto	Movement = mMovement.lock();
+	auto	Body = mBody.lock();
+	std::shared_ptr<CWorld>	World = mWorld.lock();
+
+
 
 	if (Line2D)
 	{
@@ -53,7 +60,6 @@ bool CMonster::Init()
 		Line2D->SetInheritScale(false);
 		Line2D->SetEnable(false);
 	}
-	auto	Mesh = mMeshComponent.lock();
 	if (Mesh)
 	{
 		Mesh->SetShader("DefaultTexture2D");
@@ -62,30 +68,27 @@ bool CMonster::Init()
 		Mesh->SetBlendState(0, "AlphaBlend");
 	}
 
-	auto Anim = mAnimation2DComponent.lock();
 	if (Anim)
 	{
 		Anim->SetUpdateComponent(Mesh);
 	}
-	auto Movement = mMovement.lock();
 	if (Movement)
 	{
 		Movement->SetUpdateComponent(Mesh);
 	}
 	
-	auto	Body = mBody.lock();
 
 	if (Body)
 	{
 		Body->SetCollisionProfile("Monster");
 		Body->SetCollisionBeginFunction<CMonster>(this, &CMonster::CollisionMonster);
-		Body->SetRadius(sqrtf(75.f * 75.f + 75.f * 75.f) * 0.5f);
+		Body->SetBoxSize(75.f, 80.f);
 		Body->SetDebugDraw(true);
 		Body->SetInheritScale(false);
 	}
 
+
 	// Target을 구한다.
-	std::shared_ptr<CWorld>	World = mWorld.lock();
 
 	if (World)
 	{
@@ -99,7 +102,8 @@ void CMonster::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 	auto	Anim = mAnimation2DComponent.lock();
-
+	auto	Line2D = mLine2D.lock();
+	auto	Body = mBody.lock();
 	auto World = mWorld.lock();
 	if (World)
 	{
@@ -107,6 +111,28 @@ void CMonster::Update(float DeltaTime)
 			return;
 	}
 
+
+	if (mIsAttack)
+	{
+		if (Line2D->GetDistance() <= 100)
+		{
+			float Frame = (float)Anim->GetAnimationFrame();
+			switch (mType)
+			{
+			case MonsterType::Goblin:
+				Line2D->SetLineDistance(Frame * 5);
+				break;
+			case MonsterType::Ogre:
+				Line2D->SetLineDistance(Frame * 8);
+				break;
+			}
+			if (Line2D->GetDistance() >= 100)
+			{
+				Line2D->SetLineDistance(100.f);
+			}
+
+		}
+	}
 	auto Target = mTargetObject.lock();
 	auto Movement = mMovement.lock();
 
@@ -126,20 +152,23 @@ void CMonster::Update(float DeltaTime)
 	{
 		Movement->AddMove(GetAxis(EAxis::Y));
 	}
-	auto	Line2D = mLine2D.lock();
+	mFireTime -= DeltaTime;
 	// 탐지반경 안에 들어왔을 경우
 	if (TargetDistance <= mDetectRange)
 	{
 		if (!mIsAttack)
 		{
-			Movement->SetSpeed(0);
-			Anim->ChangeAnimation(mAttackAnimName);
-			mIsAttack = true;
+			if (mType == MonsterType::Orc)
+			{
+				if (mFireTime > 0)
+					return;
+				else
+					mFireTime += 3;
+			}
+		Movement->SetSpeed(0);
+		Anim->ChangeAnimation(mAttackAnimName);
+		mIsAttack = true;
 		}
-	}
-	else
-	{
-		Line2D->SetEnable(false);
 	}
 }
 
@@ -151,7 +180,6 @@ CMonster* CMonster::Clone()
 void CMonster::CollisionMonster(const FVector3& HitPoint, CCollider* Dest)
 {
 	Damage(1);
-
 }
 
 void CMonster::AttackNotify()

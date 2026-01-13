@@ -22,6 +22,10 @@ protected:
 	float			mDistance = 100.f;
 
 public:
+	float GetDistance()
+	{
+		return mDistance;
+	}
 	const FLine2DInfo& GetInfo()	const
 	{
 		return mInfo;

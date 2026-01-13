@@ -4,8 +4,8 @@
 #include "World/WorldManager.h"
 #include "World/MainWorld.h"
 #include "Player/Player.h"
+#include "Monster/FireBall.h"
 #include "Player/Bullet.h"
-#include "Player/Missile.h"
 #include "Monster/Monster.h"
 #include "Monster/MonsterSpawnPoint.h"
 #include "Monster/Goblin.h"
@@ -43,7 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     CEngine::CreateCDO<CPlayer>();
     CEngine::CreateCDO<CBullet>();
-    CEngine::CreateCDO<CMissile>();
+    CEngine::CreateCDO<CFireBall>();
     CEngine::CreateCDO<CMonster>();
     CEngine::CreateCDO<CMonsterSpawnPoint>();
     CEngine::CreateCDO<CGoblin>();
