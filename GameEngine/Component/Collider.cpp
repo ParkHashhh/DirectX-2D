@@ -1,4 +1,4 @@
-#include "Collider.h"
+﻿#include "Collider.h"
 #include "../Asset/Shader/Shader.h"
 #include "../Asset/Shader/CBufferCollider.h"
 #include "../Asset/Shader/CBufferTransform.h"
@@ -13,7 +13,7 @@ CCollider::CCollider()
 {
 }
 
-CCollider::CCollider(const CCollider& ref)	:
+CCollider::CCollider(const CCollider& ref) :
 	CSceneComponent(ref)
 {
 }
@@ -97,7 +97,7 @@ bool CCollider::Init()
 
 		mTransformCBuffer->Init();
 	}
-	
+
 	mProfile = CCollisionInfoManager::GetInst()->FindProfile("Static");
 
 	auto	World = mWorld.lock();
@@ -185,7 +185,7 @@ void CCollider::Render()
 	}
 }
 
-void CCollider::CallCollisionBegin(const FVector3& HitPoint, 
+void CCollider::CallCollisionBegin(const FVector3& HitPoint,
 	const std::weak_ptr<CCollider>& Dest)
 {
 	auto	_Dest = Dest.lock();
@@ -207,4 +207,21 @@ void CCollider::CallCollisionEnd(CCollider* Dest)
 
 	if (mCollisionEndFunc)
 		mCollisionEndFunc(Dest);
+}
+
+void CCollider::CallCollisionHit(const FVector3& HitPoint,
+	const std::weak_ptr<CCollider>& Dest)
+{
+	auto	_Dest = Dest.lock();
+
+	//mCollisionObjectMap.insert(std::make_pair(_Dest.get(), Dest));
+
+	//mCollision = true;
+
+	if (mCollisionHitFunc)
+		mCollisionHitFunc(HitPoint, _Dest.get());
+}
+
+void CCollider::CollisionHitEnd()
+{
 }

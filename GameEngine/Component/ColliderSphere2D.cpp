@@ -1,4 +1,4 @@
-#include "ColliderSphere2D.h"
+﻿#include "ColliderSphere2D.h"
 #include "../Asset/AssetManager.h"
 #include "../Asset/Shader/ShaderManager.h"
 #include "../Asset/Shader/Shader.h"
@@ -119,6 +119,11 @@ void CColliderSphere2D::PostUpdate(float DeltaTime)
 {
 	CCollider::PostUpdate(DeltaTime);
 
+	UpdateInfo();
+}
+
+void CColliderSphere2D::UpdateInfo()
+{
 	mInfo.Center = mWorldPos;
 
 	mRenderScale.x = mWorldScale.x * mInfo.Radius;

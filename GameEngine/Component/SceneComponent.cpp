@@ -1,4 +1,4 @@
-#include "SceneComponent.h"
+﻿#include "SceneComponent.h"
 #include "../Render/RenderManager.h"
 
 CSceneComponent::CSceneComponent()
@@ -7,7 +7,7 @@ CSceneComponent::CSceneComponent()
 	mComponentType = EComponentType::Scene;
 }
 
-CSceneComponent::CSceneComponent(const CSceneComponent& ref)	:
+CSceneComponent::CSceneComponent(const CSceneComponent& ref) :
 	CComponent(ref)
 {
 	mComponentType = EComponentType::Scene;
@@ -64,6 +64,8 @@ void CSceneComponent::Begin()
 	InheritRotation();
 
 	InheritPos();
+
+	mVelocity = FVector3::Zero;
 }
 
 bool CSceneComponent::Init()
@@ -82,6 +84,19 @@ bool CSceneComponent::Init()
 
 void CSceneComponent::Update(float DeltaTime)
 {
+	// 중력 적용
+	if (mSimulatePhysics)
+	{
+		if (mUseGravity)
+		{
+			mAccel.y -= GRAVITY2D;
+		}
+
+		mPhysicsVelocity += mAccel * DeltaTime;
+
+		AddRelativePos(mPhysicsVelocity * DeltaTime);
+	}
+
 	/*size_t	Size = mChildList.size();
 
 	for (size_t i = 0; i < Size; ++i)
@@ -95,7 +110,7 @@ void CSceneComponent::Update(float DeltaTime)
 
 void CSceneComponent::PostUpdate(float DeltaTime)
 {
-	UpdateTransform();
+	//UpdateTransform();
 
 	/*size_t	Size = mChildList.size();
 
@@ -124,6 +139,9 @@ void CSceneComponent::Render()
 void CSceneComponent::PostRender()
 {
 	mVelocity = FVector3::Zero;
+
+	// 가속도 초기화
+	mAccel = FVector3::Zero;
 }
 
 CSceneComponent* CSceneComponent::Clone()	const
@@ -435,7 +453,7 @@ void CSceneComponent::InheritPos()
 		// 부모 위치가 10, 10, 10 일경우
 		/*
 		3, 0, 0, 1 * 1  0  0  0 = 13, 10, 10
-		             0  1  0  0
+					 0  1  0  0
 					 0  0  1  0
 					 10 10 10 1
 		*/

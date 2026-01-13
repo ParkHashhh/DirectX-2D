@@ -27,5 +27,8 @@ public:
 public:
 	bool Init();
 	void Update(float DeltaTime);
+
+private:
+	void UpdateInfo();
 };
 

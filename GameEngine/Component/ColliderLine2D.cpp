@@ -1,4 +1,4 @@
-#include "ColliderLine2D.h"
+﻿#include "ColliderLine2D.h"
 #include "../Asset/AssetManager.h"
 #include "../Asset/Shader/ShaderManager.h"
 #include "../Asset/Shader/Shader.h"
@@ -118,7 +118,11 @@ void CColliderLine2D::Update(float DeltaTime)
 void CColliderLine2D::PostUpdate(float DeltaTime)
 {
 	CCollider::PostUpdate(DeltaTime);
+	UpdateInfo();
+}
 
+void CColliderLine2D::UpdateInfo()
+{
 	mInfo.Start = mWorldPos;
 
 	// 회전된 선의 방향을 구한다.

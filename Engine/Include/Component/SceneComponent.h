@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Component.h"
 
@@ -9,7 +9,7 @@ enum class EComponentRender : unsigned char
 };
 
 class CSceneComponent :
-    public CComponent
+	public CComponent
 {
 	friend class CGameObject;
 	friend class CObject;
@@ -56,6 +56,35 @@ public:
 
 protected:
 	virtual CSceneComponent* Clone()	const;
+
+protected:
+	bool	mSimulatePhysics = false;
+	bool	mUseGravity = false;	// 중력 사용
+	float		mMass = 1.f;	// 질량
+	FVector3	mAccel;
+	FVector3	mPhysicsVelocity;
+
+public:
+	void SetSimulatePhysics(bool SimulatePhysics)
+	{
+		mSimulatePhysics = SimulatePhysics;
+	}
+
+	void SetUseGravity(bool UseGravity)
+	{
+		mUseGravity = UseGravity;
+	}
+
+	void AddForce(const FVector3& Force)
+	{
+		mAccel += Force * (1.f / max(mMass, 0.0001f));
+	}
+
+	void ClearPhysics()
+	{
+		mAccel = FVector3::Zero;
+		mPhysicsVelocity = FVector3::Zero;
+	}
 
 protected:
 	bool		mInheritScale = true;

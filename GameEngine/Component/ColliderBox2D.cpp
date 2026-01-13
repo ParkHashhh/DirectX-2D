@@ -1,4 +1,4 @@
-#include "ColliderBox2D.h"
+﻿#include "ColliderBox2D.h"
 #include "../Asset/AssetManager.h"
 #include "../Asset/Shader/ShaderManager.h"
 #include "../Asset/Shader/Shader.h"
@@ -118,7 +118,11 @@ void CColliderBox2D::Update(float DeltaTime)
 void CColliderBox2D::PostUpdate(float DeltaTime)
 {
 	CCollider::PostUpdate(DeltaTime);
+	UpdateInfo();
+}
 
+void CColliderBox2D::UpdateInfo()
+{
 	mInfo.Center = mWorldPos;
 
 	mInfo.Axis[EAxis::X] = mWorldAxis[EAxis::X];

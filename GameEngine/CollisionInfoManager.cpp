@@ -1,4 +1,4 @@
-#include "CollisionInfoManager.h"
+﻿#include "CollisionInfoManager.h"
 
 CCollisionInfoManager* CCollisionInfoManager::mInst = nullptr;
 
@@ -58,7 +58,7 @@ void CCollisionInfoManager::CreateChannel(const std::string& Name)
 	mChannelMap.insert(std::make_pair(Name, Channel));
 }
 
-bool CCollisionInfoManager::CreateProfile(const std::string& Name, 
+bool CCollisionInfoManager::CreateProfile(const std::string& Name,
 	const std::string& ChannelName, bool Enable,
 	ECollisionInteraction::Type DefaultInteraction)
 {

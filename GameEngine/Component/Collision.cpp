@@ -1,6 +1,6 @@
 ﻿#include "Collision.h"
 
-bool CCollision::CollisionBox2DToBox2D(FVector3& HitPoint, 
+bool CCollision::CollisionBox2DToBox2D(FVector3& HitPoint,
     CColliderBox2D* Src, CColliderBox2D* Dest)
 {
     if (!Src || !Dest)
@@ -138,7 +138,7 @@ bool CCollision::CollisionSphere2DToSphere2D(FVector3& HitPoint,
     return true;
 }
 
-bool CCollision::CollisionBox2DToSphere2D(FVector3& HitPoint, 
+bool CCollision::CollisionBox2DToSphere2D(FVector3& HitPoint,
     CColliderBox2D* Src, CColliderSphere2D* Dest)
 {
     if (!Src || !Dest)
@@ -147,7 +147,7 @@ bool CCollision::CollisionBox2DToSphere2D(FVector3& HitPoint,
     if (!CollisionBox2DToSphere2D(HitPoint, Src->GetInfo(),
         Dest->GetInfo()))
         return false;
-    
+
     return true;
 }
 
@@ -198,7 +198,7 @@ bool CCollision::CollisionBox2DToSphere2D(FVector3& HitPoint,
     return true;
 }
 
-bool CCollision::CollisionBox2DToLine2D(FVector3& HitPoint, 
+bool CCollision::CollisionBox2DToLine2D(FVector3& HitPoint,
     CColliderBox2D* Src, CColliderLine2D* Dest)
 {
     if (!Src || !Dest)
@@ -220,8 +220,8 @@ bool CCollision::CollisionBox2DToLine2D(FVector3& HitPoint,
         return true;
 
     else if (CollisionBox2DToPoint(HitPoint, Box, Line.End))
-        return true;     
-    
+        return true;
+
     // 하지만 들어오지 않을 경우 사각형을 구성하는 4개의 변을 만들고
     // 선이 교차하는 변이 있는지 체크하여 검사한다.
     // 사각형을 구성하는 4개의 꼭지점을 구한다.
@@ -299,7 +299,7 @@ bool CCollision::CollisionSphere2DToLine2D(FVector3& HitPoint,
     return true;
 }
 
-bool CCollision::CollisionSphere2DToLine2D(FVector3& HitPoint, 
+bool CCollision::CollisionSphere2DToLine2D(FVector3& HitPoint,
     const FSphere2DInfo& Sphere, const FLine2DInfo& Line)
 {
     /*
@@ -468,7 +468,7 @@ bool CCollision::CollisionLine2DToLine2D(FVector3& HitPoint,
         return true;
     }
 
-    else if (ccw3 == 0 && PointOnLine2D(Dest.Start, Dest.End, 
+    else if (ccw3 == 0 && PointOnLine2D(Dest.Start, Dest.End,
         Src.Start))
     {
         HitPoint = Src.Start;
@@ -525,7 +525,7 @@ bool CCollision::AxisProjection(const FVector3& CenterLine,
     return false;
 }
 
-ECCWResult::Type CCollision::CCW2D(const FVector3& p1, 
+ECCWResult::Type CCollision::CCW2D(const FVector3& p1,
     const FVector3& p2, const FVector3& p3)
 {
     // CCW(Counter Clock Wise) 알고리즘

@@ -1,9 +1,9 @@
-#pragma once
+﻿#pragma once
 
 #include "SceneComponent.h"
 
 class CCollider abstract :
-    public CSceneComponent
+	public CSceneComponent
 {
 	friend class CGameObject;
 	friend class CObject;
@@ -34,9 +34,13 @@ protected:
 	std::shared_ptr<class CCBufferTransform>	mTransformCBuffer;
 	std::shared_ptr<class CCBufferCollider>	mColliderCBuffer;
 
-	std::function<void(const FVector3&, CCollider*)>	
+	// Overlap일 경우 충돌 시작과 충돌 종료 시 호출될 함수
+	std::function<void(const FVector3&, CCollider*)>
 		mCollisionBeginFunc;
 	std::function<void(CCollider*)>	mCollisionEndFunc;
+
+	// Block일 경우 충돌 시 호출될 함수.
+	std::function<void(const FVector3&, CCollider*)>	mCollisionHitFunc;
 
 public:
 	EColliderType GetColliderType()	const
@@ -66,6 +70,9 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
+	// 충돌 시 정보가 변경될 수도 있기 때문에 충돌 시 정보가 변경되면
+	// 이 함수를 호출해서 충돌체의 정보도 변경시켜줄 수 있게 한다.
+	virtual void UpdateInfo() = 0;
 
 protected:
 	virtual CCollider* Clone()	const = 0;
@@ -74,6 +81,9 @@ public:
 	void CallCollisionBegin(const FVector3& HitPoint,
 		const std::weak_ptr<CCollider>& Dest);
 	void CallCollisionEnd(CCollider* Dest);
+	void CallCollisionHit(const FVector3& HitPoint,
+		const std::weak_ptr<CCollider>& Dest);
+	void CollisionHitEnd();
 
 public:
 	virtual bool Collision(FVector3& HitPoint,
@@ -94,6 +104,14 @@ public:
 	{
 		mCollisionEndFunc = std::bind(Func, Obj,
 			std::placeholders::_1);
+	}
+
+	template <typename T>
+	void SetCollisionHitFunction(T* Obj,
+		void(T::* Func)(const FVector3&, CCollider*))
+	{
+		mCollisionHitFunc = std::bind(Func, Obj,
+			std::placeholders::_1, std::placeholders::_2);
 	}
 };
 

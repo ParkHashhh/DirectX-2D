@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Collider.h"
 
@@ -43,6 +43,7 @@ public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
+	virtual void UpdateInfo();
 
 protected:
 	virtual CColliderBox2D* Clone()	const;
