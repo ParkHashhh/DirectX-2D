@@ -73,25 +73,28 @@ void COrc::SetMonsterData()
 void COrc::AttackNotify()
 {
 	auto World = mWorld.lock();
-	std::weak_ptr<CFireBall> mFireBall = World->CreateGameObject<CFireBall>("FireBall");
+	mFireBall = World->CreateGameObject<CFireBall>("FireBall");
 	std::shared_ptr<CFireBall>	FireBall = mFireBall.lock();
 	auto Target = mTargetObject.lock();
 	FVector3	TargetPos = Target->GetWorldPos();
 	FVector3	TargetDir = TargetPos - GetWorldPos();
 	TargetDir.Normalize();
 	float Angle = GetWorldPos().GetViewTargetAngle2D(Target->GetWorldPos(), EAxis::Y);
-	SetWorldRotationZ(Angle);
 	if (FireBall)
 	{
-		FireBall->SetWorldPos(GetWorldPos() + TargetDir * 50.f);
-
+		FireBall->SetWorldPos(GetWorldPos() + TargetDir * 10.f);
 		FireBall->SetNearTarget("Player");
 		FireBall->SetCollisionName("MonsterAttack");
 		FireBall->SetMoveDir(TargetDir);
 		FireBall->ComputeCollisionRange();
-
 	}
 }
+
+void COrc::OnHit()
+{
+
+}
+
 
 void COrc::AttackFinish()
 {

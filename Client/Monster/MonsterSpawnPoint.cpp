@@ -58,7 +58,7 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 	mLevelTime += DeltaTime;
-	if (mLevelTime >= 3.f)
+	if (mLevelTime >= 30.f)
 	{
 		if (mLevel < MAX_LEVEL)
 		{
@@ -93,7 +93,7 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 	}
 
 
-	if ((int)mSpawnMonsterList.size() < 20)
+	if ((int)mSpawnMonsterList.size() < 10)
 	{	
 		mTime += DeltaTime;
 
@@ -121,40 +121,64 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 
 			std::weak_ptr<CObject> Origin = CObject::FindCDO(mSpawnClass);
 			auto OriginMonster = std::dynamic_pointer_cast<CMonster>(Origin.lock());
+
 			if (OriginMonster)
 			{
 				std::string MonsterName = "Monster_" + std::to_string(rand() % 10000);
 				std::weak_ptr<CMonster> SpawnMonster = World->CreateCloneGameObject<CMonster>(MonsterName, OriginMonster);
 				auto Monster = SpawnMonster.lock();
 				Monster->SetMonsterData();
-				int Sidepos = rand() % 4;
-				int RandWidth = rand() % 1400 - 700;
-				int RandHeight = rand() % 800 - 400;
-
-				Monster->SetSpeed(rand() % (mLevel * 20) + mLevel * 10);
-
-
+				bool InRange = false;
 				FVector3 SpawnPos = FVector3::Zero;
-				// 생성위치
-				switch (Sidepos)
+				int SafetyCount = 0;
+				while (!InRange && SafetyCount < 10)
 				{
-				case SpawnPos::Top:
-					SpawnPos.x = RandWidth;
-					SpawnPos.y = 400;
-					break;
-				case SpawnPos::Bottom:
-					SpawnPos.x = RandWidth;
-					SpawnPos.y = -400;
-					break;
-				case SpawnPos::Left:
-					SpawnPos.y = RandHeight;
-					SpawnPos.x = -700;
-					break;
-				case SpawnPos::Right:
-					SpawnPos.x = 700;
-					SpawnPos.y = RandHeight;
-					break;
+					SafetyCount++;
+					InRange = true;
+					int Sidepos = rand() % 4;
+					int RandWidth = rand() % 1400 - 700;
+					int RandHeight = rand() % 800 - 400;
+
+					Monster->SetSpeed(rand() % (mLevel * 20) + mLevel * 10);
+
+
+					// 생성위치
+					switch (Sidepos)
+					{
+					case SpawnPos::Top:
+						SpawnPos.x = RandWidth;
+						SpawnPos.y = 400;
+						break;
+					case SpawnPos::Bottom:
+						SpawnPos.x = RandWidth;
+						SpawnPos.y = -400;
+						break;
+					case SpawnPos::Left:
+						SpawnPos.y = RandHeight;
+						SpawnPos.x = -700;
+						break;
+					case SpawnPos::Right:
+						SpawnPos.x = 700;
+						SpawnPos.y = RandHeight;
+						break;
+					}
+
+					// 순회한다음 각 Dist안에 몬스터가 없으면 ㄱㄱ
+					auto iter = mSpawnMonsterList.begin();
+					auto iterEnd = mSpawnMonsterList.end();
+
+					for (; iter != iterEnd; iter++)
+					{
+						float Dist = (iter->lock()->GetWorldPos() - SpawnPos).Length();
+						if (Dist < mDist)
+						{
+							InRange = false;
+							break;
+						}
+					}
 				}
+				
+
 				// 캐릭터쪽 따라가기
 				auto Target = Monster->GetTargetObject().lock();
 				FVector3	TargetPos = Target->GetWorldPos();
@@ -164,7 +188,6 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 				Monster->SetWorldRotationZ(Angle);
 
 				Monster->SetWorldPos(SpawnPos);
-				Monster->SetWorldRotationZ(Angle);
 				mSpawnMonsterList.push_back(SpawnMonster);
 			}
 		}

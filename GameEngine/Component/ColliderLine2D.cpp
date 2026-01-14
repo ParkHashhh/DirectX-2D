@@ -160,7 +160,7 @@ bool CColliderLine2D::Collision(FVector3& HitPoint,
 	switch (Dest->GetColliderType())
 	{
 	case EColliderType::Box2D:
-		return CCollision::CollisionBox2DToLine2D(HitPoint, 
+		return CCollision::CollisionBox2DToLine2D(HitPoint,
 			dynamic_cast<CColliderBox2D*>(Dest.get()), this);
 		break;
 	case EColliderType::Sphere2D:

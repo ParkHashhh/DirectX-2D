@@ -12,7 +12,8 @@
 #include "Component/ColliderBox2D.h"
 #include "Component/ColliderSphere2D.h"
 #include "Component/ColliderLine2D.h"
-
+#include "../Monster/Monster.h"
+#include "../Monster/Fireball.h"
 CPlayer::CPlayer()
 {
 	SetClassType<CPlayer>();
@@ -76,6 +77,7 @@ void CPlayer::SetAnimation()
 		Anim->AddAnimation("PlayerSlide");
 		Anim->AddAnimation("PlayerDead");
 		Anim->AddAnimation("PlayerShield");
+		Anim->SetPlayRate("PlayerShield", 10.f);
 		Anim->SetPlayRate("PlayerShoot", 1.f);
 
 		Anim->AddNotify<CPlayer>("PlayerShoot",
@@ -113,11 +115,10 @@ void CPlayer::SetMesh()
 
 	if (Mesh)
 	{
-		Mesh->SetWorldPos(0, 0, 0);
+		Mesh->SetRelativePos(0, 0,0);
 		Mesh->SetShader("DefaultTexture2D");
 		Mesh->SetMesh("RectTex");
 		Mesh->SetWorldScale(100.f, 100.f);
-		Mesh->SetMaterialBaseColor(0, 255, 255, 255, 0);
 		Mesh->SetBlendState(0, "AlphaBlend");
 		Mesh->SetPivot(0.5f, 0.5f);
 	}
@@ -131,7 +132,7 @@ void CPlayer::SetCollision()
 	if (Body)
 	{
 		Body->SetCollisionProfile("Player");
-		Body->SetBoxSize(75.f, 80.f);
+		Body->SetBoxSize(60.f, 70.f);
 		Body->SetDebugDraw(true);
 		Body->SetInheritScale(false);
 		Body->SetCollisionBeginFunction<CPlayer>(this, &CPlayer::OnHit);
@@ -141,9 +142,10 @@ void CPlayer::SetCollision()
 	if (Shield)
 	{
 		Shield->SetCollisionProfile("PlayerShield");
-		Shield->SetRadius(100);
+		Shield->SetRadius(50);
 		Shield->SetDebugDraw(false);
 		Shield->SetInheritScale(false);
+		Shield->SetEnable(false);
 		Shield->SetCollisionBeginFunction<CPlayer>(this, &CPlayer::OnHitShield);
 	}
 }
@@ -235,7 +237,8 @@ void CPlayer::Update(float DeltaTime)
 		Anim->ChangeAnimation("PlayerDead");
 	}
 	
-	
+	if (Shield->GetEnable())
+		return;
 	
 
 	if (mIsInvincible)
@@ -259,8 +262,8 @@ void CPlayer::Update(float DeltaTime)
 		AddWorldPos(mKnockbackDir * mKnockbackSpeed * DeltaTime);
 		mKnockbackSpeed -= 1500.f * DeltaTime;
 	}
-	if (Shield->GetEnable())
-		return;
+
+
 	if (mIsSlide)
 	{
 		Movement->SetSpeed(300);
@@ -340,12 +343,15 @@ void CPlayer::DeadFinish()
 
 void CPlayer::MoveUp()
 {
-	if (mIsSlide)
-		return;
 	mUpKey = true;
 	auto	Movement = mMovement.lock();
 	auto	Anim = mAnimation2DComponent.lock();	
+	auto Shield = mShield.lock();
+	if (Shield->GetEnable() || mIsSlide)
+		return;
 	Movement->AddMove(FVector3(0.f, 1.f, 0.f));
+
+	
 	if (mIsShoot)
 		return;
 
@@ -353,25 +359,27 @@ void CPlayer::MoveUp()
 
 void CPlayer::MoveDown()
 {
-	if (mIsSlide)
-		return;
 	mDownKey = true;
 
 	auto	Movement = mMovement.lock();
 	auto	Anim = mAnimation2DComponent.lock();
+	auto Shield = mShield.lock();
+	if (Shield->GetEnable() || mIsSlide)
+		return;
 	Movement->AddMove(FVector3(0.f, -1.f, 0.f));
 	if (mIsShoot)
 		return;
-
 }
 
 void CPlayer::MoveLeft()
 {
-	if (mIsSlide)
-		return;
+	
 	mLeftKey = true;
 	auto	Movement = mMovement.lock();
 	auto	Anim = mAnimation2DComponent.lock();
+	auto Shield = mShield.lock();
+	if (Shield->GetEnable() || mIsSlide)
+		return;
 	Movement->AddMove(FVector3(-1.f, 0.f, 0.f));
 	if (mIsShoot)
 		return;
@@ -379,10 +387,11 @@ void CPlayer::MoveLeft()
 
 void CPlayer::MoveRight()
 {
-	if (mIsSlide)
-		return;
 	mRightKey = true;
 	auto	Movement = mMovement.lock();
+	auto Shield = mShield.lock();
+	if (Shield->GetEnable() || mIsSlide)
+		return;
 	auto	Anim = mAnimation2DComponent.lock();
 	Movement->AddMove(FVector3(1.f, 0.f, 0.f));
 	if (mIsShoot)
@@ -407,8 +416,6 @@ void CPlayer::MoveLeftRelease()
 {
 	mAutoIdle = true;
 	mLeftKey = false;
-
-
 }
 
 void CPlayer::MoveRightRelease()
@@ -421,7 +428,8 @@ void CPlayer::MoveRightRelease()
 
 void CPlayer::AttackPress()
 {
-	if (mIsSlide)
+	auto Shield = mShield.lock();
+	if (Shield->GetEnable() || mIsSlide)
 		return;
 
 	auto	Anim = mAnimation2DComponent.lock();
@@ -484,7 +492,8 @@ void CPlayer::AttackRelease()
 
 void CPlayer::SlidePress()
 {
-	if (mIsSlide)
+	auto Shield = mShield.lock();
+	if (Shield->GetEnable() || mIsSlide)
 		return;
 	mIsSlide = true;
 	auto	Movement = mMovement.lock();
@@ -523,10 +532,16 @@ void CPlayer::SlideEndNotify()
 
 void CPlayer::ShieldPress()
 {
+	if (mIsSlide)
+		return;
 	auto Shield = mShield.lock();
 	auto Anim = mAnimation2DComponent.lock();
 	Shield->SetEnable(true);
 	Shield->SetDebugDraw(true);
+	if(mLastHorizonKey < 0)
+		Anim->SetSymmetry("PlayerShield",true);
+	else
+		Anim->SetSymmetry("PlayerShield", false);
 	Anim->ChangeAnimation("PlayerShield");
 	mAutoIdle = false;
 }
@@ -551,7 +566,8 @@ void CPlayer::AttackEndNotify()
 
 void CPlayer::MultiShotPress()
 {
-	if (mIsSlide)
+	auto Shield = mShield.lock();
+	if (Shield->GetEnable() || mIsSlide)
 		return;
 
 	auto	Anim = mAnimation2DComponent.lock();
@@ -617,7 +633,6 @@ void CPlayer::MultiShotPress()
 void CPlayer::OnHit(const FVector3& HitPoint, CCollider* Dest)
 {
 	// 무적이 아닐때 맞고 여기서 데미지가 0일때를 체크해야함.
-
 	auto Body = mBody.lock();
 	if (!mIsInvincible)
 	{
@@ -636,11 +651,47 @@ void CPlayer::OnHit(const FVector3& HitPoint, CCollider* Dest)
 	NormDir.Normalize();
 	mKnockbackDir = -NormDir;
 	mKnockbackSpeed = 500.f;
-
 }
 
 void CPlayer::OnHitShield(const FVector3& HitPoint, CCollider* Dest)
 {
+	// 내 위치에서 상대방의 위치를 빼고 상대 Line2D의 위치를 내쉴드 좌표까지 한계를 지정해 못들어오게한다.
+	auto Shield = mShield.lock();
+	auto Owner = Dest->GetOwner().lock();
+	if (!Owner) 
+		return;
+	FVector3 MyPos = GetWorldPos();
+	float Radius = Shield->GetRadius();
+	float ParryingLimit = Radius * 0.85f;
+	FVector3 Dir = HitPoint - MyPos;
+	float HitLength = Dir.Length();
+	auto Monster = std::dynamic_pointer_cast<CMonster>(Owner);
+	if (Monster)
+	{
+		if (HitLength >= ParryingLimit)
+		{
+			Monster->SetParring(true);
+			FVector3 PushDir = Dir;
+			PushDir.Normalize();
+			Monster->AddWorldPos(PushDir * 10.f);
+		}
+		else
+		{
+			OnHit(HitPoint, Dest);
+		}
+	}
+	auto FireBall = std::dynamic_pointer_cast<CFireBall>(Owner);
+	if (FireBall)
+	{
+		if (HitLength >= ParryingLimit)
+		{
+			FireBall->Destroy();
+		}
+		else
+		{
+			OnHit(HitPoint, Dest);
+		}
+	}
 }
 
 bool CPlayer::Damage(int Dmg)

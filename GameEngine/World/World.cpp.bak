@@ -113,35 +113,6 @@ void CWorld::PostUpdate(float DeltaTime)
 
 	// 모든 데이터 업데이트가 완료된 후에 충돌을 진행한다.
 	mCollision->Update(DeltaTime);
-iter = mObjList.begin();
-	iterEnd = mObjList.end();
-
-	for (; iter != iterEnd;)
-	{
-		if (iter->second.use_count() == 0)
-		{
-			iter = mObjList.erase(iter);
-			iterEnd = mObjList.end();
-			continue;
-		}
-
-		else if (!iter->second->GetAlive())
-		{
-			iter = mObjList.erase(iter);
-			iterEnd = mObjList.end();
-			continue;
-		}
-
-		else if (!iter->second->GetEnable())
-		{
-			++iter;
-			continue;
-		}
-
-		iter->second->UpdateTransform();
-		++iter;
-	}
-}
 }
 
 void CWorld::Render()

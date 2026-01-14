@@ -24,10 +24,8 @@
 #define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }
 #define	SAFE_DELETE_ARRAY(p)	if(p)	{ delete[] p; p = nullptr; }
 #define	SAFE_RELEASE(p)	if(p)	{ p->Release(); p = nullptr; }
-
-#define	GRAVITY2D	980.f
-#define MAX_LEVEL 3
-
+#define	MAX_LEVEL 3
+#define	GRAVITY2D	980.f	
 struct FResolution
 {
 	int	Width = 0;
@@ -38,7 +36,7 @@ struct FVertexColor
 {
 	// 위치
 	FVector3	Pos;
-
+	
 	// 색상
 	FVector4	Color;
 
@@ -177,7 +175,7 @@ struct FCollisionProfile
 {
 	std::string		Name;
 	// 프로파일이 어떤 채널을 사용하는지.
-	FCollisionChannel* Channel;
+	FCollisionChannel*	Channel;
 	bool			Enable = true;
 	ECollisionInteraction::Type	Interaction[ECollisionChannel::End] = {};
 };
@@ -203,3 +201,10 @@ namespace MonsterType
 		Orc
 	};
 }
+
+enum class ERenderListSort
+{
+	None,
+	Y,
+	Alpha
+};

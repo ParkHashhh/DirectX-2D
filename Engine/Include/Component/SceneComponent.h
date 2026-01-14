@@ -29,10 +29,7 @@ protected:
 	int	mRenderLayer = 0;
 
 public:
-	void SetRenderLayer(int Layer)
-	{
-		mRenderLayer = Layer;
-	}
+	void SetRenderLayer(int Layer);
 
 public:
 	EComponentRender GetRenderType()	const
@@ -44,7 +41,7 @@ public:
 	{
 		return mRenderLayer;
 	}
-
+	void SetRenderType(const std::weak_ptr<class CSceneComponent>& Component,ERenderListSort Type);
 public:
 	virtual void Begin();
 	virtual bool Init();

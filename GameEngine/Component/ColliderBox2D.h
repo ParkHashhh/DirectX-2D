@@ -3,7 +3,7 @@
 #include "Collider.h"
 
 class CColliderBox2D :
-    public CCollider
+	public CCollider
 {
 	friend class CGameObject;
 	friend class CObject;

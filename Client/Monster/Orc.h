@@ -9,9 +9,9 @@ protected:
 	COrc();
 	COrc(const COrc& ref);
 	COrc(COrc&& ref)	noexcept;
-	float mDefaultSpeed = 50.f;
+	float mDefaultSpeed = 60.f;
 
-
+	std::weak_ptr<class CFireBall> mFireBall;
 
 public:
 	virtual ~COrc();
@@ -19,6 +19,8 @@ protected:
 	virtual COrc* Clone();
 
 public:
+	virtual void OnHit();
+
 	virtual float GetDefaultSpeed()
 	{
 		return mDefaultSpeed;

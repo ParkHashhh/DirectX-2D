@@ -82,14 +82,11 @@ bool CMonster::Init()
 	{
 		Body->SetCollisionProfile("Monster");
 		Body->SetCollisionBeginFunction<CMonster>(this, &CMonster::CollisionMonster);
-		Body->SetBoxSize(75.f, 80.f);
+		Body->SetBoxSize(60.f, 65.f);
 		Body->SetDebugDraw(true);
 		Body->SetInheritScale(false);
+
 	}
-
-
-	// Target을 구한다.
-
 	if (World)
 	{
 		mTargetObject = World->FindObject<CGameObject>("Player");
@@ -100,6 +97,7 @@ bool CMonster::Init()
 
 void CMonster::Update(float DeltaTime)
 {
+	SetWorldRotation(0.f, 0.f, 0.f);
 	CGameObject::Update(DeltaTime);
 	auto	Anim = mAnimation2DComponent.lock();
 	auto	Line2D = mLine2D.lock();
@@ -111,29 +109,34 @@ void CMonster::Update(float DeltaTime)
 			return;
 	}
 
+	if (mParring)
+	{
+		OnHit();
+		return;
+	}
 
 	if (mIsAttack)
 	{
+		
 		if (Line2D->GetDistance() <= 100)
 		{
+			
 			float Frame = (float)Anim->GetAnimationFrame();
 			switch (mType)
 			{
 			case MonsterType::Goblin:
-				Line2D->SetLineDistance(Frame * 5);
+				Line2D->SetLineDistance(Frame * mGoblinAttackDistance);
 				break;
 			case MonsterType::Ogre:
-				Line2D->SetLineDistance(Frame * 8);
+				Line2D->SetLineDistance(Frame * mOgreAttackDistance);
 				break;
 			}
 			if (Line2D->GetDistance() >= 100)
 			{
 				Line2D->SetLineDistance(100.f);
 			}
-
 		}
 	}
-	auto Target = mTargetObject.lock();
 	auto Movement = mMovement.lock();
 
 
@@ -142,20 +145,29 @@ void CMonster::Update(float DeltaTime)
 		Movement->SetSpeed(GetDefaultSpeed());
 		Anim->ChangeAnimation(mIdleAnimName);
 	}
-
+	auto Target = mTargetObject.lock();
+	if (Target->GetWorldPos().x < GetWorldPos().x)
+	{
+		Anim->SetSymmetry(mIdleAnimName, true);
+		Anim->SetSymmetry(mAttackAnimName, true);
+	}
+	else
+	{
+		Anim->SetSymmetry(mIdleAnimName, false);
+		Anim->SetSymmetry(mAttackAnimName, false);
+	}
 	FVector3	TargetPos = Target->GetWorldPos();
 	FVector3	TargetDir = TargetPos - GetWorldPos();
 	float TargetDistance = TargetDir.Length();
-	float Angle = GetWorldPos().GetViewTargetAngle2D(Target->GetWorldPos(), EAxis::Y);
-	SetWorldRotationZ(Angle);
 	if (!mIsAttack)
 	{
-		Movement->AddMove(GetAxis(EAxis::Y));
+		Movement->AddMove(TargetDir);
 	}
-	mFireTime -= DeltaTime;
 	// 탐지반경 안에 들어왔을 경우
-	if (TargetDistance <= mDetectRange)
+	if (TargetDistance <= mDetectRange && GetWorldPos().x <=600 && GetWorldPos().y <= 320
+		&& GetWorldPos().x >= -600 && GetWorldPos().y >= -320)
 	{
+		mFireTime -= DeltaTime;
 		if (!mIsAttack)
 		{
 			if (mType == MonsterType::Orc)
@@ -163,7 +175,7 @@ void CMonster::Update(float DeltaTime)
 				if (mFireTime > 0)
 					return;
 				else
-					mFireTime += 3;
+					mFireTime += 5;
 			}
 		Movement->SetSpeed(0);
 		Anim->ChangeAnimation(mAttackAnimName);
@@ -197,4 +209,8 @@ void CMonster::SetMonsterData()
 float CMonster::GetDefaultSpeed()
 {
 	return mDefaultSpeed;
+}
+void CMonster::OnHit()
+{
+
 }

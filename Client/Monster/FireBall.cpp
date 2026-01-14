@@ -7,6 +7,7 @@
 #include "Component/ColliderSphere2D.h"
 #include "Component/ProjectileMovementComponent.h"
 #include "Component/Animation2DComponent.h"
+#include "FireBallEffect.h"
 
 
 CFireBall::CFireBall()
@@ -54,9 +55,9 @@ bool CFireBall::Init()
 	if (Anim)
 	{
 		Anim->SetUpdateComponent(Mesh);
-		Anim->AddAnimation("OrcFireBall");
-		Anim->ChangeAnimation("OrcFireBall");
-		Anim->SetLoop("OrcFireBall", true);
+		Anim->AddAnimation("FireBall");
+		Anim->ChangeAnimation("FireBall");
+		Anim->SetLoop("FireBall", true);
 	}
 	if (Mesh)
 	{
@@ -64,6 +65,7 @@ bool CFireBall::Init()
 		Mesh->SetMesh("CenterRectTex");
 		Movement->SetMoveDir(GetAxis(EAxis::X));
 		Mesh->SetRelativeScale(50.f, 50.f);
+		Mesh->SetBlendState(0, "AlphaBlend");
 	}
 	if (Movement)
 	{
@@ -149,6 +151,16 @@ void CFireBall::MoveEndFunction()
 void CFireBall::CollisionBegin(const FVector3& HitPoint, CCollider* Dest)
 {
 	Destroy();
+	std::shared_ptr<CWorld>	World = mWorld.lock();
+
+	if (World)
+	{
+		std::weak_ptr<CFireBallEffect> Effect = World->CreateGameObject<CFireBallEffect>("FireBallEffect");
+
+		auto	_Effect = Effect.lock();
+
+		_Effect->SetWorldPos(HitPoint);
+	}
 }
 
 void CFireBall::CollisionEnd(CCollider* Dest)

@@ -150,7 +150,7 @@ bool CBullet::Init()
 		Mesh->SetRelativeScale(50.f, 50.f);
 		auto Tex = AssetMng->FindTexture("Arrow");
 		Mesh->SetTexture(0, 0, Tex);
-				Mesh->SetMaterialBaseColor(0, 255, 255, 255, 0);
+		Mesh->SetMaterialBaseColor(0, 255, 255, 255, 0);
 		Mesh->SetBlendState(0, "AlphaBlend");
 		Mesh->SetInheritRot(true);
 	}

@@ -4,6 +4,7 @@
 #include "../Monster/MonsterSpawnPoint.h"
 #include "../Monster/Goblin.h"
 #include "Asset/AssetManager.h"
+#include "Render/RenderManager.h"
 #include "Asset/Animation2D/Animation2DManager.h"
 #include "Component/MeshComponent.h"
 #include "Component/ColliderBox2D.h"
@@ -23,23 +24,28 @@ bool CMainWorld::Init()
 	CWorld::Init();
 	
 	LoadAnimation2D();
-	std::weak_ptr<CPlayer>	Player = CreateGameObject<CPlayer>("Player");
 	std::weak_ptr<CMonsterSpawnPoint>	SpawnPoint1 = CreateGameObject<CMonsterSpawnPoint>("SpawnPoint");
 	std::weak_ptr<CGameObject> BoundsObj = CreateGameObject<CGameObject>("ScreenBounds");
-	auto Map = BoundsObj.lock();
-	//Line2D->SetWorldRotation(GetWorldRot());
-	//Line2D->SetWorldPos(GetWorldPos() + GetAxis(EAxis::Y) * 50.f);
-	//Line2D->SetEnable(true);
-	//Line2D->SetDebugDraw(true);
 
-	/*Line2D->SetDebugDraw(false);
-	Line2D->SetInheritScale(false);
-	Line2D->SetEnable(false);
-	*/
-	if (Map)
+	auto BackObj = CreateGameObject<CGameObject>("Background").lock();
+	auto Mesh = BackObj->CreateComponent<CMeshComponent>("BackMesh").lock();
+	auto AssetMng = GetWorldAssetManager().lock();
+	if (Mesh)
 	{
-		auto LineTop = Map->CreateComponent<CColliderLine2D>("Line2D").lock();
-		LineTop->SetCollisionProfile("Monster");
+		Mesh->SetMesh("CenterRectTex");
+		Mesh->SetShader("DefaultTexture2D"); 
+		Mesh->SetRelativeScale(1280.f, 720.f);
+		Mesh->SetRelativePos(0, 0, 0);
+		Mesh->SetRenderType(Mesh, ERenderListSort::None);
+		auto Tex = AssetMng->FindTexture("Background");
+		Mesh->SetTexture(0, 0, Tex);
+		Mesh->SetMaterialBaseColor(0, FVector4(0.35, 0.35, 0.35, 0));
+	}
+	auto MapLine = BoundsObj.lock();
+	if (MapLine)
+	{
+		auto LineTop = MapLine->CreateComponent<CColliderLine2D>("Line2D").lock();
+		LineTop->SetCollisionProfile("Wall");
 		LineTop->SetLineDistance(1280.f);
 		// 가로
 		LineTop->AddWorldRotationZ(-90);
@@ -48,8 +54,8 @@ bool CMainWorld::Init()
 		LineTop->SetEnable(true);
 		LineTop->SetDebugDraw(true);
 
-		auto LineBottom = Map->CreateComponent<CColliderLine2D>("Line2D").lock();
-		LineBottom->SetCollisionProfile("Monster");
+		auto LineBottom = MapLine->CreateComponent<CColliderLine2D>("Line2D").lock();
+		LineBottom->SetCollisionProfile("Wall");
 		LineBottom->SetLineDistance(1280.f);
 		// 가로
 		LineBottom->AddWorldRotationZ(-90);
@@ -58,8 +64,8 @@ bool CMainWorld::Init()
 		LineBottom->SetEnable(true);
 		LineBottom->SetDebugDraw(true);
 
-		auto LineLeft = Map->CreateComponent<CColliderLine2D>("Line2D").lock();
-		LineLeft->SetCollisionProfile("Monster");
+		auto LineLeft = MapLine->CreateComponent<CColliderLine2D>("Line2D").lock();
+		LineLeft->SetCollisionProfile("Wall");
 		LineLeft->SetLineDistance(720.f);
 		// 가로
 		LineLeft->AddWorldRotationZ(180);
@@ -68,8 +74,8 @@ bool CMainWorld::Init()
 		LineLeft->SetEnable(true);
 		LineLeft->SetDebugDraw(true);
 
-		auto LineRight = Map->CreateComponent<CColliderLine2D>("Line2D").lock();
-		LineRight->SetCollisionProfile("Monster");
+		auto LineRight = MapLine->CreateComponent<CColliderLine2D>("Line2D").lock();
+		LineRight->SetCollisionProfile("Wall");
 		LineRight->SetLineDistance(720.f);
 		// 가로
 		LineRight->AddWorldRotationZ(180);
@@ -86,6 +92,7 @@ bool CMainWorld::Init()
 		Point->SetSpawnClass<CGoblin>();
 		Point->SetSpawnTime(1.f);
 	}
+	std::weak_ptr<CPlayer>	Player = CreateGameObject<CPlayer>("Player");
 
 	return true;
 }
@@ -94,6 +101,8 @@ void CMainWorld::LoadAnimation2D()
 {
 	// LoadArrowTex
 	mWorldAssetManager->LoadTextureFullPath("Arrow", L"../Binary/Asset/Texture/Player/Item/Arrow.png");
+	mWorldAssetManager->LoadTextureFullPath("Background", L"../Binary/Asset/Texture/Background/Background.png");
+
 	
 	// CreateIdleAnim
 	mWorldAssetManager->CreateFrameAnimation(
@@ -158,13 +167,18 @@ void CMainWorld::LoadAnimation2D()
 
 	// CreateOrcFireBallAnim
 	mWorldAssetManager->CreateFrameAnimation(
-		"OrcFireBall", "OrcFireBall", 0, 7, "Monster/Orc/Attack/",
+		"FireBall", "FireBall", 0, 7, "Monster/Orc/Attack/",
 		"FireBall_Frame_", "png", 640, 360);
+
+	// CreateOrcFireEffectBallAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"FireBallEffect", "FireBallEffect", 0, 25, "Monster/Orc/Attack/",
+		"FireBall_Frame_Effect_", "png", 547, 483);
 
 
 	mWorldAssetManager->CreateFrameAnimation(
 		"Explosion", "Explosion",1,89, "Explosion/",
-		"Explosion", "png", 320.f, 240.f,false);
+		"Explosion", "png", 320.f, 240.f,false);	
 
 
 	

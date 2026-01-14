@@ -1,13 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include "../EngineInfo.h"
 
-enum class ERenderListSort
-{
-	None,
-	Y,
-	Alpha
-};
+
 
 struct FRenderLayer
 {
@@ -49,6 +44,8 @@ public:
 	bool CreateBlendState(const std::string& Name, 
 		bool AlphaToCoverageEnable = false,
 		bool IndependentBlendEnable = false);
+
+	bool SetRenderType(const std::weak_ptr<class CSceneComponent>& Component, ERenderListSort Type);
 
 	bool CreateDepthStencilState(const std::string& Name, 
 		bool DepthEnable = true,

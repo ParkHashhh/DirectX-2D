@@ -154,6 +154,7 @@
     <ClCompile Include="Interface\StateInterface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monster\FireBall.cpp" />
+    <ClCompile Include="Monster\FireBallEffect.cpp" />
     <ClCompile Include="Monster\Goblin.cpp" />
     <ClCompile Include="Monster\Monster.cpp" />
     <ClCompile Include="Monster\MonsterSpawnPoint.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="GlobalSetting.h" />
     <ClInclude Include="Interface\StateInterface.h" />
     <ClInclude Include="Monster\FireBall.h" />
+    <ClInclude Include="Monster\FireBallEffect.h" />
     <ClInclude Include="Monster\Goblin.h" />
     <ClInclude Include="Monster\Monster.h" />
     <ClInclude Include="Monster\MonsterSpawnPoint.h" />

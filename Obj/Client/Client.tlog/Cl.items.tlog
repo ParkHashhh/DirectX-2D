@@ -3,6 +3,7 @@ C:\Users\assort_75\Desktop\Git\Client\GlobalSetting.cpp;C:\Users\assort_75\Deskt
 C:\Users\assort_75\Desktop\Git\Client\Interface\StateInterface.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\StateInterface.obj
 C:\Users\assort_75\Desktop\Git\Client\main.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\main.obj
 C:\Users\assort_75\Desktop\Git\Client\Monster\FireBall.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\FireBall.obj
+C:\Users\assort_75\Desktop\Git\Client\Monster\FireBallEffect.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\FireBallEffect.obj
 C:\Users\assort_75\Desktop\Git\Client\Monster\Goblin.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\Goblin.obj
 C:\Users\assort_75\Desktop\Git\Client\Monster\Monster.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\Monster.obj
 C:\Users\assort_75\Desktop\Git\Client\Monster\MonsterSpawnPoint.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\MonsterSpawnPoint.obj

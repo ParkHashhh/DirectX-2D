@@ -9,13 +9,14 @@ protected:
 	COgre();
 	COgre(const COgre& ref);
 	COgre(COgre&& ref)	noexcept;
-	float mDefaultSpeed = 35.f;
+	float mDefaultSpeed = 50.f;
 public:
 	virtual ~COgre();
 protected:
 	virtual COgre* Clone();
 
 public:
+	virtual void OnHit();
 	virtual float GetDefaultSpeed()
 	{
 		return mDefaultSpeed;

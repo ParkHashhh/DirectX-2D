@@ -1,9 +1,9 @@
-﻿	#pragma once
+﻿#pragma once
 
 #include "Collider.h"
 
 class CColliderSphere2D :
-    public CCollider
+	public CCollider
 {
 	friend class CGameObject;
 	friend class CObject;
@@ -26,6 +26,10 @@ public:
 	}
 
 public:
+	float GetRadius()
+	{
+		return mInfo.Radius;
+	}
 	void SetRadius(float Radius)
 	{
 		mInfo.Radius = Radius;

@@ -1,4 +1,4 @@
-#include "RenderManager.h"
+﻿#include "RenderManager.h"
 #include "BlendState.h"
 #include "DepthStencilState.h"
 #include "../Component/SceneComponent.h"
@@ -25,6 +25,8 @@ CRenderManager::~CRenderManager()
 {
 	ResetState("DepthDisable");
 }
+
+
 
 bool CRenderManager::CreateLayer(const std::string& Name, 
 	int RenderOrder,
@@ -56,9 +58,28 @@ void CRenderManager::AddRenderLayer(
 	if (iter == mRenderLayerMap.end())
 		return;
 
-	iter->second.RenderList.push_back(Component);
-
+	
+		iter->second.RenderList.push_back(Component);
 }
+
+bool CRenderManager::SetRenderType(const std::weak_ptr<class CSceneComponent>& Component, ERenderListSort Type)
+{
+
+	auto	RenderComponent = Component.lock();
+
+	int	RenderLayer = RenderComponent->GetRenderLayer();
+
+	auto	iter = mRenderLayerMap.find(RenderLayer);
+
+	if (iter == mRenderLayerMap.end())
+		return false;
+
+	iter->second.SortType = Type;
+	return true;
+}
+
+
+
 
 void CRenderManager::ClearRenderLayer(int RenderLayer)
 {
@@ -260,14 +281,12 @@ bool CRenderManager::Init()
 	AddBlendRenderTargetDesc("AlphaBlend", true,
 		D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_INV_SRC_ALPHA,
 		D3D11_BLEND_OP_ADD);
-
 	CreateBlendState("AlphaBlend");
 
 	// Depth 끄기
 	CreateDepthStencilState("DepthDisable", false);
 
 	CreateLayer("Default", 0, ERenderListSort::Y);
-
 	SetState("DepthDisable");
 
 	return true;

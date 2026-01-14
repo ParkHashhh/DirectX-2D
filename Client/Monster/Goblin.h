@@ -10,12 +10,16 @@ protected:
 	CGoblin();
 	CGoblin(const CGoblin& ref);
 	CGoblin(CGoblin&& ref)	noexcept;
-	float mDefaultSpeed = 20.f;
+	float mDefaultSpeed = 35.f;
 public:
 	virtual ~CGoblin();
 
 protected:
 	virtual CGoblin* Clone();
+
+public:
+	virtual void OnHit();
+
 public:
 	virtual float GetDefaultSpeed()
 	{

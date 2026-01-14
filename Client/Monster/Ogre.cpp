@@ -76,16 +76,33 @@ void COgre::SetMonsterData()
 }
 void COgre::AttackNotify()
 {
+	auto Target = mTargetObject.lock();
+	FVector3	TargetPos = Target->GetWorldPos();
+	FVector3	TargetDir = TargetPos - GetWorldPos();
+	FVector3 MyPos = GetWorldPos();
+	FVector3 DirToTarget = TargetPos - MyPos;
+
+	DirToTarget.Normalize();
+	float Angle = MyPos.GetViewTargetAngle2D(TargetPos, EAxis::Y);
+	TargetDir.Normalize();
 	auto	Line2D = mLine2D.lock();
 	if (Line2D)
 	{
+		Line2D->SetInheritRot(false);
 		Line2D->SetLineDistance(0);
 		Line2D->SetCollisionProfile("MonsterAttack");
-		Line2D->SetWorldRotation(GetWorldRot());
+		Line2D->SetWorldRotationZ(Angle);
 		Line2D->SetEnable(true);
 		Line2D->SetDebugDraw(true);
 	}
 }
+
+void COgre::OnHit()
+{
+	auto	Line2D = mLine2D.lock();
+	Line2D->SetEnable(false);
+}
+
 void COgre::AttackFinish()
 {
 	auto	Line2D = mLine2D.lock();
@@ -102,6 +119,7 @@ void COgre::AttackFinish()
 	{
 		Anim->ChangeAnimation(mIdleAnimName);
 	}
+	mParring = false;
 	mIsAttack = false;
 }
 COgre* COgre::Clone()

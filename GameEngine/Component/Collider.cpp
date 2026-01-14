@@ -224,7 +224,6 @@ void CCollider::CallCollisionHit(const FVector3& HitPoint,
 
 void CCollider::CollisionHitEnd()
 {
-
 }
 
 void CCollider::ClearCollisionList()
@@ -244,4 +243,3 @@ void CCollider::ClearCollisionList()
 	mCollisionObjectMap.clear();
 	mCollision = false;
 }
-

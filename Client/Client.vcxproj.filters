@@ -84,8 +84,11 @@
     <ClCompile Include="Monster\Orc.cpp">
       <Filter>03. Monster\03. Orc</Filter>
     </ClCompile>
+    <ClCompile Include="Monster\FireBallEffect.cpp">
+      <Filter>03. Monster</Filter>
+    </ClCompile>
     <ClCompile Include="Monster\FireBall.cpp">
-      <Filter>03. Monster\03. Orc</Filter>
+      <Filter>03. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,8 +131,11 @@
     <ClInclude Include="Monster\Orc.h">
       <Filter>03. Monster\03. Orc</Filter>
     </ClInclude>
+    <ClInclude Include="Monster\FireBallEffect.h">
+      <Filter>03. Monster</Filter>
+    </ClInclude>
     <ClInclude Include="Monster\FireBall.h">
-      <Filter>03. Monster\03. Orc</Filter>
+      <Filter>03. Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

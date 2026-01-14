@@ -25,18 +25,26 @@ protected:
 	std::weak_ptr<class CObjectMovementComponent>	mMovement;
 	std::weak_ptr<class CColliderBox2D>	mBody;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
-	MonsterType::Type mType = MonsterType::Goblin;
 
+	MonsterType::Type mType = MonsterType::Goblin;
 	float	mFireTime = 0.f;
 	std::weak_ptr<CGameObject>	mTargetObject;
 	float	mDetectRange = 100.f;
 	int		mHP = 5;
+	int mGoblinAttackDistance = 10;
+	int mOgreAttackDistance = 13;
+	bool mParring = false;
 	bool mIsAttack = false;
 	float mDefaultSpeed = 0;
 	std::string mAttackAnimName;
 	std::string mIdleAnimName;
 
 public:
+	void SetParring(bool Parring)
+	{
+		mParring = Parring;
+	}
+
 	void Damage(int Dmg)
 	{
 		mHP -= Dmg;
@@ -60,6 +68,7 @@ public:
 	virtual void Update(float DeltaTime);
 public:
 	virtual void SetMonsterData();
+	virtual void OnHit();
 
 protected:
 	virtual CMonster* Clone();

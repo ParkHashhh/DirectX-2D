@@ -3,7 +3,7 @@
 #include "Collider.h"
 
 class CColliderLine2D :
-    public CCollider
+	public CCollider
 {
 	friend class CGameObject;
 	friend class CObject;
@@ -25,6 +25,11 @@ public:
 	float GetDistance()
 	{
 		return mDistance;
+	}
+
+	void AddDistance(float Distance)
+	{
+		mDistance += Distance;
 	}
 	const FLine2DInfo& GetInfo()	const
 	{

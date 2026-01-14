@@ -15,6 +15,7 @@ bool CGlobalSetting::Init()
 	CCollisionInfoManager::GetInst()->CreateChannel("MonsterAttack");
 	CCollisionInfoManager::GetInst()->CreateChannel("PlayerInvincible");
 	CCollisionInfoManager::GetInst()->CreateChannel("PlayerShield");
+	CCollisionInfoManager::GetInst()->CreateChannel("Wall");
 
 	CCollisionInfoManager::GetInst()->CreateProfile("PlayerAttack",
 		"PlayerAttack", true);
@@ -26,19 +27,66 @@ bool CGlobalSetting::Init()
 		"PlayerShield", true);
 
 
+	CCollisionInfoManager::GetInst()->CreateProfile("Wall",
+		"Wall", true);
+
+	//벽
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"Wall", "Monster",
+		ECollisionInteraction::Ignore);
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"Monster", "Wall",
+		ECollisionInteraction::Ignore);
+	
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"Wall", "Player",
+		ECollisionInteraction::Block);
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"Player", "Wall",
+		ECollisionInteraction::Block);
+
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"Wall", "PlayerAttack",
+		ECollisionInteraction::Overlap);
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"PlayerAttack", "Wall",
+		ECollisionInteraction::Overlap);
+
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"Wall", "MonsterAttack",
+		ECollisionInteraction::Ignore);
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"MonsterAttack", "Wall",
+		ECollisionInteraction::Ignore);
+
+
+
 	// 쉴드
 	CCollisionInfoManager::GetInst()->SetProfileInteraction(
 		"PlayerShield", "MonsterAttack",
-		ECollisionInteraction::Block);
+		ECollisionInteraction::Overlap);
 	CCollisionInfoManager::GetInst()->SetProfileInteraction(
 		"MonsterAttack", "PlayerShield",
-		ECollisionInteraction::Block);
+		ECollisionInteraction::Overlap);
 	CCollisionInfoManager::GetInst()->SetProfileInteraction(
 		"PlayerShield", "Monster",
 		ECollisionInteraction::Block);
 	CCollisionInfoManager::GetInst()->SetProfileInteraction(
 		"Monster", "PlayerShield",
 		ECollisionInteraction::Block);
+
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"PlayerAttack", "PlayerShield",
+		ECollisionInteraction::Ignore);
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"PlayerShield", "PlayerAttack",
+		ECollisionInteraction::Ignore);
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"Player", "PlayerShield",
+		ECollisionInteraction::Ignore);
+	CCollisionInfoManager::GetInst()->SetProfileInteraction(
+		"PlayerShield", "Player",
+		ECollisionInteraction::Ignore);
 
 
 	// 무적상태
@@ -80,7 +128,7 @@ bool CGlobalSetting::Init()
 
 	CCollisionInfoManager::GetInst()->SetProfileInteraction(
 		"Monster", "Monster",
-		ECollisionInteraction::Ignore);
+		ECollisionInteraction::Block);
 
 
 	CCollisionInfoManager::GetInst()->SetProfileInteraction(

@@ -82,6 +82,17 @@ bool CSceneComponent::Init()
 	return true;
 }
 
+
+void CSceneComponent::SetRenderLayer(int Layer)
+{
+	mRenderLayer = Layer;
+}
+
+void CSceneComponent::SetRenderType(const std::weak_ptr<class CSceneComponent>& Component,ERenderListSort Type)
+{
+	CRenderManager::GetInst()->SetRenderType(Component,Type);
+}
+
 void CSceneComponent::Update(float DeltaTime)
 {
 	// 중력 적용
