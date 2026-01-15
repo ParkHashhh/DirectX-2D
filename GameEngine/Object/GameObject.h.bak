@@ -5,7 +5,7 @@
 #include "../Component/ObjectComponent.h"
 
 class CGameObject :
-    public CObject
+	public CObject
 {
 	friend class CWorld;
 	friend class CObject;
@@ -61,6 +61,7 @@ public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
+	virtual void UpdateTransform();
 	virtual void Render();
 	virtual void Destroy();
 
@@ -175,6 +176,15 @@ public:
 	}
 
 public:
+	void SetSimulatePhysics(bool SimulatePhysics);
+	void SetUseGravity(bool UseGravity);
+	void AddForce(const FVector3& Force);
+	void ClearPhysics();
+
+public:
+	const FVector3& GetPivot()	const;
+	const FVector3& GetVelocity()	const;
+	float GetSpeed()	const;
 	const FVector3& GetAxis(EAxis::Type Axis)	const;
 	const FVector3& GetRelativeScale()	const;
 	const FVector3& GetRelativeRot()	const;

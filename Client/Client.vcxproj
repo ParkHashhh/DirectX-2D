@@ -152,6 +152,10 @@
     <ClCompile Include="Component\StateComponent.cpp" />
     <ClCompile Include="GlobalSetting.cpp" />
     <ClCompile Include="Interface\StateInterface.cpp" />
+    <ClCompile Include="Item\ArrowForce.cpp" />
+    <ClCompile Include="Item\HpPotion.cpp" />
+    <ClCompile Include="Item\Item.cpp" />
+    <ClCompile Include="Item\SpeedUp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monster\FireBall.cpp" />
     <ClCompile Include="Monster\FireBallEffect.cpp" />
@@ -160,6 +164,7 @@
     <ClCompile Include="Monster\MonsterSpawnPoint.cpp" />
     <ClCompile Include="Monster\Ogre.cpp" />
     <ClCompile Include="Monster\Orc.cpp" />
+    <ClCompile Include="Monster\SparkEffect.cpp" />
     <ClCompile Include="Player\Bullet.cpp" />
     <ClCompile Include="Player\BulletEffect.cpp" />
     <ClCompile Include="Player\Player.cpp" />
@@ -169,6 +174,10 @@
     <ClInclude Include="Component\StateComponent.h" />
     <ClInclude Include="GlobalSetting.h" />
     <ClInclude Include="Interface\StateInterface.h" />
+    <ClInclude Include="Item\ArrowForce.h" />
+    <ClInclude Include="Item\HpPotion.h" />
+    <ClInclude Include="Item\Item.h" />
+    <ClInclude Include="Item\SpeedUp.h" />
     <ClInclude Include="Monster\FireBall.h" />
     <ClInclude Include="Monster\FireBallEffect.h" />
     <ClInclude Include="Monster\Goblin.h" />
@@ -176,6 +185,7 @@
     <ClInclude Include="Monster\MonsterSpawnPoint.h" />
     <ClInclude Include="Monster\Ogre.h" />
     <ClInclude Include="Monster\Orc.h" />
+    <ClInclude Include="Monster\SparkEffect.h" />
     <ClInclude Include="Player\Bullet.h" />
     <ClInclude Include="Player\BulletEffect.h" />
     <ClInclude Include="Player\Player.h" />

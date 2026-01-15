@@ -166,8 +166,8 @@ void CWorldCollision::Update(float DeltaTime)
 						// 속도 / -2.f 를 하면 이동한 양의 반을 반대방향
 						// 으로 이동시키는데 여기에 1.01을 곱해서 1% 만큼
 						// 더 반대 방향으로 이동하게 한다.
-						SrcObj->AddWorldPos(SrcVelocity / -2.f * 1.01f);
-						DestObj->AddWorldPos(DestVelocity / -2.f * 1.01f);
+						SrcObj->AddWorldPos(SrcVelocity * -1.01f);
+						DestObj->AddWorldPos(DestVelocity * -1.01f);
 
 						SrcCollider->UpdateInfo();
 						DestCollider->UpdateInfo();

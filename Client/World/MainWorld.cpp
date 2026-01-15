@@ -99,10 +99,12 @@ bool CMainWorld::Init()
 
 void CMainWorld::LoadAnimation2D()
 {
-	// LoadArrowTex
+	// LoadTexture
 	mWorldAssetManager->LoadTextureFullPath("Arrow", L"../Binary/Asset/Texture/Player/Item/Arrow.png");
 	mWorldAssetManager->LoadTextureFullPath("Background", L"../Binary/Asset/Texture/Background/Background.png");
-
+	mWorldAssetManager->LoadTextureFullPath("ArrowForce", L"../Binary/Asset/Texture/Item/ArrowForce.png");
+	mWorldAssetManager->LoadTextureFullPath("HpPotion", L"../Binary/Asset/Texture/Item/HpPotion.png");
+	mWorldAssetManager->LoadTextureFullPath("SpeedUp", L"../Binary/Asset/Texture/Item/SpeedUp.png");
 	
 	// CreateIdleAnim
 	mWorldAssetManager->CreateFrameAnimation(
@@ -172,14 +174,18 @@ void CMainWorld::LoadAnimation2D()
 
 	// CreateOrcFireEffectBallAnim
 	mWorldAssetManager->CreateFrameAnimation(
-		"FireBallEffect", "FireBallEffect", 0, 25, "Monster/Orc/Attack/",
+		"FireBallEffect", "FireBallEffect", 0, 25, "Effect/Fireball/",
 		"FireBall_Frame_Effect_", "png", 547, 483);
 
 
 	mWorldAssetManager->CreateFrameAnimation(
-		"Explosion", "Explosion",1,89, "Explosion/",
+		"Explosion", "Explosion",1,89, "Effect/Explosion/",
 		"Explosion", "png", 320.f, 240.f,false);	
-
+	mWorldAssetManager->CreateFrameAnimation(
+		"Spark", "Spark", 0, 10, "Effect/Spark/",
+		"Spark_Frame_Effect_", "png", 1280, 720);
+	
 
 	
 }
+	

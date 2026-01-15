@@ -14,6 +14,12 @@
 #include "Component/ColliderLine2D.h"
 #include "../Monster/Monster.h"
 #include "../Monster/Fireball.h"
+#include "../Monster/SparkEffect.h"
+#include "../Item/HpPotion.h"
+#include "../Item/ArrowForce.h"
+#include "../Item/SpeedUp.h"
+#include "../Item/Item.h"
+
 CPlayer::CPlayer()
 {
 	SetClassType<CPlayer>();
@@ -54,10 +60,11 @@ bool CPlayer::Init()
 void CPlayer::SetMovement()
 {
 	auto	Movement = mMovement.lock();
-
+	auto State = mStateComponent.lock();
 	if (Movement)
 	{
 		Movement->SetUpdateComponent(mMeshComponent);
+		Movement->SetSpeed(State->GetSpeed());
 	}
 }
 
@@ -225,13 +232,12 @@ void CPlayer::Update(float DeltaTime)
 	auto	Movement = mMovement.lock();
 	auto Body = mBody.lock();
 	auto Shield = mShield.lock();
-	
-
+	auto State = mStateComponent.lock();
 	if (mEnd)
 	{
 		return;
 	}
-	if(mHP <= 0)
+	if(State->IsDead())
 	{
 		OutputDebugStringA("Player Dead!\n");
 		Anim->ChangeAnimation("PlayerDead");
@@ -266,7 +272,7 @@ void CPlayer::Update(float DeltaTime)
 
 	if (mIsSlide)
 	{
-		Movement->SetSpeed(300);
+		Movement->SetSpeed(State->GetSpeed() + 200);
 		Movement->AddMove(mDir);
 		return;
 	}
@@ -304,10 +310,9 @@ void CPlayer::Update(float DeltaTime)
 			Anim->ChangeAnimation("PlayerRun");
 			mAutoIdle = true;
 		}
-		else if (mAutoIdle && Mesh->GetSpeed() <= 0.1f)
+		else if (mAutoIdle && Movement->GetVelocity().Length() <= 0.1)
 		{
 			Anim->ChangeAnimation("PlayerIdle");
-			mAutoIdle = false;
 		}
 	}
 	
@@ -465,17 +470,26 @@ void CPlayer::AttackPress()
 			Anim->ChangeAnimation(AnimName);
 
 		}
-
-		std::weak_ptr<CBullet> mBullet = World->CreateGameObject<CBullet>("Bullet");
-		std::shared_ptr<CBullet>	Bullet = mBullet.lock();
-		if (Bullet)
+		auto State = mStateComponent.lock();
+		int ArrowCount = State->GetArrowCount();
+		for (int i = 0; i < ArrowCount; i++)
 		{
+			std::weak_ptr<CBullet> mBullet = World->CreateGameObject<CBullet>("Bullet");
+			std::shared_ptr<CBullet>	Bullet = mBullet.lock();
+			auto	Mesh = mMeshComponent.lock();
+			float CenterIndex = (float)(ArrowCount - 1) / 2.f;
+			float FinalRotation = 20.f * ((float)i - CenterIndex);
+			FMatrix RotMatrix;
+			RotMatrix.RotationZ(FinalRotation);
+			FVector3 ShootDir = ResultDir.TransformNormal(RotMatrix);
+			ShootDir.Normalize();
 			Bullet->SetCollisionName("PlayerAttack");
-			Bullet->SetWorldRotation(GetWorldRot());
-			Bullet->SetWorldPos(GetWorldPos() + ResultDir * 75.f);
+			float BaseAngle = atan2f(ResultDir.y, ResultDir.x) * (180.f / 3.141592f);
+			Bullet->SetWorldRotationZ(BaseAngle + FinalRotation);
+			Bullet->SetWorldPos(GetWorldPos() + ShootDir * 35.f);
 			Bullet->SetCollisionTargetName("Monster");
 			Bullet->ComputeCollisionRange();
-			Bullet->SetMoveDir(ResultDir);
+			Bullet->SetMoveDir(ShootDir);
 			Bullet->SetSpeed(500);
 		}
 	}
@@ -515,17 +529,30 @@ void CPlayer::SlideEndNotify()
 {
 	mAutoIdle = true;
 	mIsSlide = false;
-
+	auto State = mStateComponent.lock();
 	auto	Anim = mAnimation2DComponent.lock();
 	auto	Movement = mMovement.lock();
+	Movement->SetSpeed(State->GetSpeed());
+
 	if (Anim)
 	{
-		if (mDir.x == -1 || mDir.y == -1)
+		if (mLastHorizonKey < 0)
+		{
 			Anim->SetSymmetry("PlayerIdle", true);
-		else
-			Anim->SetSymmetry("PlayerIdle", false);
+			Anim->SetSymmetry("PlayerRun", true);
 
-		Anim->ChangeAnimation("PlayerIdle");
+		}
+		else
+		{
+			Anim->SetSymmetry("PlayerIdle", false);
+			Anim->SetSymmetry("PlayerRun", false);
+
+		}
+
+		if (mUpKey || mDownKey || mLeftKey || mRightKey)
+			Anim->ChangeAnimation("PlayerRun");
+		else 
+			Anim->ChangeAnimation("PlayerIdle");
 	}
 }
 
@@ -555,6 +582,12 @@ void CPlayer::ShieldRelease()
 	auto Shield = mShield.lock();
 	mAutoIdle = true;
 	Shield->SetEnable(false);
+	auto	Anim = mAnimation2DComponent.lock();
+	if (Anim)
+	{
+		if (!mDir.IsZero()) Anim->ChangeAnimation("PlayerRun");
+		else Anim->ChangeAnimation("PlayerIdle");
+	}
 }
 
 
@@ -633,10 +666,14 @@ void CPlayer::MultiShotPress()
 void CPlayer::OnHit(const FVector3& HitPoint, CCollider* Dest)
 {
 	// 무적이 아닐때 맞고 여기서 데미지가 0일때를 체크해야함.
+	auto Owner = Dest->GetOwner().lock();
+	auto Item = std::dynamic_pointer_cast<CItem>(Owner);
+	if (Item)
+		return;
 	auto Body = mBody.lock();
 	if (!mIsInvincible)
 	{
-		if (!Damage(1))
+		if (AddHP(-1))
 			return;
 		mInvincibleTime = 1.0f;
 		mIsInvincible = true;
@@ -666,6 +703,7 @@ void CPlayer::OnHitShield(const FVector3& HitPoint, CCollider* Dest)
 	FVector3 Dir = HitPoint - MyPos;
 	float HitLength = Dir.Length();
 	auto Monster = std::dynamic_pointer_cast<CMonster>(Owner);
+	
 	if (Monster)
 	{
 		if (HitLength >= ParryingLimit)
@@ -674,12 +712,24 @@ void CPlayer::OnHitShield(const FVector3& HitPoint, CCollider* Dest)
 			FVector3 PushDir = Dir;
 			PushDir.Normalize();
 			Monster->AddWorldPos(PushDir * 10.f);
+			std::shared_ptr<CWorld>	World = mWorld.lock();
+
+			if (World)
+			{
+				std::weak_ptr<CSparkEffect> Effect = World->CreateGameObject<CSparkEffect>("SparkEffect");
+
+				auto	_Effect = Effect.lock();
+
+				_Effect->SetWorldPos(HitPoint);
+			}
 		}
 		else
 		{
 			OnHit(HitPoint, Dest);
 		}
 	}
+	
+	
 	auto FireBall = std::dynamic_pointer_cast<CFireBall>(Owner);
 	if (FireBall)
 	{
@@ -694,15 +744,30 @@ void CPlayer::OnHitShield(const FVector3& HitPoint, CCollider* Dest)
 	}
 }
 
-bool CPlayer::Damage(int Dmg)
+bool CPlayer::AddHP(int HP)
 {
 	{
-		mHP -= Dmg;
-		if (mHP <= 0)
+		auto State = mStateComponent.lock();
+		if (State->AddHP(HP))
 			return false;
-		char buf[256];
-		sprintf_s(buf, "Player HP: %d\n", mHP);
-		OutputDebugStringA(buf);
 		return true;
+	}
+}
+
+void CPlayer::AddSpeed(float Speed)
+{
+	{
+		auto Movement = mMovement.lock();
+		auto State = mStateComponent.lock();
+		State->AddSpeed(Speed);
+		Movement->SetSpeed(State->GetSpeed());
+
+	}
+}
+void CPlayer::AddArrow(int Arrow)
+{
+	{
+		auto State = mStateComponent.lock();
+		State->AddArrow(Arrow);
 	}
 }

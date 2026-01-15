@@ -6,6 +6,10 @@
 #include "Ogre.h"
 #include "Orc.h"
 
+
+
+
+
 namespace SpawnPos
 {
 	enum Type : unsigned char
@@ -178,6 +182,7 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 					}
 				}
 				
+			
 
 				// 캐릭터쪽 따라가기
 				auto Target = Monster->GetTargetObject().lock();

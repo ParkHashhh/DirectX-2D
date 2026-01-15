@@ -52,6 +52,11 @@ void CObjectMovementComponent::PostUpdate(float DeltaTime)
 	auto	UpdateComponent = mUpdateComponent.lock();
 
 	UpdateComponent->AddWorldPos(mVelocity);
+}
+
+void CObjectMovementComponent::PostRender()
+{
+	CMovementComponent::PostRender();
 
 	mMoveDir = FVector3::Zero;
 }

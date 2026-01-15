@@ -1,6 +1,10 @@
 C:\Users\assort_75\Desktop\Git\Client\Component\StateComponent.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\StateComponent.obj
 C:\Users\assort_75\Desktop\Git\Client\GlobalSetting.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\GlobalSetting.obj
 C:\Users\assort_75\Desktop\Git\Client\Interface\StateInterface.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\StateInterface.obj
+C:\Users\assort_75\Desktop\Git\Client\Item\ArrowForce.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\ArrowForce.obj
+C:\Users\assort_75\Desktop\Git\Client\Item\HpPotion.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\HpPotion.obj
+C:\Users\assort_75\Desktop\Git\Client\Item\Item.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\Item.obj
+C:\Users\assort_75\Desktop\Git\Client\Item\SpeedUp.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\SpeedUp.obj
 C:\Users\assort_75\Desktop\Git\Client\main.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\main.obj
 C:\Users\assort_75\Desktop\Git\Client\Monster\FireBall.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\FireBall.obj
 C:\Users\assort_75\Desktop\Git\Client\Monster\FireBallEffect.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\FireBallEffect.obj
@@ -9,6 +13,7 @@ C:\Users\assort_75\Desktop\Git\Client\Monster\Monster.cpp;C:\Users\assort_75\Des
 C:\Users\assort_75\Desktop\Git\Client\Monster\MonsterSpawnPoint.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\MonsterSpawnPoint.obj
 C:\Users\assort_75\Desktop\Git\Client\Monster\Ogre.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\Ogre.obj
 C:\Users\assort_75\Desktop\Git\Client\Monster\Orc.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\Orc.obj
+C:\Users\assort_75\Desktop\Git\Client\Monster\SparkEffect.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\SparkEffect.obj
 C:\Users\assort_75\Desktop\Git\Client\Player\Bullet.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\Bullet.obj
 C:\Users\assort_75\Desktop\Git\Client\Player\BulletEffect.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\BulletEffect.obj
 C:\Users\assort_75\Desktop\Git\Client\Player\Player.cpp;C:\Users\assort_75\Desktop\Git\Obj\Client\Player.obj

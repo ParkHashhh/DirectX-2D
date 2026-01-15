@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "MovementComponent.h"
 
@@ -21,10 +21,6 @@ protected:
 	FVector3		mVelocity;
 
 public:
-	void SetVelocity(FVector3 Velocity)
-	{
-		mVelocity = Velocity;
-	}
 	const FVector3& GetVelocity()	const
 	{
 		return mVelocity;
@@ -63,6 +59,7 @@ public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
+	virtual void PostRender();
 	virtual void Destroy();
 
 protected:

@@ -30,9 +30,7 @@ private:
 	std::weak_ptr<class CColliderSphere2D>	mSphere2D;
 	std::weak_ptr<class CColliderSphere2D>	mShield;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
-	int		mHP = 3;
 	bool	mAutoIdle = true;
-	float mDefaultSpeed = 300.f;
 	FVector3 mDir = FVector3(0.f, 1.f, 0.f);
 	float mInvincibleTime = 1.0f;
 	bool mIsInvincible = false;
@@ -46,16 +44,15 @@ private:
 
 	FVector3 mKnockbackDir;
 	float mKnockbackSpeed = 0.f;
-
-
 	bool mEnd = false;
 	bool mShieldEnable = false;
 
 	std::weak_ptr<class CBullet>	mBullet;
 
 public:
-	bool Damage(int Dmg);
-	
+	bool AddHP(int HP);
+	void AddSpeed(float Speed);
+	void AddArrow(int Arrow);
 
 public:
 	
@@ -63,8 +60,8 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
 
+
 private:
-	void TestNotify();
 	void AttackNotify();
 	void AttackFinish();
 	void DeadNotify();

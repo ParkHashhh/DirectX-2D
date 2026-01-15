@@ -8,7 +8,10 @@
 #include "Component/ColliderSphere2D.h"
 #include "Component/ColliderLine2D.h"
 #include "Component/ObjectMovementComponent.h"
-
+#include "../Item/HpPotion.h"
+#include "../Item/ArrowForce.h"
+#include "../Item/SpeedUp.h"
+#include "../Item/Item.h"
 
 CMonster::CMonster()
 {
@@ -42,12 +45,14 @@ bool CMonster::Init()
 	mMovement = CreateComponent<CObjectMovementComponent>("MonsterMovement");
 	mLine2D = CreateComponent<CColliderLine2D>("MonsterLine2D");
 	mBody = CreateComponent<CColliderBox2D>("MonsterBody");
+	mHitBox = CreateComponent<CColliderBox2D>("MonsterHitBox");
 
 	auto	Line2D = mLine2D.lock();
 	auto	Mesh = mMeshComponent.lock();
 	auto    Anim = mAnimation2DComponent.lock();
 	auto	Movement = mMovement.lock();
 	auto	Body = mBody.lock();
+	auto	HitBox = mHitBox.lock();
 	std::shared_ptr<CWorld>	World = mWorld.lock();
 
 
@@ -81,10 +86,19 @@ bool CMonster::Init()
 	if (Body)
 	{
 		Body->SetCollisionProfile("Monster");
-		Body->SetCollisionBeginFunction<CMonster>(this, &CMonster::CollisionMonster);
-		Body->SetBoxSize(60.f, 65.f);
+		Body->SetBoxSize(60.f, 10.f);
 		Body->SetDebugDraw(true);
+		Body->SetRelativePos(0, -23.f);
 		Body->SetInheritScale(false);
+
+	}
+	if (HitBox)
+	{
+		HitBox->SetCollisionProfile("HitBox");
+		HitBox->SetCollisionBeginFunction<CMonster>(this, &CMonster::CollisionMonster);
+		HitBox->SetBoxSize(60.f, 60.f);
+		HitBox->SetDebugDraw(true);
+		HitBox->SetInheritScale(false);
 
 	}
 	if (World)
@@ -213,4 +227,49 @@ float CMonster::GetDefaultSpeed()
 void CMonster::OnHit()
 {
 
+}
+
+void CMonster::Damage(int Damage)
+{
+	mHP -= Damage;
+	if (mHP <= 0)
+	{
+		Destroy();
+		if (rand() % 100 < mItemDropPercent)
+		{
+			auto World = mWorld.lock();
+			EItemType ItemType = (EItemType)(rand() % 3);
+			switch (ItemType)
+			{
+			case EItemType::HpPotion:
+			{
+				auto Item = World->CreateGameObject<CHpPotion>("HpPotion");
+				char	Test[256] = {};
+				sprintf_s(Test, "HpPotion 생성\n");
+				OutputDebugStringA(Test);
+				Item.lock()->SetWorldPos(GetWorldPos());
+			}
+			break;
+			case EItemType::ArrowForce:
+			{
+				auto Item = World->CreateGameObject<CArrowForce>("ArrowItem");
+				char	Test[256] = {};
+				sprintf_s(Test, "ArrowForce 생성\n");
+				OutputDebugStringA(Test);
+				Item.lock()->SetWorldPos(GetWorldPos());
+			}
+			break;
+			case EItemType::SpeedUp:
+				auto Item = World->CreateGameObject<CSpeedUp>("SpeedItem");
+				char	Test[256] = {};
+				sprintf_s(Test, "SpeedUp 생성\n");
+				OutputDebugStringA(Test);
+				Item.lock()->SetWorldPos(GetWorldPos());
+				break;
+			}
+		}
+	}
+	char	Test[256] = {};
+	sprintf_s(Test, "HP : %d\n", mHP);
+	OutputDebugStringA(Test);
 }

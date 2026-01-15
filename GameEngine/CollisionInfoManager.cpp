@@ -1,4 +1,4 @@
-#include "CollisionInfoManager.h"
+﻿#include "CollisionInfoManager.h"
 
 CCollisionInfoManager* CCollisionInfoManager::mInst = nullptr;
 
@@ -27,13 +27,6 @@ CCollisionInfoManager::~CCollisionInfoManager()
 
 bool CCollisionInfoManager::Init()
 {
-	CreateChannel("Static");
-	CreateChannel("Player");
-	CreateChannel("Monster");
-
-	CreateProfile("Static", "Static", true);
-	CreateProfile("Player", "Player", true);
-	CreateProfile("Monster", "Monster", true);
 
 	return true;
 }

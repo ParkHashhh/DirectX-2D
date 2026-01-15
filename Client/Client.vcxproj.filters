@@ -43,6 +43,9 @@
     <Filter Include="03. Monster\03. Orc">
       <UniqueIdentifier>{7055cce8-4fe6-4b58-bd76-6f552952f451}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. Item">
+      <UniqueIdentifier>{de004a3e-9a11-4034-85ed-181a31ffe1af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,6 +93,21 @@
     <ClCompile Include="Monster\FireBall.cpp">
       <Filter>03. Monster</Filter>
     </ClCompile>
+    <ClCompile Include="Monster\SparkEffect.cpp">
+      <Filter>03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\Item.cpp">
+      <Filter>07. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\HpPotion.cpp">
+      <Filter>07. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\SpeedUp.cpp">
+      <Filter>07. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\ArrowForce.cpp">
+      <Filter>07. Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -136,6 +154,21 @@
     </ClInclude>
     <ClInclude Include="Monster\FireBall.h">
       <Filter>03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\SparkEffect.h">
+      <Filter>03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\Item.h">
+      <Filter>07. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\HpPotion.h">
+      <Filter>07. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\SpeedUp.h">
+      <Filter>07. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\ArrowForce.h">
+      <Filter>07. Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

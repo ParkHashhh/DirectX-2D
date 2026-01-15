@@ -36,7 +36,7 @@ bool CFireBallEffect::Init()
 		Anim->SetUpdateComponent(mMeshComponent);
 
 		Anim->AddAnimation("FireBallEffect");
-		Anim->SetPlayRate("FireBallEffect", 10.f);
+		Anim->SetPlayRate("FireBallEffect", 5.f);
 		Anim->SetFinishNotify<CFireBallEffect>("FireBallEffect",
 			this, &CFireBallEffect::FinishAnimation);
 	}

@@ -24,6 +24,7 @@ protected:
 	std::weak_ptr<class CAnimation2DComponent>	mAnimation2DComponent;
 	std::weak_ptr<class CObjectMovementComponent>	mMovement;
 	std::weak_ptr<class CColliderBox2D>	mBody;
+	std::weak_ptr<class CColliderBox2D>	mHitBox;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
 
 	MonsterType::Type mType = MonsterType::Goblin;
@@ -36,6 +37,8 @@ protected:
 	bool mParring = false;
 	bool mIsAttack = false;
 	float mDefaultSpeed = 0;
+	float mItemDropPercent = 50.f;
+
 	std::string mAttackAnimName;
 	std::string mIdleAnimName;
 
@@ -45,15 +48,8 @@ public:
 		mParring = Parring;
 	}
 
-	void Damage(int Dmg)
-	{
-		mHP -= Dmg;
-		if (mHP <= 0)
-			Destroy();
-		char	Test[256] = {};
-		sprintf_s(Test, "HP : %d\n", mHP);
-		OutputDebugStringA(Test);
-	}
+	void Damage(int Dmg);
+	
 	void SetSpeed(int Speed)
 	{
 		mDefaultSpeed = Speed;

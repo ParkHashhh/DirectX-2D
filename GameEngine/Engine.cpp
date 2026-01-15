@@ -144,6 +144,7 @@ void CEngine::Render()
     // 출력할 코드들.
     //CWorldManager::GetInst()->Render();
     CRenderManager::GetInst()->Render();
+	CWorldManager::GetInst()->Render();
 
     CDevice::GetInst()->EndRender();
 }

@@ -65,6 +65,10 @@ void CProjectileMovementComponent::PostUpdate(float DeltaTime)
 	}
 }
 
+void CProjectileMovementComponent::PostRender()
+{
+	CMovementComponent::PostRender();
+}
 void CProjectileMovementComponent::Destroy()
 {
 	CMovementComponent::Destroy();

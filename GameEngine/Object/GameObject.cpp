@@ -290,6 +290,68 @@ void CGameObject::Render()
 		Root->Render();
 }
 
+void CGameObject::PostRender()
+{
+	auto	iter1 = mSceneComponentList.begin();
+	auto	iter1End = mSceneComponentList.end();
+
+	for (; iter1 != iter1End;)
+	{
+		if ((*iter1).use_count() == 0)
+		{
+			iter1 = mSceneComponentList.erase(iter1);
+			iter1End = mSceneComponentList.end();
+			continue;
+		}
+
+		else if (!(*iter1)->GetAlive())
+		{
+			iter1 = mSceneComponentList.erase(iter1);
+			iter1End = mSceneComponentList.end();
+			continue;
+		}
+
+		else if (!(*iter1)->GetEnable())
+		{
+			++iter1;
+			continue;
+		}
+
+		(*iter1)->PostRender();
+		++iter1;
+	}
+
+
+	auto	iter = mObjectComponentList.begin();
+	auto	iterEnd = mObjectComponentList.end();
+
+	for (; iter != iterEnd;)
+	{
+		if ((*iter).use_count() == 0)
+		{
+			iter = mObjectComponentList.erase(iter);
+			iterEnd = mObjectComponentList.end();
+			continue;
+		}
+
+		else if (!(*iter)->GetAlive())
+		{
+			iter = mObjectComponentList.erase(iter);
+			iterEnd = mObjectComponentList.end();
+			continue;
+		}
+
+		else if (!(*iter)->GetEnable())
+		{
+			++iter;
+			continue;
+		}
+
+		(*iter)->PostRender();
+		++iter;
+	}
+}
+
 CGameObject* CGameObject::Clone()
 {
 	return new CGameObject(*this);

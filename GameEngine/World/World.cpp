@@ -173,7 +173,7 @@ void CWorld::Render()
 			continue;
 		}
 
-		iter->second->Render();
+		iter->second->PostRender();
 		++iter;
 	}
 }

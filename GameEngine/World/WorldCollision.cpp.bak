@@ -1,5 +1,7 @@
 #include "WorldCollision.h"
 #include "../Component/Collider.h"
+#include "../Component/ColliderSphere2D.h"
+#include "../Object/GameObject.h"
 
 CWorldCollision::CWorldCollision()
 {
@@ -22,7 +24,7 @@ bool CWorldCollision::Init()
 
 void CWorldCollision::Update(float DeltaTime)
 {
-	if (mInterval > 0.f)
+	/*if (mInterval > 0.f)
 	{
 		mIntervalTime += DeltaTime;
 
@@ -30,7 +32,10 @@ void CWorldCollision::Update(float DeltaTime)
 			return;
 
 		mIntervalTime -= mInterval;
-	}
+	}*/
+
+	// 충돌체 정보를 모두 갱신한다.
+	UpdateInfo();
 
 	auto	iter = mColliderList.begin();
 	auto	iterEnd = mColliderList.end();
@@ -123,6 +128,14 @@ void CWorldCollision::Update(float DeltaTime)
 				continue;
 			}
 
+			// Overlap vs Block 처리 못함. 서로 같을 경우에만 처리.
+			else if (SrcProfile->Interaction[DestProfile->Channel->Channel] !=
+				DestProfile->Interaction[SrcProfile->Channel->Channel])
+			{
+				++iter1;
+				continue;
+			}
+
 			// 실제 충돌처리를 진행한다.
 			FVector3	HitPoint;
 
@@ -130,16 +143,76 @@ void CWorldCollision::Update(float DeltaTime)
 			// 의미이다.
 			if (SrcCollider->Collision(HitPoint, DestCollider))
 			{
-				// 두 물체가 이전 프레임에 충돌이 되어 서로 충돌 오브젝트
-				// 로 가지고 있는지 판단한다.
-				if (!SrcCollider->CheckCollisionObject(
-					DestCollider.get()))
+				// Hit 충돌의 경우 충돌 되었다가 떨어지는 것이 없기
+				// 때문에 Hit일 경우를 체크하여 바로 진행한다.
+				if (SrcProfile->Interaction[DestProfile->Channel->Channel] == ECollisionInteraction::Block)
 				{
-					SrcCollider->CallCollisionBegin(HitPoint,
+					// 둘중 이동하고 있던 물체를 찾는다.
+					// RootComponent를 기준으로 찾는다.
+					// 만약 둘 다 이동하고 있던 물체라면 두 물체는
+					// 겹치는 구간의 반씩 반대방향으로 이동한다.
+					auto SrcObj = SrcCollider->GetOwner().lock();
+					auto DestObj = DestCollider->GetOwner().lock();
+
+					// 현재 프레임에 얼마나 움직였는지를 가지고 온다.
+					FVector3	SrcVelocity = SrcObj->GetVelocity();
+					FVector3	DestVelocity = DestObj->GetVelocity();
+
+					// 둘다 움직이고 있을 경우
+					if (!SrcVelocity.IsZero() &&
+						!DestVelocity.IsZero())
+					{
+						// 서로의 x, y, z 절반씩 이동한다.
+						// 속도 / -2.f 를 하면 이동한 양의 반을 반대방향
+						// 으로 이동시키는데 여기에 1.01을 곱해서 1% 만큼
+						// 더 반대 방향으로 이동하게 한다.
+						SrcObj->AddWorldPos(SrcVelocity / -2.f * 1.01f);
+						DestObj->AddWorldPos(DestVelocity / -2.f * 1.01f);
+
+						SrcCollider->UpdateInfo();
+						DestCollider->UpdateInfo();
+					}
+					
+					// RigidBody 만들어야 회전까지 처리됨.
+					// Src가 움직이고 있을 경우
+					else if (!SrcVelocity.IsZero())
+					{
+						SrcObj->AddWorldPos(-(SrcVelocity * 1.01f));
+
+						SrcCollider->UpdateInfo();
+					}
+
+					// Dest가 움직이고 있을 경우
+					else if (!DestVelocity.IsZero())
+					{
+						DestObj->AddWorldPos(-(DestVelocity * 1.01f));
+
+						DestCollider->UpdateInfo();
+					}
+
+					SrcObj->ClearPhysics();
+					DestObj->ClearPhysics();
+
+
+					SrcCollider->CallCollisionHit(HitPoint,
 						*iter1);
 
-					DestCollider->CallCollisionBegin(HitPoint,
+					DestCollider->CallCollisionHit(HitPoint,
 						*iter);
+				}
+
+				// Overlap일 경우
+				else
+				{
+					if (!SrcCollider->CheckCollisionObject(
+						DestCollider.get()))
+					{
+						SrcCollider->CallCollisionBegin(HitPoint,
+							*iter1);
+
+						DestCollider->CallCollisionBegin(HitPoint,
+							*iter);
+					}
 				}
 			}
 
@@ -148,14 +221,49 @@ void CWorldCollision::Update(float DeltaTime)
 			else if (SrcCollider->CheckCollisionObject(
 				DestCollider.get()))
 			{
-				SrcCollider->CallCollisionEnd(DestCollider.get());
+				if (SrcProfile->Interaction[DestProfile->Channel->Channel] == ECollisionInteraction::Overlap)
+				{
+					SrcCollider->CallCollisionEnd(DestCollider.get());
 
-				DestCollider->CallCollisionEnd(SrcCollider.get());
+					DestCollider->CallCollisionEnd(SrcCollider.get());
+				}
+
+				else
+				{
+				}
 			}
 
 			++iter1;
 		}
 
+		++iter;
+	}
+}
+
+void CWorldCollision::UpdateInfo()
+{
+	auto	iter = mColliderList.begin();
+	auto	iterEnd = mColliderList.end();
+
+	for (; iter != iterEnd;)
+	{
+		if ((*iter).expired())
+		{
+			iter = mColliderList.erase(iter);
+			iterEnd = mColliderList.end();
+			continue;
+		}
+
+		auto	Collider = (*iter).lock();
+
+		if (!Collider->GetAlive())
+		{
+			iter = mColliderList.erase(iter);
+			iterEnd = mColliderList.end();
+			continue;
+		}
+
+		Collider->UpdateInfo();
 		++iter;
 	}
 }

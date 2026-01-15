@@ -208,3 +208,10 @@ enum class ERenderListSort
 	Y,
 	Alpha
 };
+
+enum class EItemType
+{
+	HpPotion,    
+	ArrowForce,   
+	SpeedUp
+};
