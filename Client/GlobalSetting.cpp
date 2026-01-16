@@ -222,7 +222,7 @@ bool CGlobalSetting::Init()
 
 	CCollisionInfoManager::GetInst()->SetProfileInteraction(
 		"Monster", "Monster",
-		ECollisionInteraction::Block);
+		ECollisionInteraction::Ignore);
 
 
 	CCollisionInfoManager::GetInst()->SetProfileInteraction(

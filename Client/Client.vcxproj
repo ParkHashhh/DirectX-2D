@@ -157,6 +157,7 @@
     <ClCompile Include="Item\Item.cpp" />
     <ClCompile Include="Item\SpeedUp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monster\Ballock.cpp" />
     <ClCompile Include="Monster\FireBall.cpp" />
     <ClCompile Include="Monster\FireBallEffect.cpp" />
     <ClCompile Include="Monster\Goblin.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Item\HpPotion.h" />
     <ClInclude Include="Item\Item.h" />
     <ClInclude Include="Item\SpeedUp.h" />
+    <ClInclude Include="Monster\Ballock.h" />
     <ClInclude Include="Monster\FireBall.h" />
     <ClInclude Include="Monster\FireBallEffect.h" />
     <ClInclude Include="Monster\Goblin.h" />

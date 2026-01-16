@@ -5,6 +5,7 @@
 #include "Goblin.h"
 #include "Ogre.h"
 #include "Orc.h"
+#include "Ballock.h"
 
 
 
@@ -61,19 +62,38 @@ bool CMonsterSpawnPoint::Init()
 void CMonsterSpawnPoint::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
+	auto World = mWorld.lock();
 	mLevelTime += DeltaTime;
-	if (mLevelTime >= 30.f)
-	{
+	
+	/*if (mLevelTime >= 30.f)
+	{*/
 		if (mLevel < MAX_LEVEL)
 		{
 			mLevelTime -= 30.f;
 			mLevel++;
 			mSpawnTime -= 0.2f;
 		}
-	}
+		if (mLevel == MAX_LEVEL)
+		{
+
+			std::weak_ptr<CObject> Origin = CObject::FindCDO(typeid(CBallock).hash_code());
+			auto OriginMonster = std::dynamic_pointer_cast<CMonster>(Origin.lock());
+
+			if (OriginMonster)
+			{
+				std::string MonsterName = "Monster_" + std::to_string(rand() % 10000);
+				std::weak_ptr<CMonster> SpawnMonster = World->CreateCloneGameObject<CMonster>(MonsterName, OriginMonster);
+				auto Monster = SpawnMonster.lock();
+				Monster->SetMonsterData();
+				mSpawnMonsterList.push_back(SpawnMonster);
+				mBossMonster = SpawnMonster;
+			}
+			mLevel++;
+			OutputDebugStringA("### BOSS BALLOCK SPAWNED! ###\n");
+		}
+	//}
 
 	// 플레이어 죽으면 끝
-	auto World = mWorld.lock();
 	if (World)
 	{
 		if (World->GetPlayerIsDead())
@@ -108,7 +128,6 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 
 			int MonsterType = rand() % mLevel;
 
-			auto	World = mWorld.lock();
 			// 몬스터 해쉬코드 받아오기
 			switch (MonsterType)
 			{

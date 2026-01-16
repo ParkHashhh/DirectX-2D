@@ -46,6 +46,9 @@
     <Filter Include="07. Item">
       <UniqueIdentifier>{de004a3e-9a11-4034-85ed-181a31ffe1af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Monster\04. Ballock">
+      <UniqueIdentifier>{ea73bdc0-f20d-4979-97da-2e0a4983c7b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -108,6 +111,9 @@
     <ClCompile Include="Item\ArrowForce.cpp">
       <Filter>07. Item</Filter>
     </ClCompile>
+    <ClCompile Include="Monster\Ballock.cpp">
+      <Filter>03. Monster\04. Ballock</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -146,9 +152,6 @@
     <ClInclude Include="Monster\Ogre.h">
       <Filter>03. Monster\02. Ogre</Filter>
     </ClInclude>
-    <ClInclude Include="Monster\Orc.h">
-      <Filter>03. Monster\03. Orc</Filter>
-    </ClInclude>
     <ClInclude Include="Monster\FireBallEffect.h">
       <Filter>03. Monster</Filter>
     </ClInclude>
@@ -169,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="Item\ArrowForce.h">
       <Filter>07. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Orc.h">
+      <Filter>03. Monster\03. Orc</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Ballock.h">
+      <Filter>03. Monster\04. Ballock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

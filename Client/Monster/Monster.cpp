@@ -45,14 +45,12 @@ bool CMonster::Init()
 	mMovement = CreateComponent<CObjectMovementComponent>("MonsterMovement");
 	mLine2D = CreateComponent<CColliderLine2D>("MonsterLine2D");
 	mBody = CreateComponent<CColliderBox2D>("MonsterBody");
-	mHitBox = CreateComponent<CColliderBox2D>("MonsterHitBox");
 
 	auto	Line2D = mLine2D.lock();
 	auto	Mesh = mMeshComponent.lock();
 	auto    Anim = mAnimation2DComponent.lock();
 	auto	Movement = mMovement.lock();
 	auto	Body = mBody.lock();
-	auto	HitBox = mHitBox.lock();
 	std::shared_ptr<CWorld>	World = mWorld.lock();
 
 
@@ -86,19 +84,10 @@ bool CMonster::Init()
 	if (Body)
 	{
 		Body->SetCollisionProfile("Monster");
-		Body->SetBoxSize(60.f, 10.f);
+		Body->SetBoxSize(60.f, 60.f);
 		Body->SetDebugDraw(true);
-		Body->SetRelativePos(0, -23.f);
 		Body->SetInheritScale(false);
-
-	}
-	if (HitBox)
-	{
-		HitBox->SetCollisionProfile("HitBox");
-		HitBox->SetCollisionBeginFunction<CMonster>(this, &CMonster::CollisionMonster);
-		HitBox->SetBoxSize(60.f, 60.f);
-		HitBox->SetDebugDraw(true);
-		HitBox->SetInheritScale(false);
+		Body->SetCollisionBeginFunction<CMonster>(this, &CMonster::CollisionMonster);
 
 	}
 	if (World)
@@ -131,10 +120,10 @@ void CMonster::Update(float DeltaTime)
 
 	if (mIsAttack)
 	{
-		
+
 		if (Line2D->GetDistance() <= 100)
 		{
-			
+
 			float Frame = (float)Anim->GetAnimationFrame();
 			switch (mType)
 			{
@@ -160,16 +149,33 @@ void CMonster::Update(float DeltaTime)
 		Anim->ChangeAnimation(mIdleAnimName);
 	}
 	auto Target = mTargetObject.lock();
-	if (Target->GetWorldPos().x < GetWorldPos().x)
+	if (GetName() == "Ballock")
 	{
-		Anim->SetSymmetry(mIdleAnimName, true);
-		Anim->SetSymmetry(mAttackAnimName, true);
+		if (Target->GetWorldPos().x < GetWorldPos().x)
+		{
+			Anim->SetSymmetry(mIdleAnimName, false);
+			Anim->SetSymmetry(mAttackAnimName, false);
+		}
+		else
+		{
+			Anim->SetSymmetry(mIdleAnimName, true);
+			Anim->SetSymmetry(mAttackAnimName, true);
+		}
 	}
 	else
 	{
-		Anim->SetSymmetry(mIdleAnimName, false);
-		Anim->SetSymmetry(mAttackAnimName, false);
+		if (Target->GetWorldPos().x < GetWorldPos().x)
+		{
+			Anim->SetSymmetry(mIdleAnimName, true);
+			Anim->SetSymmetry(mAttackAnimName, true);
+		}
+		else
+		{
+			Anim->SetSymmetry(mIdleAnimName, false);
+			Anim->SetSymmetry(mAttackAnimName, false);
+		}
 	}
+	
 	FVector3	TargetPos = Target->GetWorldPos();
 	FVector3	TargetDir = TargetPos - GetWorldPos();
 	float TargetDistance = TargetDir.Length();
@@ -184,16 +190,27 @@ void CMonster::Update(float DeltaTime)
 		mFireTime -= DeltaTime;
 		if (!mIsAttack)
 		{
-			if (mType == MonsterType::Orc)
+			if (GetName() == "Ballock")
 			{
-				if (mFireTime > 0)
-					return;
-				else
-					mFireTime += 5;
+				if (TargetDistance <= mDetectRange / 2)
+				{
+					Anim->ChangeAnimation(mAttackAnimName);
+
+				}
 			}
-		Movement->SetSpeed(0);
-		Anim->ChangeAnimation(mAttackAnimName);
-		mIsAttack = true;
+			else
+			{
+				if (mType == MonsterType::Orc)
+				{
+					if (mFireTime > 0)
+						return;
+					else
+						mFireTime += 5;
+				}
+				Movement->SetSpeed(0);
+				Anim->ChangeAnimation(mAttackAnimName);
+				mIsAttack = true;
+			}
 		}
 	}
 }

@@ -50,7 +50,8 @@ bool CSpeedUp::Init()
 		Mesh->SetTexture(0, 0, Tex);
 		Mesh->SetMaterialBaseColor(0, 255, 255, 255, 0);
 		Mesh->SetBlendState(0, "AlphaBlend");
-		Mesh->SetRelativeScale(25, 25);
+		Mesh->SetRelativeScale(25.f, 25.f);
+
 	}
 
 	return true;

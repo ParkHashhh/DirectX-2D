@@ -11,6 +11,7 @@
 #include "Monster/Goblin.h"
 #include "Monster/Ogre.h"
 #include "Monster/Orc.h"
+#include "Monster/Ballock.h"
 
 #include "Component/StateComponent.h"
 #include "GlobalSetting.h"
@@ -49,6 +50,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     CEngine::CreateCDO<CGoblin>();
     CEngine::CreateCDO<COgre>();
     CEngine::CreateCDO<COrc>();
+    CEngine::CreateCDO<CBallock>();
 
     CEngine::CreateCDO<CStateComponent>();
 

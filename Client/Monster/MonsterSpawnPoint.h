@@ -22,6 +22,7 @@ private:
 	float	mSpawnTime = 1.f;
 	std::weak_ptr<class CMonster>	mSpawnMonster;
 	std::vector<std::weak_ptr<class CMonster>> mSpawnMonsterList;
+	std::weak_ptr<CMonster> mBossMonster;
 	int mLevel = 3;
 	float   mLevelTime = 0.f;
 	float mDist = 50.f;

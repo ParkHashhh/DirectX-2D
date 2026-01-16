@@ -198,7 +198,8 @@ namespace MonsterType
 	{
 		Goblin,
 		Ogre,
-		Orc
+		Orc,
+		Ballock
 	};
 }
 

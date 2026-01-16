@@ -24,7 +24,6 @@ protected:
 	std::weak_ptr<class CAnimation2DComponent>	mAnimation2DComponent;
 	std::weak_ptr<class CObjectMovementComponent>	mMovement;
 	std::weak_ptr<class CColliderBox2D>	mBody;
-	std::weak_ptr<class CColliderBox2D>	mHitBox;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
 
 	MonsterType::Type mType = MonsterType::Goblin;
@@ -40,6 +39,7 @@ protected:
 	float mItemDropPercent = 50.f;
 
 	std::string mAttackAnimName;
+	std::string mThrowAnimName;
 	std::string mIdleAnimName;
 
 public:

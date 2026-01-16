@@ -46,20 +46,19 @@ void COgre::SetMonsterData()
 	mStateComponent = FindComponent<CStateComponent>("MonsterState");
 	mLine2D = FindComponent<CColliderLine2D>("MonsterLine2D");
 	mBody = FindComponent<CColliderBox2D>("MonsterBody");
-	mHitBox = FindComponent<CColliderBox2D>("HitBox");
 
 	auto Anim = mAnimation2DComponent.lock();
 	auto Mesh = mMeshComponent.lock();
-	Anim->SetUpdateComponent(Mesh);
 	auto Movement = mMovement.lock();
 	mAttackAnimName = "OgreAttack";
 	mIdleAnimName = "OgreRun";
 	mHP = 4;
 	mType = MonsterType::Ogre;
 
-
 	if (Anim)
 	{
+		Anim->SetUpdateComponent(Mesh);
+
 		Anim->AddAnimation(mIdleAnimName);
 		Anim->AddAnimation(mAttackAnimName);
 		Anim->ChangeAnimation(mIdleAnimName);

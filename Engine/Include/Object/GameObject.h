@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../Object.h"
 #include "../Component/SceneComponent.h"
@@ -43,6 +43,10 @@ public:
 	bool GetAlive()	const
 	{
 		return mAlive;
+	}
+	std::string GetName()
+	{
+		return mName;
 	}
 
 public:

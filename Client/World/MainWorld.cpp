@@ -177,7 +177,34 @@ void CMainWorld::LoadAnimation2D()
 		"FireBallEffect", "FireBallEffect", 0, 25, "Effect/Fireball/",
 		"FireBall_Frame_Effect_", "png", 547, 483);
 
+	// CreateBallockDeadAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockDead", "BallockDead", 1, 4, "Monster/Ballock/Dead/",
+		"Ballock_Dead_frame_", "png", 240, 162);
 
+	// CreateBallockHitAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockHit", "BallockHit", 1, 30, "Monster/Ballock/Hit/",
+		"Ballock_Hit_frame_", "png", 172, 160);
+
+	// CreateBallockMoveAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockMove", "BallockMove", 1, 15, "Monster/Ballock/Move/",
+		"Ballock_Move_frame_", "png", 185, 170);
+
+	// CreateBallockSlashAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockSlash", "BallockSlash", 1, 10, "Monster/Ballock/Slash/",
+		"Ballock_Slash_frame_", "png", 203, 171);
+
+	// CreateBallockThrowAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockThrow", "BallockThrow", 1, 10, "Monster/Ballock/Throw/",
+		"Ballock_Slash_frame_", "png", 201, 171);
+
+
+
+	//Effect
 	mWorldAssetManager->CreateFrameAnimation(
 		"Explosion", "Explosion",1,89, "Effect/Explosion/",
 		"Explosion", "png", 320.f, 240.f,false);	

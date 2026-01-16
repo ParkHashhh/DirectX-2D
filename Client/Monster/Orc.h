@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Monster.h"
 class COrc :
-    public CMonster
+	public CMonster
 {
 	friend class CWorld;
 	friend class CObject;

@@ -47,10 +47,8 @@ void CGoblin::SetMonsterData()
 	mStateComponent = FindComponent<CStateComponent>("MonsterState");
 	mLine2D = FindComponent<CColliderLine2D>("MonsterLine2D");
 	mBody = FindComponent<CColliderBox2D>("MonsterBody");
-	mHitBox = FindComponent<CColliderBox2D>("HitBox");
 	auto Anim = mAnimation2DComponent.lock();
 	auto Mesh = mMeshComponent.lock();
-	Anim->SetUpdateComponent(Mesh);
 	auto Movement = mMovement.lock();
 	mHP = 2;
 	mType = MonsterType::Goblin;
@@ -59,9 +57,9 @@ void CGoblin::SetMonsterData()
 	mAttackAnimName = "GoblinAttack";
 	if (Anim)
 	{
+		Anim->SetUpdateComponent(Mesh);
 		Anim->AddAnimation(mIdleAnimName);
 		Anim->AddAnimation(mAttackAnimName);
-		
 		Anim->ChangeAnimation(mIdleAnimName);
 		Anim->AddNotify<CGoblin>(mAttackAnimName,
 			mAttackAnimName, 1, this, &CGoblin::AttackNotify);

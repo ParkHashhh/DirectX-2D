@@ -42,11 +42,9 @@ void COrc::SetMonsterData()
 	mStateComponent = FindComponent<CStateComponent>("MonsterState");
 	mLine2D = FindComponent<CColliderLine2D>("MonsterLine2D");
 	mBody = FindComponent<CColliderBox2D>("MonsterBody");
-	mHitBox = FindComponent<CColliderBox2D>("HitBox");
 
 	auto Anim = mAnimation2DComponent.lock();
 	auto Mesh = mMeshComponent.lock();
-	Anim->SetUpdateComponent(Mesh);
 	auto Movement = mMovement.lock();
 	mAttackAnimName = "OrcAttack";
 	mIdleAnimName = "OrcRun";
@@ -56,6 +54,7 @@ void COrc::SetMonsterData()
 
 	if (Anim)
 	{
+		Anim->SetUpdateComponent(Mesh);
 		Anim->AddAnimation(mIdleAnimName);
 		Anim->AddAnimation(mAttackAnimName);
 		Anim->ChangeAnimation(mIdleAnimName);
@@ -73,7 +72,7 @@ void COrc::SetMonsterData()
 }
 
 void COrc::AttackNotify()
-{
+{	
 	auto World = mWorld.lock();
 	mFireBall = World->CreateGameObject<CFireBall>("FireBall");
 	std::shared_ptr<CFireBall>	FireBall = mFireBall.lock();
