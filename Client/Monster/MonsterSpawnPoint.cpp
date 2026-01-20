@@ -162,7 +162,6 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 					int RandWidth = rand() % 1400 - 700;
 					int RandHeight = rand() % 800 - 400;
 
-					Monster->SetSpeed(rand() % (mLevel * 20) + mLevel * 10);
 
 
 					// 생성위치

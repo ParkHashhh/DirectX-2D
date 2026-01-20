@@ -106,6 +106,8 @@ void CMonster::Update(float DeltaTime)
 	auto	Line2D = mLine2D.lock();
 	auto	Body = mBody.lock();
 	auto World = mWorld.lock();
+	auto Movement = mMovement.lock();
+
 	if (World)
 	{
 		if (World->GetPlayerIsDead())
@@ -114,16 +116,25 @@ void CMonster::Update(float DeltaTime)
 
 	if (mParring)
 	{
-		OnHit();
-		return;
+		mSturnTime -= DeltaTime;
+		Movement->SetSpeed(0.f);
+		Line2D->SetEnable(false);
+		Anim->ChangeAnimation(mSturnAnimName);
+
+		if (mSturnTime <= 0)
+		{
+			OnHit();
+		}
+		else
+		{
+			return;
+		}
 	}
 
 	if (mIsAttack)
 	{
-
 		if (Line2D->GetDistance() <= 100)
 		{
-
 			float Frame = (float)Anim->GetAnimationFrame();
 			switch (mType)
 			{
@@ -139,8 +150,14 @@ void CMonster::Update(float DeltaTime)
 				Line2D->SetLineDistance(100.f);
 			}
 		}
+		if (GetName() == "Ballock")
+		{
+			float Frame = (float)Anim->GetAnimationFrame();
+
+			Line2D->SetLineDistance(Frame * mBallockAttackDistance);
+
+		}
 	}
-	auto Movement = mMovement.lock();
 
 
 	if (!mIsAttack)
@@ -155,11 +172,15 @@ void CMonster::Update(float DeltaTime)
 		{
 			Anim->SetSymmetry(mIdleAnimName, false);
 			Anim->SetSymmetry(mAttackAnimName, false);
+			Anim->SetSymmetry(mThrowAnimName, false);
+			Anim->SetSymmetry(mSturnAnimName, false);
 		}
 		else
 		{
 			Anim->SetSymmetry(mIdleAnimName, true);
 			Anim->SetSymmetry(mAttackAnimName, true);
+			Anim->SetSymmetry(mThrowAnimName, true);
+			Anim->SetSymmetry(mSturnAnimName, true);
 		}
 	}
 	else
@@ -168,11 +189,13 @@ void CMonster::Update(float DeltaTime)
 		{
 			Anim->SetSymmetry(mIdleAnimName, true);
 			Anim->SetSymmetry(mAttackAnimName, true);
+			Anim->SetSymmetry(mSturnAnimName, true);
 		}
 		else
 		{
 			Anim->SetSymmetry(mIdleAnimName, false);
 			Anim->SetSymmetry(mAttackAnimName, false);
+			Anim->SetSymmetry(mSturnAnimName, false);
 		}
 	}
 	
@@ -192,10 +215,19 @@ void CMonster::Update(float DeltaTime)
 		{
 			if (GetName() == "Ballock")
 			{
-				if (TargetDistance <= mDetectRange / 2)
+				
+				if (mFireTime <= 0)
 				{
+					mFireTime = 5.0f;
+					Movement->SetSpeed(0);
+					Anim->ChangeAnimation(mThrowAnimName);
+					mIsAttack = true;
+				}
+				else if (TargetDistance <= mDetectRange / 2)
+				{
+					Movement->SetSpeed(0);
 					Anim->ChangeAnimation(mAttackAnimName);
-
+					mIsAttack = true;
 				}
 			}
 			else
@@ -207,6 +239,7 @@ void CMonster::Update(float DeltaTime)
 					else
 						mFireTime += 5;
 				}
+				Anim->ChangeAnimation(mAttackAnimName);
 				Movement->SetSpeed(0);
 				Anim->ChangeAnimation(mAttackAnimName);
 				mIsAttack = true;
@@ -243,14 +276,31 @@ float CMonster::GetDefaultSpeed()
 }
 void CMonster::OnHit()
 {
-
+	
 }
 
 void CMonster::Damage(int Damage)
 {
 	mHP -= Damage;
+	auto	Anim = mAnimation2DComponent.lock();
+
 	if (mHP <= 0)
 	{
+		auto Target = mTargetObject.lock();
+		if (GetName() == "Ballock")
+		{
+			if (Target->GetWorldPos().x < GetWorldPos().x)
+			{
+				Anim->SetSymmetry(mIdleAnimName, false);
+			}
+			else
+			{
+				Anim->SetSymmetry(mIdleAnimName, true);
+			}
+
+			Anim->ChangeAnimation("BallockDead");
+			return;
+		}
 		Destroy();
 		if (rand() % 100 < mItemDropPercent)
 		{

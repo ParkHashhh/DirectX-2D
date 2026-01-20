@@ -46,20 +46,28 @@ private:
 	float mKnockbackSpeed = 0.f;
 	bool mEnd = false;
 	bool mShieldEnable = false;
-
+	float mDebuffTime = 5.f;      
+	bool  mIsRestricted = false; 
+	float mSaveSpeed;
+	bool mDebuff = false;
+	bool mIsSave = false;
 	std::weak_ptr<class CBullet>	mBullet;
 
 public:
 	bool AddHP(int HP);
 	void AddSpeed(float Speed);
 	void AddArrow(int Arrow);
+	void SetDebuff(bool Debuff)
+	{
+		mDebuff = Debuff;
+	}
 
 public:
 	
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
-
+	
 
 private:
 	void AttackNotify();
@@ -98,7 +106,7 @@ private:
 	void ShieldHold();
 	void ShieldRelease();
 	void AttackEndNotify();
-	void MultiShotPress();
+	//void MultiShotPress();
 	void OnHit(const FVector3& HitPoint,
 		class CCollider* Dest);
 	void OnHitShield(const FVector3& HitPoint,

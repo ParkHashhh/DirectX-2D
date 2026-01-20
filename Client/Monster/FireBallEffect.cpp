@@ -47,7 +47,7 @@ bool CFireBallEffect::Init()
 	{
 		Mesh->SetShader("DefaultTexture2D");
 		Mesh->SetMesh("CenterRectTex");
-		Mesh->SetWorldScale(100.f, 100.f);
+		Mesh->SetWorldScale(100.f, 300.f);
 		Mesh->SetBlendState(0, "AlphaBlend");
 	}
 

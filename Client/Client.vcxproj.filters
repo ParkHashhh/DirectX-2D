@@ -114,6 +114,12 @@
     <ClCompile Include="Monster\Ballock.cpp">
       <Filter>03. Monster\04. Ballock</Filter>
     </ClCompile>
+    <ClCompile Include="Monster\BallockEffect.cpp">
+      <Filter>03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\BressEffect.cpp">
+      <Filter>03. Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -178,6 +184,12 @@
     </ClInclude>
     <ClInclude Include="Monster\Ballock.h">
       <Filter>03. Monster\04. Ballock</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\BallockEffect.h">
+      <Filter>03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\BressEffect.h">
+      <Filter>03. Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

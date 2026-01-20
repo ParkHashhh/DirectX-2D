@@ -210,16 +210,16 @@ void CPlayer::SetKey()
 	Input->SetBindFunction<CPlayer>("Slide", EInputType::Press, this, &CPlayer::SlidePress);
 
 
-	Input->AddBindKey("MultiShot", 'D');
-	Input->SetBindFunction<CPlayer>("MultiShot", EInputType::Press, this, &CPlayer::MultiShotPress);
+	//Input->AddBindKey("MultiShot", 'D');
+	//Input->SetBindFunction<CPlayer>("MultiShot", EInputType::Press, this, &CPlayer::MultiShotPress);
 
-	Input->AddBindKey("Shield", 'F');
+	Input->AddBindKey("Shield", 'D');
 	Input->SetBindFunction<CPlayer>("Shield", EInputType::Press, this, &CPlayer::ShieldPress);
 
-	Input->AddBindKey("Shield", 'F');
+	Input->AddBindKey("Shield", 'D');
 	Input->SetBindFunction<CPlayer>("Shield", EInputType::Hold, this, &CPlayer::ShieldHold);
 
-	Input->AddBindKey("Shield", 'F');
+	Input->AddBindKey("Shield", 'D');
 	Input->SetBindFunction<CPlayer>("Shield", EInputType::Release, this, &CPlayer::ShieldRelease);
 
 }
@@ -245,7 +245,30 @@ void CPlayer::Update(float DeltaTime)
 	
 	if (Shield->GetEnable())
 		return;
-	
+	if (mDebuff)
+	{
+		if (!mIsSave)
+		{
+			mSaveSpeed = State->GetSpeed();
+			State->AddSpeed(-(mSaveSpeed * 0.5f));
+			Movement->SetSpeed(State->GetSpeed());
+			if (Mesh)
+				Mesh->SetMaterialBaseColor(0, FVector4(0.5f, 0.2f, 0.8f, 1.0f));
+			mIsSave = true;
+		}
+		mDebuffTime -= DeltaTime;
+		if (mDebuffTime <= 0)
+		{
+			mDebuff = false;       
+			mIsSave = false;
+			State->SetSpeed(mSaveSpeed);
+			Movement->SetSpeed(State->GetSpeed());
+			mDebuffTime = 5.f;     
+			if (Mesh) 
+				Mesh->SetMaterialBaseColor(0, FVector4(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+	}
+
 
 	if (mIsInvincible)
 	{
@@ -259,7 +282,6 @@ void CPlayer::Update(float DeltaTime)
 		{
 			Mesh->SetMaterialOpacity(0, 1);
 			mIsInvincible = false;
-
 		}
 	}
 
@@ -507,7 +529,7 @@ void CPlayer::AttackRelease()
 void CPlayer::SlidePress()
 {
 	auto Shield = mShield.lock();
-	if (Shield->GetEnable() || mIsSlide)
+	if (Shield->GetEnable() || mIsSlide || mDebuff)
 		return;
 	mIsSlide = true;
 	auto	Movement = mMovement.lock();
@@ -559,7 +581,7 @@ void CPlayer::SlideEndNotify()
 
 void CPlayer::ShieldPress()
 {
-	if (mIsSlide)
+	if (mIsSlide || mDebuff )
 		return;
 	auto Shield = mShield.lock();
 	auto Anim = mAnimation2DComponent.lock();
@@ -585,8 +607,10 @@ void CPlayer::ShieldRelease()
 	auto	Anim = mAnimation2DComponent.lock();
 	if (Anim)
 	{
-		if (!mDir.IsZero()) Anim->ChangeAnimation("PlayerRun");
-		else Anim->ChangeAnimation("PlayerIdle");
+		if (!mDir.IsZero())
+			Anim->ChangeAnimation("PlayerRun");
+		else
+			Anim->ChangeAnimation("PlayerIdle");
 	}
 }
 
@@ -597,71 +621,71 @@ void CPlayer::AttackEndNotify()
 	mAutoIdle = true;
 }
 
-void CPlayer::MultiShotPress()
-{
-	auto Shield = mShield.lock();
-	if (Shield->GetEnable() || mIsSlide)
-		return;
-
-	auto	Anim = mAnimation2DComponent.lock();
-	auto	Movement = mMovement.lock();
-	auto	 World = mWorld.lock();
-	if (World)
-	{
-		mIsShoot = true;
-		FVector3 ResultDir = FVector3::Zero;
-		if (mUpKey)
-			ResultDir.y += 1;
-		if (mDownKey)
-			ResultDir.y -= 1;
-		if (mLeftKey)
-			ResultDir.x -= 1;
-		if (mRightKey)
-			ResultDir.x += 1;
-		if (ResultDir.IsZero())
-			ResultDir = mDir;
-		else
-			ResultDir.Normalize();
-		if (Anim)
-		{
-			std::string AnimName = "PlayerShoot";
-			if (mUpKey || mDownKey || mLeftKey || mRightKey)
-				AnimName = "PlayerRunShoot";
-
-			if (mDir.x < 0)
-				Anim->SetSymmetry(AnimName, true);
-			else if (mDir.x > 0.f)
-				Anim->SetSymmetry(AnimName, false);
-
-			Anim->ChangeAnimation(AnimName);
-
-		}
-		for (int i = 0; i < 3; i++)
-		{
-			std::weak_ptr<CBullet> mBullet = World->CreateGameObject<CBullet>("Bullet");
-			std::shared_ptr<CBullet>	Bullet = mBullet.lock();
-			auto	Mesh = mMeshComponent.lock();
-			if (Bullet)
-			{
-
-				float FinalRotation = 20.f * (float)(i - 1);
-				FMatrix RotMatrix;
-				RotMatrix.RotationZ(FinalRotation);
-				FVector3 ShootDir = ResultDir.TransformNormal(RotMatrix);
-				ShootDir.Normalize();
-				Bullet->SetCollisionName("PlayerAttack");
-				float BaseAngle = atan2f(ResultDir.y, ResultDir.x) * (180.f / 3.141592f);
-				Bullet->SetWorldRotationZ(BaseAngle + FinalRotation);
-				Bullet->SetWorldPos(GetWorldPos() + ShootDir * 35.f);
-				Bullet->SetCollisionTargetName("Monster");
-				Bullet->ComputeCollisionRange();
-				Bullet->SetMoveDir(ShootDir);
-				Bullet->SetSpeed(500);
-			}
-		}
-		
-	}
-}
+//void CPlayer::MultiShotPress()
+//{
+//	auto Shield = mShield.lock();
+//	if (Shield->GetEnable() || mIsSlide)
+//		return;
+//
+//	auto	Anim = mAnimation2DComponent.lock();
+//	auto	Movement = mMovement.lock();
+//	auto	 World = mWorld.lock();
+//	if (World)
+//	{
+//		mIsShoot = true;
+//		FVector3 ResultDir = FVector3::Zero;
+//		if (mUpKey)
+//			ResultDir.y += 1;
+//		if (mDownKey)
+//			ResultDir.y -= 1;
+//		if (mLeftKey)
+//			ResultDir.x -= 1; 
+//		if (mRightKey)
+//			ResultDir.x += 1;
+//		if (ResultDir.IsZero())
+//			ResultDir = mDir;
+//		else
+//			ResultDir.Normalize();
+//		if (Anim)
+//		{
+//			std::string AnimName = "PlayerShoot";
+//			if (mUpKey || mDownKey || mLeftKey || mRightKey)
+//				AnimName = "PlayerRunShoot";
+//
+//			if (mDir.x < 0)
+//				Anim->SetSymmetry(AnimName, true);
+//			else if (mDir.x > 0.f)
+//				Anim->SetSymmetry(AnimName, false);
+//
+//			Anim->ChangeAnimation(AnimName);
+//
+//		}
+//		for (int i = 0; i < 3; i++)
+//		{
+//			std::weak_ptr<CBullet> mBullet = World->CreateGameObject<CBullet>("Bullet");
+//			std::shared_ptr<CBullet>	Bullet = mBullet.lock();
+//			auto	Mesh = mMeshComponent.lock();
+//			if (Bullet)
+//			{
+//
+//				float FinalRotation = 20.f * (float)(i - 1);
+//				FMatrix RotMatrix;
+//				RotMatrix.RotationZ(FinalRotation);
+//				FVector3 ShootDir = ResultDir.TransformNormal(RotMatrix);
+//				ShootDir.Normalize();
+//				Bullet->SetCollisionName("PlayerAttack");
+//				float BaseAngle = atan2f(ResultDir.y, ResultDir.x) * (180.f / 3.141592f);
+//				Bullet->SetWorldRotationZ(BaseAngle + FinalRotation);
+//				Bullet->SetWorldPos(GetWorldPos() + ShootDir * 35.f);
+//				Bullet->SetCollisionTargetName("Monster");
+//				Bullet->ComputeCollisionRange();
+//				Bullet->SetMoveDir(ShootDir);
+//				Bullet->SetSpeed(500);
+//			}
+//		}
+//		
+//	}
+//}
 
 void CPlayer::OnHit(const FVector3& HitPoint, CCollider* Dest)
 {

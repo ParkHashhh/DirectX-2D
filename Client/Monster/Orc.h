@@ -9,7 +9,7 @@ protected:
 	COrc();
 	COrc(const COrc& ref);
 	COrc(COrc&& ref)	noexcept;
-	float mDefaultSpeed = 60.f;
+	float mDefaultSpeed = 20.f;
 
 	std::weak_ptr<class CFireBall> mFireBall;
 

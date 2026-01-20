@@ -148,6 +148,11 @@ void CMainWorld::LoadAnimation2D()
 	mWorldAssetManager->CreateFrameAnimation(
 		"GoblinAttack", "GoblinAttack", 0, 11, "Monster/Goblin/Attack/",
 		"0_Goblin_Attack_", "png", 900, 900);
+	// CreateGoblinSturnAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"GoblinSturn", "GoblinSturn", 0, 11, "Monster/Goblin/Sturn/",
+		"0_Goblin_Sturn_", "png", 900, 900);
+
 
 	// CreateOgreRunAnim
 	mWorldAssetManager->CreateFrameAnimation(
@@ -157,6 +162,11 @@ void CMainWorld::LoadAnimation2D()
 	mWorldAssetManager->CreateFrameAnimation(
 		"OgreAttack", "OgreAttack", 0, 11, "Monster/Ogre/Attack/",
 		"0_Ogre_Slashing_", "png", 900, 900);
+	// CreateOgreSturnAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"OgreSturn", "OgreSturn", 0, 11, "Monster/Ogre/Sturn/",
+		"0_Ogre_Sturn_", "png", 900, 900);
+
 
 	// CreateOrcRunAnim
 	mWorldAssetManager->CreateFrameAnimation(
@@ -200,9 +210,20 @@ void CMainWorld::LoadAnimation2D()
 	// CreateBallockThrowAnim
 	mWorldAssetManager->CreateFrameAnimation(
 		"BallockThrow", "BallockThrow", 1, 10, "Monster/Ballock/Throw/",
-		"Ballock_Slash_frame_", "png", 201, 171);
+		"Ballock_Throw_frame_", "png", 201, 171);
 
-
+	// CreateBallockSturnAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockSturn", "BallockSturn", 1, 10, "Monster/Ballock/Sturn/",
+		"Ballock_Sturn_frame_", "png", 172, 160);
+	// CreateBallockSkillAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockSkill", "BallockSkill", 1, 45, "Monster/Ballock/Skill/",
+		"Ballock_Skill_frame_", "png", 600,540);
+	// CreateBallockBressAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockBress", "BallockBress", 1, 12, "Monster/Ballock/Bress/",
+		"Ballock_Bress_frame_", "png", 600, 540);
 
 	//Effect
 	mWorldAssetManager->CreateFrameAnimation(
@@ -211,7 +232,13 @@ void CMainWorld::LoadAnimation2D()
 	mWorldAssetManager->CreateFrameAnimation(
 		"Spark", "Spark", 0, 10, "Effect/Spark/",
 		"Spark_Frame_Effect_", "png", 1280, 720);
-	
+	mWorldAssetManager->CreateFrameAnimation(
+		"BallockEffect", "BallockEffect", 1, 8, "Effect/BallockEffect/",
+		"Ballock_Skill_Effect_frame_", "png", 114, 111);
+	mWorldAssetManager->CreateFrameAnimation(
+		"BressEffect", "BressEffect", 1, 50, "Effect/BressEffect/",
+		"Bress_Effect_frame_", "png", 500, 500);
+
 
 	
 }

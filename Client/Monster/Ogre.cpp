@@ -50,8 +50,11 @@ void COgre::SetMonsterData()
 	auto Anim = mAnimation2DComponent.lock();
 	auto Mesh = mMeshComponent.lock();
 	auto Movement = mMovement.lock();
+	SetSpeed(50.f);
+
 	mAttackAnimName = "OgreAttack";
 	mIdleAnimName = "OgreRun";
+	mSturnAnimName = "OgreSturn";
 	mHP = 4;
 	mType = MonsterType::Ogre;
 
@@ -61,6 +64,7 @@ void COgre::SetMonsterData()
 
 		Anim->AddAnimation(mIdleAnimName);
 		Anim->AddAnimation(mAttackAnimName);
+		Anim->AddAnimation(mSturnAnimName);
 		Anim->ChangeAnimation(mIdleAnimName);
 
 		Anim->AddNotify<COgre>(mAttackAnimName,
@@ -72,7 +76,7 @@ void COgre::SetMonsterData()
 	}
 	if (Movement)
 	{
-		Movement->SetSpeed(30.f);
+		Movement->SetSpeed(50.f);
 	}
 }
 void COgre::AttackNotify()
@@ -100,8 +104,18 @@ void COgre::AttackNotify()
 
 void COgre::OnHit()
 {
-	auto	Line2D = mLine2D.lock();
-	Line2D->SetEnable(false);
+
+	mParring = false;
+	auto Movement = mMovement.lock();
+	Movement->SetSpeed(GetDefaultSpeed());
+	mSturnTime += 1.f;
+	if (Movement)
+		Movement->SetSpeed(GetDefaultSpeed());
+
+	mIsAttack = false;
+
+	auto Anim = mAnimation2DComponent.lock();
+	if (Anim) Anim->ChangeAnimation(mIdleAnimName);
 }
 
 void COgre::AttackFinish()
@@ -120,7 +134,6 @@ void COgre::AttackFinish()
 	{
 		Anim->ChangeAnimation(mIdleAnimName);
 	}
-	mParring = false;
 	mIsAttack = false;
 }
 COgre* COgre::Clone()

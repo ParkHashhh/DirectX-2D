@@ -38,6 +38,13 @@ public:
 		sprintf_s(Test, "CurrentSpeed : %f\n", mSpeed);
 		OutputDebugStringA(Test);
 	}
+	void SetSpeed(float Speed)
+	{
+		mSpeed = Speed;
+		char	Test[256] = {};
+		sprintf_s(Test, "CurrentSpeed : %f\n", mSpeed);
+		OutputDebugStringA(Test);
+	}
 	void AddArrow(int Arrow)
 	{
 		mArrow += Arrow;

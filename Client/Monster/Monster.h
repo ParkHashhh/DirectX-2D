@@ -33,16 +33,20 @@ protected:
 	int		mHP = 5;
 	int mGoblinAttackDistance = 10;
 	int mOgreAttackDistance = 13;
+	int mBallockAttackDistance = 20;
 	bool mParring = false;
 	bool mIsAttack = false;
 	float mDefaultSpeed = 0;
 	float mItemDropPercent = 50.f;
+	float mSturnTime = 1.f;
 
 	std::string mAttackAnimName;
 	std::string mThrowAnimName;
 	std::string mIdleAnimName;
+	std::string mSturnAnimName;
 
 public:
+	
 	void SetParring(bool Parring)
 	{
 		mParring = Parring;
@@ -68,8 +72,6 @@ public:
 
 protected:
 	virtual CMonster* Clone();
-
-private:
 	virtual float GetDefaultSpeed();
 	void CollisionMonster(const FVector3& HitPoint,
 		class CCollider* Dest);

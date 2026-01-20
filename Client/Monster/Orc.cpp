@@ -48,6 +48,8 @@ void COrc::SetMonsterData()
 	auto Movement = mMovement.lock();
 	mAttackAnimName = "OrcAttack";
 	mIdleAnimName = "OrcRun";
+	SetSpeed(20.f);
+
 	mHP = 6;
 	mDetectRange = 400.f;
 	mType = MonsterType::Orc;
@@ -67,7 +69,7 @@ void COrc::SetMonsterData()
 	}
 	if (Movement)
 	{
-		Movement->SetSpeed(40.f);
+		Movement->SetSpeed(20.f);
 	}
 }
 

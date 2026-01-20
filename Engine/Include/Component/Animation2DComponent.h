@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "ObjectComponent.h"
 #include "Animation2DSequence.h"
@@ -27,6 +27,10 @@ protected:
 	bool	mUpdateEnable = false;
 
 public:
+	std::string GetName()
+	{
+		return mCurrentAnimation->GetName();
+	}
 	void SetUpdateComponent(
 		const std::weak_ptr<class CMeshComponent>& Component);
 	void AddAnimation(const std::weak_ptr<class CAnimation2D>& Anim,

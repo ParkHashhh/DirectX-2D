@@ -52,14 +52,16 @@ void CGoblin::SetMonsterData()
 	auto Movement = mMovement.lock();
 	mHP = 2;
 	mType = MonsterType::Goblin;
-
+	SetSpeed(35.f);
 	mIdleAnimName = "GoblinRun";
 	mAttackAnimName = "GoblinAttack";
+	mSturnAnimName = "GoblinSturn";
 	if (Anim)
 	{
 		Anim->SetUpdateComponent(Mesh);
 		Anim->AddAnimation(mIdleAnimName);
 		Anim->AddAnimation(mAttackAnimName);
+		Anim->AddAnimation(mSturnAnimName);
 		Anim->ChangeAnimation(mIdleAnimName);
 		Anim->AddNotify<CGoblin>(mAttackAnimName,
 			mAttackAnimName, 1, this, &CGoblin::AttackNotify);
@@ -96,8 +98,15 @@ void CGoblin::AttackNotify()
 }
 void CGoblin::OnHit()
 {
-	auto	Line2D = mLine2D.lock();
-	Line2D->SetEnable(false);
+	mParring = false;
+	auto Movement = mMovement.lock();
+	Movement->SetSpeed(GetDefaultSpeed());
+	mSturnTime += 1.f;
+	if (Movement)
+		Movement->SetSpeed(GetDefaultSpeed());
+	mIsAttack = false;
+	auto Anim = mAnimation2DComponent.lock();
+	if (Anim) Anim->ChangeAnimation(mIdleAnimName);
 }
 
 void CGoblin::AttackFinish()
@@ -115,7 +124,6 @@ void CGoblin::AttackFinish()
 	{
 		Anim->ChangeAnimation(mIdleAnimName);
 	}
-	mParring = false;
 	mIsAttack = false;
 
 }
