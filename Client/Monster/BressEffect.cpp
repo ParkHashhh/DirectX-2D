@@ -47,7 +47,7 @@ bool CBressEffect::Init()
 	{
 		Mesh->SetShader("DefaultTexture2D");
 		Mesh->SetMesh("CenterRectTex");
-		Mesh->SetWorldScale(150.f, 300.f);
+		Mesh->SetWorldScale(600.f, 1000.f);
 		Mesh->SetBlendState(0, "AlphaBlend");
 	}
 

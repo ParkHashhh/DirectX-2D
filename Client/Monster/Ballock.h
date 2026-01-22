@@ -23,6 +23,9 @@ protected:
 	std::weak_ptr<class CColliderBox2D>	mBressBody;
 	std::shared_ptr<class CBressEffect> mBressEffect;
 
+	FVector3	mTargetPos;
+	FVector3	mTargetDir;
+	float mAngle;
 public:
 	virtual ~CBallock();
 protected:
@@ -41,8 +44,10 @@ public:
 	virtual void AttackNotify();
 	virtual void SkillNotify();
 	virtual void BressNotify();
+	virtual void BressFirstNotify();
 	virtual void AttackFinish();
 	virtual void DeadFinish();
+	virtual void DeadNotify();
 	virtual void SetMonsterData();
 };
 

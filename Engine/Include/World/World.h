@@ -24,6 +24,7 @@ protected:
 	std::shared_ptr<CInput>	mInput;
 	std::shared_ptr<CWorldCollision>	mCollision;
 	bool mIsPlayerDead = false;
+	bool mIsBallockDead = false;
 
 public:
 	std::weak_ptr<CCameraManager> GetCameraManager()	const
@@ -69,6 +70,14 @@ public:
 	bool GetPlayerIsDead()
 	{
 		return mIsPlayerDead;
+	}
+	void SetBallockIsDead(bool IsDead)
+	{
+		mIsBallockDead = IsDead;
+	}
+	bool GetBallockIsDead()
+	{
+		return mIsBallockDead;
 	}
 
 	template <typename T>

@@ -26,6 +26,8 @@ protected:
 	std::weak_ptr<class CColliderBox2D>	mBody;
 	std::weak_ptr<class CColliderLine2D>	mLine2D;
 
+	static bool mMonsterStop;
+
 	MonsterType::Type mType = MonsterType::Goblin;
 	float	mFireTime = 0.f;
 	std::weak_ptr<CGameObject>	mTargetObject;

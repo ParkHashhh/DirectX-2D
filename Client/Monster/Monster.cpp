@@ -13,6 +13,8 @@
 #include "../Item/SpeedUp.h"
 #include "../Item/Item.h"
 
+bool CMonster::mMonsterStop = false;
+
 CMonster::CMonster()
 {
 	SetClassType<CMonster>();
@@ -107,12 +109,18 @@ void CMonster::Update(float DeltaTime)
 	auto	Body = mBody.lock();
 	auto World = mWorld.lock();
 	auto Movement = mMovement.lock();
+	if (mMonsterStop)
+		return;
 
-	if (World)
+	if (World->GetPlayerIsDead())
 	{
-		if (World->GetPlayerIsDead())
-			return;
+		if (Movement) 
+			Movement->SetSpeed(0.f);
+		if (Anim) 
+			Anim->ChangeAnimation(mIdleAnimName);
+		return;
 	}
+		
 
 	if (mParring)
 	{
@@ -122,13 +130,9 @@ void CMonster::Update(float DeltaTime)
 		Anim->ChangeAnimation(mSturnAnimName);
 
 		if (mSturnTime <= 0)
-		{
 			OnHit();
-		}
 		else
-		{
 			return;
-		}
 	}
 
 	if (mIsAttack)
@@ -207,8 +211,8 @@ void CMonster::Update(float DeltaTime)
 		Movement->AddMove(TargetDir);
 	}
 	// 탐지반경 안에 들어왔을 경우
-	if (TargetDistance <= mDetectRange && GetWorldPos().x <=600 && GetWorldPos().y <= 320
-		&& GetWorldPos().x >= -600 && GetWorldPos().y >= -320)
+	if (TargetDistance <= mDetectRange && GetWorldPos().x <=640 && GetWorldPos().y <= 360
+		&& GetWorldPos().x >= -640 && GetWorldPos().y >= -360)
 	{
 		mFireTime -= DeltaTime;
 		if (!mIsAttack)
@@ -283,24 +287,12 @@ void CMonster::Damage(int Damage)
 {
 	mHP -= Damage;
 	auto	Anim = mAnimation2DComponent.lock();
+	auto World = mWorld.lock();
 
 	if (mHP <= 0)
 	{
-		auto Target = mTargetObject.lock();
 		if (GetName() == "Ballock")
-		{
-			if (Target->GetWorldPos().x < GetWorldPos().x)
-			{
-				Anim->SetSymmetry(mIdleAnimName, false);
-			}
-			else
-			{
-				Anim->SetSymmetry(mIdleAnimName, true);
-			}
-
-			Anim->ChangeAnimation("BallockDead");
 			return;
-		}
 		Destroy();
 		if (rand() % 100 < mItemDropPercent)
 		{

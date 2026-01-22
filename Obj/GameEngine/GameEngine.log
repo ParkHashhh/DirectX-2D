@@ -302,17 +302,6 @@ C:\Users\assort_75\Desktop\Git\GameEngine\Asset\Shader\ShaderManager.h(1,1): war
 C:\Users\assort_75\Desktop\Git\GameEngine\Asset\Shader\ConstantBufferData.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
   (소스 파일 'Engine.cpp'을(를) 컴파일하는 중)
   
-  GameObject.cpp
-C:\Users\assort_75\Desktop\Git\GameEngine\Object\GameObject.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-C:\Users\assort_75\Desktop\Git\GameEngine\Object.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  (소스 파일 'Object/GameObject.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\assort_75\Desktop\Git\GameEngine\Matrix.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  (소스 파일 'Object/GameObject.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\assort_75\Desktop\Git\GameEngine\Vector2.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  (소스 파일 'Object/GameObject.cpp'을(를) 컴파일하는 중)
-  
   World.cpp
 C:\Users\assort_75\Desktop\Git\GameEngine\Matrix.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
   (소스 파일 'World/World.cpp'을(를) 컴파일하는 중)
@@ -343,17 +332,6 @@ C:\Users\assort_75\Desktop\Git\GameEngine\Asset\Animation2D\Animation2D.h(1,1): 
   
 C:\Users\assort_75\Desktop\Git\GameEngine\World\Input.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
   (소스 파일 'World/World.cpp'을(를) 컴파일하는 중)
-  
-  WorldCollision.cpp
-C:\Users\assort_75\Desktop\Git\GameEngine\World\WorldCollision.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-C:\Users\assort_75\Desktop\Git\GameEngine\Matrix.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  (소스 파일 'World/WorldCollision.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\assort_75\Desktop\Git\GameEngine\Vector2.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  (소스 파일 'World/WorldCollision.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\assort_75\Desktop\Git\GameEngine\Object.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  (소스 파일 'World/WorldCollision.cpp'을(를) 컴파일하는 중)
   
   WorldManager.cpp
 C:\Users\assort_75\Desktop\Git\GameEngine\Matrix.h(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
@@ -388,7 +366,7 @@ C:\Users\assort_75\Desktop\Git\GameEngine\World\Input.h(1,1): warning C4819: 현
   
   코드를 생성하고 있습니다...
   GameEngine.vcxproj -> C:\Users\assort_75\Desktop\Git\Engine\Binary\GameEngine_Debug.lib
-  .\Object\GameObject.h
+  .\World\World.h
   1개 파일이 복사되었습니다.
   파일을 찾을 수 없습니다-*.inl
   0개 파일이 복사되었습니다.

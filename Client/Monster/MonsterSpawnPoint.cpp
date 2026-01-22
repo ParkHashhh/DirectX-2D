@@ -65,8 +65,8 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 	auto World = mWorld.lock();
 	mLevelTime += DeltaTime;
 	
-	/*if (mLevelTime >= 30.f)
-	{*/
+	if (mLevelTime >= 10.f)
+	{
 		if (mLevel < MAX_LEVEL)
 		{
 			mLevelTime -= 30.f;
@@ -91,13 +91,37 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 			mLevel++;
 			OutputDebugStringA("### BOSS BALLOCK SPAWNED! ###\n");
 		}
-	//}
+	}
 
-	// 플레이어 죽으면 끝
+	// 플레이어
 	if (World)
 	{
 		if (World->GetPlayerIsDead())
+		{
+			auto iter = mSpawnMonsterList.begin();
+			auto iterEnd = mSpawnMonsterList.end();
+			for (; iter != iterEnd; iter++)
+			{
+				auto Monster = iter->lock();
+				if(Monster)
+					Monster->Destroy();
+			}
+			mSpawnMonsterList.clear();
 			return;
+		}
+		else if (World->GetBallockIsDead())
+		{
+			auto iter = mSpawnMonsterList.begin();
+			auto iterEnd = mSpawnMonsterList.end();
+			for (; iter != iterEnd; iter++)
+			{
+				auto Monster = iter->lock();
+				if (Monster)
+					Monster->Destroy();
+			}
+			mSpawnMonsterList.clear();
+			return;
+		}
 	}
 
 
@@ -204,6 +228,8 @@ void CMonsterSpawnPoint::Update(float DeltaTime)
 
 				// 캐릭터쪽 따라가기
 				auto Target = Monster->GetTargetObject().lock();
+				if (!Target)
+					return;
 				FVector3	TargetPos = Target->GetWorldPos();
 				FVector3 DirToTarget = TargetPos - SpawnPos;
 				DirToTarget.Normalize();

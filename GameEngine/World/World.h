@@ -24,6 +24,7 @@ protected:
 	std::shared_ptr<CInput>	mInput;
 	std::shared_ptr<CWorldCollision>	mCollision;
 	bool mIsPlayerDead = false;
+	bool mIsBallockDead = false;
 
 public:
 	std::weak_ptr<CCameraManager> GetCameraManager()	const

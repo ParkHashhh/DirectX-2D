@@ -138,6 +138,10 @@ void CMainWorld::LoadAnimation2D()
 	mWorldAssetManager->CreateFrameAnimation(
 		"PlayerShield", "PlayerShield", 0, 17, "Player/Shield/",
 		"0_Forest_Ranger_Shield_", "png", 900, 900);
+	// CreateClearAnim
+	mWorldAssetManager->CreateFrameAnimation(
+		"PlayerClear", "PlayerClear", 1, 29, "Player/Clear/",
+		"Player_Clear_frame_", "png", 900, 900);
 
 	// CreateGoblinRunAnim
 	if (!mWorldAssetManager->CreateFrameAnimation(

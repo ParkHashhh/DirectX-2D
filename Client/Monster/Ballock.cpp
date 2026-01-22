@@ -48,7 +48,6 @@ void CBallock::SetMonsterData()
 	mStateComponent = FindComponent<CStateComponent>("MonsterState");
 	mLine2D = FindComponent<CColliderLine2D>("MonsterLine2D");
 	mBressBody = FindComponent<CColliderBox2D>("BressBody");
-
 	auto BressBody = mBressBody.lock();
 	auto Anim = mAnimation2DComponent.lock();
 	auto Mesh = mMeshComponent.lock();
@@ -64,22 +63,14 @@ void CBallock::SetMonsterData()
 	mDetectRange = 400.f;
 	mType = MonsterType::Ballock;
 	SetSpeed(120.f);
-	if (BressBody)
-	{
-		Body->SetCollisionProfile("MonsterAttack");
-		BressBody->SetEnable(true);
-		BressBody->SetBoxSize(150.f, 300.f);
-		Body->SetInheritScale(false);
-		Body->SetDebugDraw(true);
-
-	}
+	
 	if (Mesh)
 	{
 		Mesh->SetShader("DefaultTexture2D");
 		Mesh->SetMesh("CenterRectTex");
 		Mesh->SetRelativeScale(200.f, 200.f);
 		Mesh->SetBlendState(0, "AlphaBlend");
-		Mesh->SetWorldPos(0, -400);
+		Mesh->SetWorldPos(0, -800);
 	}
 	if (Body)
 	{
@@ -89,7 +80,16 @@ void CBallock::SetMonsterData()
 		Body->SetInheritScale(false);
 
 	}
-	
+	if (BressBody)
+	{
+		BressBody->SetCollisionProfile("MonsterAttack");
+		BressBody->SetEnable(false);
+		BressBody->SetBoxSize(300.f, 800.f);
+		BressBody->SetInheritScale(false);
+		BressBody->SetInheritRot(false);
+		BressBody->SetDebugDraw(true);
+
+	}
 	if (Anim)
 	{
 		Anim->SetUpdateComponent(Mesh);
@@ -99,11 +99,16 @@ void CBallock::SetMonsterData()
 		Anim->AddAnimation(mSturnAnimName);
 		Anim->AddAnimation("BallockSkill");
 		Anim->AddAnimation("BallockDead");
+		Anim->SetPlayTime("BallockDead", 3.f);
 		Anim->AddAnimation("BallockBress");
 		Anim->SetPlayTime("BallockBress", 5.f);
 		Anim->ChangeAnimation(mIdleAnimName);
 		Anim->AddNotify<CBallock>("BallockBress",
 			"BallockBress", 5, this, &CBallock::BressNotify);
+		Anim->AddNotify<CBallock>("BallockBress",
+			"BallockBress", 1, this, &CBallock::BressFirstNotify);
+		Anim->AddNotify<CBallock>("BallockDead",
+			"BallockDead", 1, this, &CBallock::DeadNotify);
 		Anim->AddNotify<CBallock>(mAttackAnimName,
 			mAttackAnimName, 6, this, &CBallock::AttackNotify);
 		Anim->AddNotify<CBallock>("BallockSkill",
@@ -184,32 +189,40 @@ void CBallock::SkillNotify()
 void CBallock::BressNotify()
 {
 	auto World = mWorld.lock();
-	auto Target = mTargetObject.lock();
 	auto BressBody = mBressBody.lock();
 	auto Movement = mMovement.lock();
 
-	if (!Target || !BressBody || mBressEffect)
+	if (!BressBody || mBressEffect)
 		return;
-	FVector3	TargetPos = Target->GetWorldPos();
-	FVector3	TargetDir = TargetPos - GetWorldPos();
-	TargetDir.Normalize();
-	float Angle = GetWorldPos().GetViewTargetAngle2D(Target->GetWorldPos(), EAxis::Y);
+	
 	mBressEffect = World->CreateGameObject<CBressEffect>("BressEffect").lock();
 
 	if (mBressEffect)
 	{
-		float Angle = GetWorldPos().GetViewTargetAngle2D(TargetPos, EAxis::Y);
-		mBressEffect->SetWorldPos(GetWorldPos() + TargetDir * 300.f);
+		float Angle = GetWorldPos().GetViewTargetAngle2D(mTargetPos, EAxis::Y);
+		mBressEffect->SetWorldPos(GetWorldPos() + mTargetDir * 500.f);
 		mBressEffect->SetWorldRotationZ(Angle);
 
 	}
 	if (BressBody)
 	{
-		BressBody->SetWorldRotationZ(Angle);
-		BressBody->SetWorldPos(GetWorldPos() + TargetDir * 100.f);
+		BressBody->SetEnable(true);
+		BressBody->SetWorldRotationZ(mAngle);
+		BressBody->SetWorldPos(GetWorldPos() + mTargetDir * 500.f);
 	}
 	Movement->SetSpeed(0.f);
 
+}
+
+void CBallock::BressFirstNotify()
+{
+	auto Target = mTargetObject.lock();
+	if (!Target)
+		return;
+	mTargetPos = Target->GetWorldPos();
+	mTargetDir = mTargetPos - GetWorldPos();
+	mTargetDir.Normalize();
+	mAngle = GetWorldPos().GetViewTargetAngle2D(Target->GetWorldPos(), EAxis::Y);
 }
 
 void CBallock::ThrowNotify()
@@ -278,7 +291,6 @@ void CBallock::AttackFinish()
 	auto Mesh = mMeshComponent.lock();
 	Mesh->SetRelativeScale(200.f, 200.f);
 	Mesh->SetPivot(0, 0);
-
 	mIsAttack = false;
 	mIsBress = false;
 }
@@ -288,6 +300,8 @@ CBallock* CBallock::Clone()
 }
 void CBallock::DeadFinish()
 {
+	auto World = mWorld.lock();
+	World->SetBallockIsDead(true);
 	Destroy();
 }
 void CBallock::Update(float DeltaTime)
@@ -300,11 +314,26 @@ void CBallock::Update(float DeltaTime)
 	auto Target = mTargetObject.lock();
 	auto Mesh = mMeshComponent.lock();
 	auto BressBody = mBressBody.lock();
-
+	if (mHP <= 0)
+	{	if(mBressEffect)
+			mBressEffect->Destroy();
+		if (BressBody)
+			BressBody->SetEnable(false);
+		if (Anim->GetName() != "BallockDead")
+		{
+			Mesh->SetRelativeScale(200.f, 200.f);
+			OutputDebugStringA("Ballock Dead!\n");
+			Anim->ChangeAnimation("BallockDead");
+		}
+		return;
+	}
 	if (mIsBress)
 	{
 		if (mBressEffect && Target && BressBody)
 		{
+			/*
+			Player를 따라가는 코드인데 아예 못피하게 되어있어서 블럭처리했음 
+			
 			FVector3 TargetPos = Target->GetWorldPos();
 			FVector3 TargetDir = TargetPos - GetWorldPos();
 			TargetDir.Normalize();
@@ -313,13 +342,14 @@ void CBallock::Update(float DeltaTime)
 			mBressEffect->SetWorldPos(GetWorldPos() + TargetDir * 200.f);
 			BressBody->SetWorldRotationZ(Angle);
 			BressBody->SetWorldPos(GetWorldPos() + TargetDir * 200.f);
+			
+			*/
 		}
-
 		return;
 	}
 	if (!mIsAttack || !mParring)
 	{
-		if (mHP % mBressPercent == 0 && mLastBressHP != mHP)
+		if (mHP % mBressPercent == 0 && mLastBressHP != mHP && mHP != mHPMax)
 		{
 			mIsBress = true;
 			mIsAttack = true;
@@ -356,3 +386,7 @@ void CBallock::Update(float DeltaTime)
 }
 
 
+void CBallock::DeadNotify()
+{
+	mMonsterStop = true;
+}

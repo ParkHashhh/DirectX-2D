@@ -83,10 +83,11 @@ void CPlayer::SetAnimation()
 		Anim->AddAnimation("PlayerRunShoot");
 		Anim->AddAnimation("PlayerSlide");
 		Anim->AddAnimation("PlayerDead");
+		Anim->AddAnimation("PlayerClear");
 		Anim->AddAnimation("PlayerShield");
 		Anim->SetPlayRate("PlayerShield", 10.f);
 		Anim->SetPlayRate("PlayerShoot", 1.f);
-
+		Anim->SetLoop("PlayerClear", true);
 		Anim->AddNotify<CPlayer>("PlayerShoot",
 			"AttackNotify", 1, this, &CPlayer::AttackNotify);
 		Anim->SetFinishNotify<CPlayer>("PlayerShoot",
@@ -233,14 +234,39 @@ void CPlayer::Update(float DeltaTime)
 	auto Body = mBody.lock();
 	auto Shield = mShield.lock();
 	auto State = mStateComponent.lock();
-	if (mEnd)
+	auto World = mWorld.lock();
+
+	if (World->GetBallockIsDead())
 	{
+		if (Anim->GetName() != "PlayerClear")
+		{
+			if (mLastHorizonKey < 0)
+				Anim->SetSymmetry("PlayerClear", true);
+			else
+				Anim->SetSymmetry("PlayerClear", false);
+			Anim->ChangeAnimation("PlayerClear");
+			mIsInvincible = true;
+		}
 		return;
 	}
+	if (mEnd)
+		return;
+
 	if(State->IsDead())
 	{
-		OutputDebugStringA("Player Dead!\n");
-		Anim->ChangeAnimation("PlayerDead");
+		if (Anim->GetName() != "PlayerDead")
+		{
+			Mesh->SetMaterialBaseColor(0, FVector4(1.0f, 1.0f, 1.0f, 1.0f));
+			if (mLastHorizonKey < 0)
+				Anim->SetSymmetry("PlayerClear", true);
+			else
+				Anim->SetSymmetry("PlayerDead", false);
+			Anim->ChangeAnimation("PlayerDead");
+			OutputDebugStringA("Player Dead!\n");
+			Anim->ChangeAnimation("PlayerDead");
+			World->SetPlayerIsDead(true);
+		}
+		return;
 	}
 	
 	if (Shield->GetEnable())
@@ -358,8 +384,6 @@ void CPlayer::AttackFinish()
 
 void CPlayer::DeadNotify()
 {
-	auto World = mWorld.lock();
-	World->SetPlayerIsDead(true);
 
 }
 
@@ -371,10 +395,12 @@ void CPlayer::DeadFinish()
 void CPlayer::MoveUp()
 {
 	mUpKey = true;
+	auto State = mStateComponent.lock();
+	auto World = mWorld.lock();
 	auto	Movement = mMovement.lock();
 	auto	Anim = mAnimation2DComponent.lock();	
 	auto Shield = mShield.lock();
-	if (Shield->GetEnable() || mIsSlide)
+	if (Shield->GetEnable() || mIsSlide || State->IsDead() || World->GetBallockIsDead())
 		return;
 	Movement->AddMove(FVector3(0.f, 1.f, 0.f));
 
@@ -387,11 +413,12 @@ void CPlayer::MoveUp()
 void CPlayer::MoveDown()
 {
 	mDownKey = true;
-
+	auto State = mStateComponent.lock();
+	auto World = mWorld.lock();
 	auto	Movement = mMovement.lock();
 	auto	Anim = mAnimation2DComponent.lock();
 	auto Shield = mShield.lock();
-	if (Shield->GetEnable() || mIsSlide)
+	if (Shield->GetEnable() || mIsSlide || State->IsDead() || World->GetBallockIsDead())
 		return;
 	Movement->AddMove(FVector3(0.f, -1.f, 0.f));
 	if (mIsShoot)
@@ -402,10 +429,12 @@ void CPlayer::MoveLeft()
 {
 	
 	mLeftKey = true;
+	auto State = mStateComponent.lock();
+	auto World = mWorld.lock();
 	auto	Movement = mMovement.lock();
 	auto	Anim = mAnimation2DComponent.lock();
 	auto Shield = mShield.lock();
-	if (Shield->GetEnable() || mIsSlide)
+	if (Shield->GetEnable() || mIsSlide || State->IsDead() || World->GetBallockIsDead())
 		return;
 	Movement->AddMove(FVector3(-1.f, 0.f, 0.f));
 	if (mIsShoot)
@@ -415,9 +444,11 @@ void CPlayer::MoveLeft()
 void CPlayer::MoveRight()
 {
 	mRightKey = true;
+	auto State = mStateComponent.lock();
 	auto	Movement = mMovement.lock();
+	auto World = mWorld.lock();
 	auto Shield = mShield.lock();
-	if (Shield->GetEnable() || mIsSlide)
+	if (Shield->GetEnable() || mIsSlide || State->IsDead() || World->GetBallockIsDead())
 		return;
 	auto	Anim = mAnimation2DComponent.lock();
 	Movement->AddMove(FVector3(1.f, 0.f, 0.f));
