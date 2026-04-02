@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../EngineInfo.h"
 #include "CollisionQuadTree.h"
@@ -26,7 +26,10 @@ public:
 	{
 		mWorld = World;
 	}
-
+	std::list<std::weak_ptr<class CCollider>> GetColliderList()
+	{
+		return mColliderList;
+	}
 	void SetInterval(float Interval)
 	{
 		mInterval = Interval;
