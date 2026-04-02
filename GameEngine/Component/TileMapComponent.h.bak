@@ -1,0 +1,131 @@
+#pragma once
+
+#include "ObjectComponent.h"
+#include "Tile.h"
+
+struct FTileMapInstancingBuffer
+{
+	FVector4	WVP0;
+	FVector4	WVP1;
+	FVector4	WVP2;
+	FVector4	WVP3;
+	FVector2	LTUV;
+	FVector2	RBUV;
+};
+
+class CTileMapComponent :
+    public CObjectComponent
+{
+	friend class CGameObject;
+
+protected:
+	CTileMapComponent();
+	CTileMapComponent(const CTileMapComponent& ref);
+	CTileMapComponent(CTileMapComponent&& ref)	noexcept;
+
+public:
+	virtual ~CTileMapComponent();
+
+protected:
+	std::vector<std::shared_ptr<CTile>>	mTileList;
+	std::vector<FTileMapInstancingBuffer>	mTileIstData;
+	FVertexBuffer	mInstancingBuffer;
+	int				mInstancingCount = 0;
+	ETileShape		mShape = ETileShape::Rect;
+	FVector2		mTileSize;
+	FVector2		mMapSize;
+	int				mCountX = 0;
+	int				mCountY = 0;
+	bool			mTileOutLineRender = false;
+	std::weak_ptr<class CMesh>		mOutLineMesh;
+	std::weak_ptr<class CShader>	mOutLineShader;
+	std::weak_ptr<class CMesh>		mTileMesh;
+	std::weak_ptr<class CShader>	mTileShader;
+	std::shared_ptr<class CCBufferTransform>	mTransform;
+	std::shared_ptr<class CCBufferTileMap>	mCBufferTileMap;
+	FVector2	mTileTextureSize;
+	std::vector<FTileFrame>		mTileFrame;
+
+	int		mViewStartX = 0;
+	int		mViewStartY = 0;
+	int		mViewEndX = 0;
+	int		mViewEndY = 0;
+
+public:
+	ETileShape GetTileShape()	const
+	{
+		return mShape;
+	}
+
+	const FVector2& GetTileSize()	const
+	{
+		return mTileSize;
+	}
+
+	const FVector2& GetMapSize()	const
+	{
+		return mMapSize;
+	}
+
+	int GetTileCountX()	const
+	{
+		return mCountX;
+	}
+
+	int GetTileCountY()	const
+	{
+		return mCountY;
+	}
+
+public:
+	void SetTileTextureSize(const FVector2& Size)
+	{
+		mTileTextureSize = Size;
+	}
+
+	void SetTileTextureSize(float x, float y)
+	{
+		mTileTextureSize.x = x;
+		mTileTextureSize.y = y;
+	}
+
+public:
+	void SetTileOutLineRender(bool Render);
+	bool SetTileTexture(ETileTextureType::Type Type,
+		const std::weak_ptr<class CTexture>& Texture);
+	bool SetTileTexture(ETileTextureType::Type Type,
+		const std::string& Name);
+	bool SetTileTexture(ETileTextureType::Type Type,
+		const std::string& Name, const TCHAR* FileName,
+		const std::string& PathName = "Texture");
+	void AddTileFrame(const FVector2& Start,
+		const FVector2& End);
+	void AddTileFrame(float StartX, float StartY,
+		float EndX, float EndY);
+	void SetTileFrameAll(int FrameIndex);
+
+public:
+	virtual bool Init();
+	virtual bool Init(const char* FileName);
+	virtual void Update(float DeltaTime);
+	virtual void PostUpdate(float DeltaTime);
+	virtual void PostRender();
+	virtual void Destroy();
+
+protected:
+	virtual CTileMapComponent* Clone()	const;
+
+public:
+	void RenderTile();
+	void RenderTileOutLine();
+
+public:
+	void CreateTile(ETileShape Shape, int CountX, int CountY,
+		const FVector2& TileSize,
+		int TileTextureFrame = -1);
+
+private:
+	bool CreateInstancingBuffer(int Size, int Count);
+	bool SetInstancingData(void* Data, int Count);
+};
+

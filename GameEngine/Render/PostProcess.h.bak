@@ -1,0 +1,80 @@
+﻿#pragma once
+
+#include "../EngineInfo.h"
+
+class CPostProcess
+{
+	friend class CRenderManager;
+
+protected:
+	CPostProcess();
+
+public:
+	virtual ~CPostProcess() = 0;
+
+protected:
+	std::string	mName;
+	bool		mEnable = true;
+	bool		mActive = true;
+	int			mOrder = 0;
+	std::weak_ptr<class CRenderTarget>	mTarget;
+	std::weak_ptr<class CShader>	mShader;
+
+public:
+	bool GetActive()	const
+	{
+		return mActive;
+	}
+
+	bool GetEnable()	const
+	{
+		return mEnable;
+	}
+
+	const std::string& GetName()	const
+	{
+		return mName;
+	}
+
+	int GetOrder()	const
+	{
+		return mOrder;
+	}
+
+public:
+	void Destroy()
+	{
+		mActive = false;
+	}
+
+	void SetEnable(bool Enable)
+	{
+		mEnable = Enable;
+	}
+
+	void SetName(const std::string& Name)
+	{
+		mName = Name;
+	}
+
+	void SetOrder(int Order)
+	{
+		mOrder = Order;
+	}
+
+	void SetRenderTarget(const std::string& Name);
+	void SetRenderTarget(const std::weak_ptr<class CRenderTarget>& Target);
+	void SetShader(const std::string& Name);
+
+public:
+	virtual bool Init();
+	virtual void Update(float DeltaTime) = 0;
+
+protected:
+	virtual void Render() = 0;
+	void RenderFullScreenQuad();
+
+private:
+	void RenderPostProcess();
+};
+

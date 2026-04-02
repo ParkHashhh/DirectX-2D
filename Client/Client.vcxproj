@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{5488f37f-a1e9-4acb-94d0-805227ae88dd}</ProjectGuid>
+    <RootNamespace>Client</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>../Binary/</OutDir>
+    <IntDir>../Obj/Client/</IntDir>
+    <TargetName>$(ProjectName)_Debug</TargetName>
+    <IncludePath>../Engine/Include/;$(IncludePath)</IncludePath>
+    <LibraryPath>../Engine/Binary/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>../Binary/</OutDir>
+    <IntDir>../Obj/Client/</IntDir>
+    <IncludePath>../Engine/Include/;$(IncludePath)</IncludePath>
+    <LibraryPath>../Engine/Binary/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>../Binary/</OutDir>
+    <IntDir>../Obj/Client/</IntDir>
+    <TargetName>$(ProjectName)_Debug</TargetName>
+    <IncludePath>../Engine/Include/;$(IncludePath)</IncludePath>
+    <LibraryPath>../Engine/Binary/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>../Binary/</OutDir>
+    <IntDir>../Obj/Client/</IntDir>
+    <IncludePath>../Engine/Include/;$(IncludePath)</IncludePath>
+    <LibraryPath>../Engine/Binary/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>call "$(ProjectDir)Copy.bat"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>call "$(ProjectDir)Copy.bat"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Component\StateComponent.cpp" />
+    <ClCompile Include="GlobalSetting.cpp" />
+    <ClCompile Include="Interface\StateInterface.cpp" />
+    <ClCompile Include="Item\FieldItem.cpp" />
+    <ClCompile Include="Item\Item.cpp" />
+    <ClCompile Include="Item\ItemManager.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monster\DamageObject.cpp" />
+    <ClCompile Include="Monster\HornTail\HornTail.cpp" />
+    <ClCompile Include="Monster\HornTail\HornTailPart.cpp" />
+    <ClCompile Include="Monster\HornTail\LeftHand.cpp" />
+    <ClCompile Include="Monster\HornTail\LeftHead.cpp" />
+    <ClCompile Include="Monster\HornTail\LeftHeadObject.cpp" />
+    <ClCompile Include="Monster\HornTail\Leg.cpp" />
+    <ClCompile Include="Monster\HornTail\MiddleHead.cpp" />
+    <ClCompile Include="Monster\HornTail\Poison.cpp" />
+    <ClCompile Include="Monster\HornTail\RightHand.cpp" />
+    <ClCompile Include="Monster\HornTail\RightHead.cpp" />
+    <ClCompile Include="Monster\HornTail\Tail.cpp" />
+    <ClCompile Include="Monster\HornTail\Wing.cpp" />
+    <ClCompile Include="Monster\HornTail\Wyvern.cpp" />
+    <ClCompile Include="Monster\Monster.cpp" />
+    <ClCompile Include="Monster\MonsterSpawnPoint.cpp" />
+    <ClCompile Include="Monster\ScareCrow\ScareCrow.cpp" />
+    <ClCompile Include="Monster\Zakum\ArmSkill.cpp" />
+    <ClCompile Include="Monster\Zakum\BossGround.cpp" />
+    <ClCompile Include="Monster\Zakum\DestinationStone.cpp" />
+    <ClCompile Include="Monster\Zakum\FallingStone.cpp" />
+    <ClCompile Include="Monster\Zakum\Zakum.cpp" />
+    <ClCompile Include="Monster\Zakum\ZakumArm.cpp" />
+    <ClCompile Include="Npc\Npc.cpp" />
+    <ClCompile Include="Player\Avenger.cpp" />
+    <ClCompile Include="Player\BoostEffect.cpp" />
+    <ClCompile Include="Player\Shuriken.cpp" />
+    <ClCompile Include="Player\ShurikenEffect.cpp" />
+    <ClCompile Include="Player\DarkDebuffEffect.cpp" />
+    <ClCompile Include="Player\Grave.cpp" />
+    <ClCompile Include="Player\HeistEffect.cpp" />
+    <ClCompile Include="Player\JumpEffect.cpp" />
+    <ClCompile Include="Player\Player.cpp" />
+    <ClCompile Include="Player\RayTracing.cpp" />
+    <ClCompile Include="Player\Shadow.cpp" />
+    <ClCompile Include="Player\ShadowEffect.cpp" />
+    <ClCompile Include="Player\ShadowEffect2.cpp" />
+    <ClCompile Include="Player\SturnDebuffEffect.cpp" />
+    <ClCompile Include="Player\TripleThrowEffect.cpp" />
+    <ClCompile Include="Player\WillEffect.cpp" />
+    <ClCompile Include="Portal\Portal.cpp" />
+    <ClCompile Include="Thread\LoadingThread.cpp" />
+    <ClCompile Include="UI\DamageUI.cpp" />
+    <ClCompile Include="UI\EndingWidget.cpp" />
+    <ClCompile Include="UI\Equipment.cpp" />
+    <ClCompile Include="UI\EquipmentSlot.cpp" />
+    <ClCompile Include="UI\FadeOutWidget.cpp" />
+    <ClCompile Include="UI\Inventory.cpp" />
+    <ClCompile Include="UI\InventoryManager.cpp" />
+    <ClCompile Include="UI\InventorySlot.cpp" />
+    <ClCompile Include="UI\LoadingWidget.cpp" />
+    <ClCompile Include="UI\MonsterHPWidget.cpp" />
+    <ClCompile Include="UI\NpcWidget.cpp" />
+    <ClCompile Include="UI\PlayerSkillStateWidget.cpp" />
+    <ClCompile Include="UI\PlayerSkillWidget.cpp" />
+    <ClCompile Include="UI\PlayerStateWidget.cpp" />
+    <ClCompile Include="UI\SkillSlot.cpp" />
+    <ClCompile Include="UI\SkillSlotIcon.cpp" />
+    <ClCompile Include="UI\Slot.cpp" />
+    <ClCompile Include="UI\SlotIcon.cpp" />
+    <ClCompile Include="UI\StartWidget.cpp" />
+    <ClCompile Include="UI\Statement.cpp" />
+    <ClCompile Include="World\EndingObject.cpp" />
+    <ClCompile Include="World\EndingWorld.cpp" />
+    <ClCompile Include="World\HornTailWorld.cpp" />
+    <ClCompile Include="World\LoadingWorld.cpp" />
+    <ClCompile Include="World\ZakumWorld.cpp" />
+    <ClCompile Include="World\MainWorld.cpp" />
+    <ClCompile Include="World\StartWorld.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Cpp\DirectX\Client\World\LoadingWorld.h" />
+    <ClInclude Include="ClientInfo.h" />
+    <ClInclude Include="Component\StateComponent.h" />
+    <ClInclude Include="GlobalSetting.h" />
+    <ClInclude Include="Interface\StateInterface.h" />
+    <ClInclude Include="Item\FieldItem.h" />
+    <ClInclude Include="Item\Item.h" />
+    <ClInclude Include="Item\ItemManager.h" />
+    <ClInclude Include="Monster\DamageObject.h" />
+    <ClInclude Include="Monster\HornTail\HornTail.h" />
+    <ClInclude Include="Monster\HornTail\HornTailPart.h" />
+    <ClInclude Include="Monster\HornTail\LeftHand.h" />
+    <ClInclude Include="Monster\HornTail\LeftHead.h" />
+    <ClInclude Include="Monster\HornTail\LeftHeadObject.h" />
+    <ClInclude Include="Monster\HornTail\Leg.h" />
+    <ClInclude Include="Monster\HornTail\MiddleHead.h" />
+    <ClInclude Include="Monster\HornTail\Poison.h" />
+    <ClInclude Include="Monster\HornTail\RightHand.h" />
+    <ClInclude Include="Monster\HornTail\RightHead.h" />
+    <ClInclude Include="Monster\HornTail\Tail.h" />
+    <ClInclude Include="Monster\HornTail\Wing.h" />
+    <ClInclude Include="Monster\HornTail\Wyvern.h" />
+    <ClInclude Include="Monster\Monster.h" />
+    <ClInclude Include="Monster\MonsterSpawnPoint.h" />
+    <ClInclude Include="Monster\ScareCrow\ScareCrow.h" />
+    <ClInclude Include="Monster\Zakum\ArmSkill.h" />
+    <ClInclude Include="Monster\Zakum\BossGround.h" />
+    <ClInclude Include="Monster\Zakum\DestinationStone.h" />
+    <ClInclude Include="Monster\Zakum\FallingStone.h" />
+    <ClInclude Include="Monster\Zakum\Zakum.h" />
+    <ClInclude Include="Monster\Zakum\ZakumArm.h" />
+    <ClInclude Include="Npc\Npc.h" />
+    <ClInclude Include="Player\Avenger.h" />
+    <ClInclude Include="Player\BoostEffect.h" />
+    <ClInclude Include="Player\Shuriken.h" />
+    <ClInclude Include="Player\ShurikenEffect.h" />
+    <ClInclude Include="Player\DarkDebuffEffect.h" />
+    <ClInclude Include="Player\Grave.h" />
+    <ClInclude Include="Player\HeistEffect.h" />
+    <ClInclude Include="Player\JumpEffect.h" />
+    <ClInclude Include="Player\Player.h" />
+    <ClInclude Include="Player\RayTracing.h" />
+    <ClInclude Include="Player\Shadow.h" />
+    <ClInclude Include="Player\ShadowEffect.h" />
+    <ClInclude Include="Player\ShadowEffect2.h" />
+    <ClInclude Include="Player\SturnDebuffEffect.h" />
+    <ClInclude Include="Player\TripleThrowEffect.h" />
+    <ClInclude Include="Player\WillEffect.h" />
+    <ClInclude Include="Portal\Portal.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Thread\LoadingThread.h" />
+    <ClInclude Include="UI\DamageUI.h" />
+    <ClInclude Include="UI\EndingWidget.h" />
+    <ClInclude Include="UI\Equipment.h" />
+    <ClInclude Include="UI\EquipmentSlot.h" />
+    <ClInclude Include="UI\FadeOutWidget.h" />
+    <ClInclude Include="UI\Inventory.h" />
+    <ClInclude Include="UI\InventoryManager.h" />
+    <ClInclude Include="UI\InventorySlot.h" />
+    <ClInclude Include="UI\LoadingWidget.h" />
+    <ClInclude Include="UI\MonsterHPWidget.h" />
+    <ClInclude Include="UI\NpcWidget.h" />
+    <ClInclude Include="UI\PlayerSkillStateWidget.h" />
+    <ClInclude Include="UI\PlayerSkillWidget.h" />
+    <ClInclude Include="UI\PlayerStateWidget.h" />
+    <ClInclude Include="UI\SkillSlot.h" />
+    <ClInclude Include="UI\SkillSlotIcon.h" />
+    <ClInclude Include="UI\Slot.h" />
+    <ClInclude Include="UI\SlotIcon.h" />
+    <ClInclude Include="UI\StartWidget.h" />
+    <ClInclude Include="UI\Statement.h" />
+    <ClInclude Include="World\EndingObject.h" />
+    <ClInclude Include="World\EndingWorld.h" />
+    <ClInclude Include="World\HornTailWorld.h" />
+    <ClInclude Include="World\ZakumWorld.h" />
+    <ClInclude Include="World\MainWorld.h" />
+    <ClInclude Include="World\StartWorld.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

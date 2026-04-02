@@ -1,0 +1,586 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01. Player">
+      <UniqueIdentifier>{2cbd72ef-029e-4db4-a60f-37bac5dbf3a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. World">
+      <UniqueIdentifier>{d16df0c0-509c-4df8-8c1a-2ea1567ca95d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster">
+      <UniqueIdentifier>{b20109aa-1ea7-4746-ab38-6b143566bc78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component">
+      <UniqueIdentifier>{653ce010-efc1-4dcf-b040-5d5769d850d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Component\01. State">
+      <UniqueIdentifier>{5170b423-560e-4cca-97a2-22ef19f14a6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Interface">
+      <UniqueIdentifier>{165b9001-342c-4720-87b5-c7497c431442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. Setting">
+      <UniqueIdentifier>{031f271d-7fbc-418d-980e-12209691b400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. Item">
+      <UniqueIdentifier>{de004a3e-9a11-4034-85ed-181a31ffe1af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI">
+      <UniqueIdentifier>{5488196c-9c9a-40c6-95ab-55cb4eb64cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\StartWidget">
+      <UniqueIdentifier>{d72810c1-d20d-4073-8608-72c7a41714b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\MainWidget">
+      <UniqueIdentifier>{3f7148dd-260c-4bb3-9c2c-7da4f9336e01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\LoadingWidget">
+      <UniqueIdentifier>{f5e97a83-4f92-4a3a-987c-0cf858e2abf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. Thread">
+      <UniqueIdentifier>{4c6f636f-2f3f-4588-9e55-48fb13e2f277}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster\01. ScareCrow">
+      <UniqueIdentifier>{e96673f7-76ae-456e-83d4-f12516e9580d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10. Portal">
+      <UniqueIdentifier>{1aace9ed-06e6-4267-8aa3-a97824b410c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Player\01. Core">
+      <UniqueIdentifier>{a843af8b-ec0d-4ec2-9a85-2c33f13381eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Player\02. Effect">
+      <UniqueIdentifier>{e5c6d132-f398-460b-b6ec-c0ad652bddb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Player\03. Skill">
+      <UniqueIdentifier>{c72d33c1-c57f-43fc-b759-91dfd9aa9c64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster\02. Zakum">
+      <UniqueIdentifier>{bd80dcba-6817-4722-a338-f9a4280f9c9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\EndingWidget">
+      <UniqueIdentifier>{e2f2d89d-49b3-44b5-829a-6d66981ebd84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster\03. HornTail">
+      <UniqueIdentifier>{c0b492cd-93fb-4bd4-ab63-838e22b6a813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster\03. HornTail\01. Head">
+      <UniqueIdentifier>{b0bdacec-2762-46ea-9ea3-78a1187cfba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster\03. HornTail\02. Body">
+      <UniqueIdentifier>{79d79df7-d4c5-42d4-930c-b8dbd6c57d10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Monster\03. HornTail\03. Tail">
+      <UniqueIdentifier>{3162da94-94e4-42da-a7f9-90640efdc13b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\MainWidget\01. PlayerState">
+      <UniqueIdentifier>{d53cb8fd-43fa-4985-8d7a-b9525c99017d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\MainWidget\01. PlayerState\01. Inventory">
+      <UniqueIdentifier>{ce02aff2-5a2a-4726-b1b7-4f00eab8b1c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\MainWidget\01. PlayerState\02. Equip">
+      <UniqueIdentifier>{df885755-fa8b-450f-98a7-9389b86d4093}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\MainWidget\01. PlayerState\03. Statement">
+      <UniqueIdentifier>{b928b861-5bd6-4c31-b21f-13cda9a0783c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\MainWidget\02. MonsterWidget">
+      <UniqueIdentifier>{7a1022ff-5aa0-4a5d-b089-8bfdb22ca079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="11. Npc">
+      <UniqueIdentifier>{004b1037-ff50-4b35-8815-e084280b6835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\NpcWidget">
+      <UniqueIdentifier>{dbc3bc28-3f0b-4874-9934-87065614c59b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08. UI\FadeOutWidget">
+      <UniqueIdentifier>{1f0d13ae-be2d-4a8b-928e-c0a8c1c61e5c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="World\MainWorld.cpp">
+      <Filter>02. World</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Monster.cpp">
+      <Filter>03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\StateComponent.cpp">
+      <Filter>04. Component\01. State</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\StateInterface.cpp">
+      <Filter>05. Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\MonsterSpawnPoint.cpp">
+      <Filter>03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalSetting.cpp">
+      <Filter>06. Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Inventory.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState\01. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\PlayerStateWidget.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="World\StartWorld.cpp">
+      <Filter>02. World</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\LoadingWidget.cpp">
+      <Filter>08. UI\LoadingWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread\LoadingThread.cpp">
+      <Filter>09. Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Slot.cpp">
+      <Filter>08. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\SlotIcon.cpp">
+      <Filter>08. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\InventorySlot.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState\01. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\SkillSlot.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\PlayerSkillWidget.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\SkillSlotIcon.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\DamageUI.cpp">
+      <Filter>08. UI\MainWidget\02. MonsterWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal\Portal.cpp">
+      <Filter>10. Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\BoostEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\ShurikenEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\HeistEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\JumpEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\ShadowEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\ShadowEffect2.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\Player.cpp">
+      <Filter>01. Player\01. Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\Shuriken.cpp">
+      <Filter>01. Player\01. Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\Avenger.cpp">
+      <Filter>01. Player\03. Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\Shadow.cpp">
+      <Filter>01. Player\03. Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\RayTracing.cpp">
+      <Filter>01. Player\01. Core</Filter>
+    </ClCompile>
+    <ClCompile Include="World\ZakumWorld.cpp">
+      <Filter>02. World</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\DamageObject.cpp">
+      <Filter>03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\Grave.cpp">
+      <Filter>01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\StartWidget.cpp">
+      <Filter>08. UI\StartWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\EndingWidget.cpp">
+      <Filter>08. UI\EndingWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="World\HornTailWorld.cpp">
+      <Filter>02. World</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Zakum\ArmSkill.cpp">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Zakum\DestinationStone.cpp">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Zakum\FallingStone.cpp">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Zakum\Zakum.cpp">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Zakum\ZakumArm.cpp">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\ScareCrow\ScareCrow.cpp">
+      <Filter>03. Monster\01. ScareCrow</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\HornTail.cpp">
+      <Filter>03. Monster\03. HornTail</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\LeftHead.cpp">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\MiddleHead.cpp">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\RightHead.cpp">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\LeftHand.cpp">
+      <Filter>03. Monster\03. HornTail\02. Body</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\RightHand.cpp">
+      <Filter>03. Monster\03. HornTail\02. Body</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\Wing.cpp">
+      <Filter>03. Monster\03. HornTail\02. Body</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\Leg.cpp">
+      <Filter>03. Monster\03. HornTail\03. Tail</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\Tail.cpp">
+      <Filter>03. Monster\03. HornTail\03. Tail</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\LeftHeadObject.cpp">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\Wyvern.cpp">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\DarkDebuffEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\SturnDebuffEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\Poison.cpp">
+      <Filter>03. Monster\03. HornTail\03. Tail</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\HornTail\HornTailPart.cpp">
+      <Filter>03. Monster\03. HornTail</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\WillEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\PlayerSkillStateWidget.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\MonsterHPWidget.cpp">
+      <Filter>08. UI\MainWidget\02. MonsterWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="World\EndingWorld.cpp">
+      <Filter>02. World</Filter>
+    </ClCompile>
+    <ClCompile Include="World\EndingObject.cpp">
+      <Filter>02. World</Filter>
+    </ClCompile>
+    <ClCompile Include="World\LoadingWorld.cpp">
+      <Filter>02. World</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\Item.cpp">
+      <Filter>07. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\FieldItem.cpp">
+      <Filter>07. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Zakum\BossGround.cpp">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\ItemManager.cpp">
+      <Filter>07. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Equipment.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState\02. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\EquipmentSlot.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState\02. Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\InventoryManager.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState\01. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Statement.cpp">
+      <Filter>08. UI\MainWidget\01. PlayerState\03. Statement</Filter>
+    </ClCompile>
+    <ClCompile Include="Npc\Npc.cpp">
+      <Filter>11. Npc</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\NpcWidget.cpp">
+      <Filter>08. UI\NpcWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\FadeOutWidget.cpp">
+      <Filter>08. UI\FadeOutWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\TripleThrowEffect.cpp">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="World\MainWorld.h">
+      <Filter>02. World</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Monster.h">
+      <Filter>03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\StateComponent.h">
+      <Filter>04. Component\01. State</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\StateInterface.h">
+      <Filter>05. Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\MonsterSpawnPoint.h">
+      <Filter>03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalSetting.h">
+      <Filter>06. Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Inventory.h">
+      <Filter>08. UI\MainWidget\01. PlayerState\01. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\PlayerStateWidget.h">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="World\StartWorld.h">
+      <Filter>02. World</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientInfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Cpp\DirectX\Client\World\LoadingWorld.h">
+      <Filter>02. World</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\LoadingWidget.h">
+      <Filter>08. UI\LoadingWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\LoadingThread.h">
+      <Filter>09. Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Slot.h">
+      <Filter>08. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SlotIcon.h">
+      <Filter>08. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\InventorySlot.h">
+      <Filter>08. UI\MainWidget\01. PlayerState\01. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SkillSlot.h">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\PlayerSkillWidget.h">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SkillSlotIcon.h">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\DamageUI.h">
+      <Filter>08. UI\MainWidget\02. MonsterWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal\Portal.h">
+      <Filter>10. Portal</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\BoostEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\ShurikenEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\HeistEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\JumpEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\ShadowEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\ShadowEffect2.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Player.h">
+      <Filter>01. Player\01. Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Shuriken.h">
+      <Filter>01. Player\01. Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Avenger.h">
+      <Filter>01. Player\03. Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Shadow.h">
+      <Filter>01. Player\03. Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\RayTracing.h">
+      <Filter>01. Player\01. Core</Filter>
+    </ClInclude>
+    <ClInclude Include="World\ZakumWorld.h">
+      <Filter>02. World</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\DamageObject.h">
+      <Filter>03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Grave.h">
+      <Filter>01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\StartWidget.h">
+      <Filter>08. UI\StartWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\EndingWidget.h">
+      <Filter>08. UI\EndingWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="World\HornTailWorld.h">
+      <Filter>02. World</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Zakum\ArmSkill.h">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Zakum\DestinationStone.h">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Zakum\FallingStone.h">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Zakum\Zakum.h">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Zakum\ZakumArm.h">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\ScareCrow\ScareCrow.h">
+      <Filter>03. Monster\01. ScareCrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\HornTail.h">
+      <Filter>03. Monster\03. HornTail</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\LeftHead.h">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\MiddleHead.h">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\RightHead.h">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\LeftHand.h">
+      <Filter>03. Monster\03. HornTail\02. Body</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\RightHand.h">
+      <Filter>03. Monster\03. HornTail\02. Body</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\Wing.h">
+      <Filter>03. Monster\03. HornTail\02. Body</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\Leg.h">
+      <Filter>03. Monster\03. HornTail\03. Tail</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\Tail.h">
+      <Filter>03. Monster\03. HornTail\03. Tail</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\LeftHeadObject.h">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\Wyvern.h">
+      <Filter>03. Monster\03. HornTail\01. Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\DarkDebuffEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\SturnDebuffEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\Poison.h">
+      <Filter>03. Monster\03. HornTail\03. Tail</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\HornTail\HornTailPart.h">
+      <Filter>03. Monster\03. HornTail</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\WillEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\PlayerSkillStateWidget.h">
+      <Filter>08. UI\MainWidget\01. PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\MonsterHPWidget.h">
+      <Filter>08. UI\MainWidget\02. MonsterWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="World\EndingWorld.h">
+      <Filter>02. World</Filter>
+    </ClInclude>
+    <ClInclude Include="World\EndingObject.h">
+      <Filter>02. World</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\Item.h">
+      <Filter>07. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\FieldItem.h">
+      <Filter>07. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Zakum\BossGround.h">
+      <Filter>03. Monster\02. Zakum</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\ItemManager.h">
+      <Filter>07. Item</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Equipment.h">
+      <Filter>08. UI\MainWidget\01. PlayerState\02. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\EquipmentSlot.h">
+      <Filter>08. UI\MainWidget\01. PlayerState\02. Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\InventoryManager.h">
+      <Filter>08. UI\MainWidget\01. PlayerState\01. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Statement.h">
+      <Filter>08. UI\MainWidget\01. PlayerState\03. Statement</Filter>
+    </ClInclude>
+    <ClInclude Include="Npc\Npc.h">
+      <Filter>11. Npc</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\NpcWidget.h">
+      <Filter>08. UI\NpcWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\FadeOutWidget.h">
+      <Filter>08. UI\FadeOutWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\TripleThrowEffect.h">
+      <Filter>01. Player\02. Effect</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

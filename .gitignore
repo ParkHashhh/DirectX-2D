@@ -1,0 +1,26 @@
+# 1. 일단 모든 Binary 폴더를 무시 대상으로 설정
+[Bb]in/
+[Bb]inary/
+[Oo]bj/
+Debug/
+Release/
+x64/
+x86/
+.vs/
+
+# 2. 하지만 Engine 하위의 Binary 폴더는 무시하지 마라 (예외 처리)
+!Engine/[Bb]inary/
+
+# 3. 추가로 컴파일러가 생성하는 불필요한 파일들만 골라 무시
+*.ilk
+*.pdb
+*.iobj
+*.ipdb
+*.recipe
+*.tlog
+*.lastbuildstate
+*.log
+*.aps
+
+Engine/Binary/GameEngine.lib
+Engine/Binary/GameEngine_Debug.lib
