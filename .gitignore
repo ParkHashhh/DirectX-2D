@@ -1,6 +1,5 @@
 # 1. 일단 모든 Binary 폴더를 무시 대상으로 설정
 [Bb]in/
-[Bb]inary/
 [Oo]bj/
 Debug/
 Release/
